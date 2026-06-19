@@ -69,7 +69,7 @@ export default function BoldCanvas() {
           <span style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: 22, fontWeight: 900, color: PLUM, letterSpacing: "0.15em", textTransform: "uppercase" }}>ELYXIER</span>
           <div style={{ display: "flex", gap: 36, alignItems: "center" }}>
             {["Shop", "About", "Live"].map((item) => (
-              <a key={item} href="#" style={{ color: TEXT_DARK, fontSize: 13, letterSpacing: "0.12em", textTransform: "uppercase", textDecoration: "none", fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 600 }}
+              <a key={item} href={item === "About" ? "#about" : "#"} style={{ color: TEXT_DARK, fontSize: 13, letterSpacing: "0.12em", textTransform: "uppercase", textDecoration: "none", fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 600 }}
                 onMouseEnter={e => (e.currentTarget.style.color = PLUM)}
                 onMouseLeave={e => (e.currentTarget.style.color = TEXT_DARK)}>
                 {item}
@@ -160,7 +160,7 @@ export default function BoldCanvas() {
       </section>
 
       {/* About */}
-      <section style={{ background: PLUM, padding: "120px 40px", textAlign: "center", overflow: "hidden", position: "relative" }}>
+      <section id="about" style={{ background: PLUM, padding: "120px 40px", textAlign: "center", overflow: "hidden", position: "relative" }}>
         <div style={{ position: "absolute", top: -80, right: -80, width: 320, height: 320, borderRadius: "50%", background: "rgba(196,30,58,0.15)" }} />
         <div style={{ position: "absolute", bottom: -60, left: -60, width: 240, height: 240, borderRadius: "50%", background: "rgba(212,160,160,0.1)" }} />
         <div style={{ maxWidth: 900, margin: "0 auto", position: "relative" }}>

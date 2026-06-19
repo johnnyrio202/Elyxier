@@ -67,7 +67,7 @@ export default function MidnightLuxe() {
           <span style={{ fontFamily: "var(--font-playfair), serif", fontSize: 24, fontWeight: 700, color: GOLD, letterSpacing: "0.12em" }}>ELYXIER</span>
           <div style={{ display: "flex", gap: 36, alignItems: "center" }}>
             {["Shop", "About", "Live"].map((item) => (
-              <a key={item} href="#" style={{ color: MUTED, fontSize: 13, letterSpacing: "0.12em", textTransform: "uppercase", textDecoration: "none" }}
+              <a key={item} href={item === "About" ? "#about" : "#"} style={{ color: MUTED, fontSize: 13, letterSpacing: "0.12em", textTransform: "uppercase", textDecoration: "none" }}
                 onMouseEnter={e => (e.currentTarget.style.color = GOLD)}
                 onMouseLeave={e => (e.currentTarget.style.color = MUTED)}>
                 {item}
@@ -143,7 +143,7 @@ export default function MidnightLuxe() {
       </section>
 
       {/* About */}
-      <section style={{ background: SECTION, padding: "120px 32px", textAlign: "center" }}>
+      <section id="about" style={{ background: SECTION, padding: "120px 32px", textAlign: "center" }}>
         <div style={{ maxWidth: 800, margin: "0 auto" }}>
           <div style={{ width: 1, height: 80, background: `linear-gradient(to bottom, transparent, ${GOLD})`, margin: "0 auto 48px" }} />
           <p style={{ color: GOLD, fontSize: 11, letterSpacing: "0.4em", textTransform: "uppercase", marginBottom: 24 }}>Our Story</p>

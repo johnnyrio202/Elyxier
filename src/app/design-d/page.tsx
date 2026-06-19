@@ -108,7 +108,7 @@ export default function ElevatedGlam() {
           <span style={{ fontFamily: BEBAS, fontSize: 30, letterSpacing: "0.18em", color: t.AMBER }}>ELYXIER</span>
           <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
             {["Shop", "About", "Live", "Contact"].map((item) => (
-              <a key={item} href="#" style={{ color: t.MUTED, fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", fontFamily: DM, fontWeight: 500 }}
+              <a key={item} href={item === "About" ? "#about" : "#"} style={{ color: t.MUTED, fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", fontFamily: DM, fontWeight: 500 }}
                 onMouseEnter={e => (e.currentTarget.style.color = t.AMBER)}
                 onMouseLeave={e => (e.currentTarget.style.color = t.MUTED)}>
                 {item}
@@ -203,7 +203,7 @@ export default function ElevatedGlam() {
       </section>
 
       {/* Brand Story */}
-      <section style={{ background: t.STORY_BG, padding: "120px 32px" }}>
+      <section id="about" style={{ background: t.STORY_BG, padding: "120px 32px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 80, alignItems: "center" }}>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <div style={{ width: 280, height: 280, borderRadius: "50%", background: t.STORY_E_BG, border: `2px solid ${t.AMBER}40`, display: "flex", alignItems: "center", justifyContent: "center" }}>

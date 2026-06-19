@@ -65,7 +65,7 @@ export default function WarmIvory() {
           <span style={{ fontFamily: "var(--font-cormorant), serif", fontSize: 28, fontWeight: 600, color: CHOC, letterSpacing: "0.08em" }}>ELYXIER</span>
           <div style={{ display: "flex", gap: 36, alignItems: "center" }}>
             {["Shop", "About", "Live"].map((item) => (
-              <a key={item} href="#" style={{ color: TEXT_LIGHT, fontSize: 14, letterSpacing: "0.04em", textDecoration: "none" }}
+              <a key={item} href={item === "About" ? "#about" : "#"} style={{ color: TEXT_LIGHT, fontSize: 14, letterSpacing: "0.04em", textDecoration: "none" }}
                 onMouseEnter={e => (e.currentTarget.style.color = AMBER)}
                 onMouseLeave={e => (e.currentTarget.style.color = TEXT_LIGHT)}>
                 {item}
@@ -152,7 +152,7 @@ export default function WarmIvory() {
       </section>
 
       {/* About */}
-      <section style={{ padding: "120px 40px", background: IVORY }}>
+      <section id="about" style={{ padding: "120px 40px", background: IVORY }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "center" }}>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <div style={{ position: "relative" }}>
