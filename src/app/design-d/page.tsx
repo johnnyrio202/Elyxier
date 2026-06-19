@@ -5,12 +5,12 @@ const BEBAS = "var(--font-bebas), Impact, sans-serif";
 const DM = "var(--font-dm-sans), system-ui, sans-serif";
 
 const products = [
-  { name: "Original Whipped Shea", desc: "The classic. Rich, whipped, and deeply nourishing.", photo: "p3O5f4u95Lo" },
-  { name: "Lavender & Honey", desc: "Calming lavender meets sweet honey for restful skin.", photo: "g6q3lFAe3kA" },
-  { name: "Vanilla Glow", desc: "Warm vanilla that leaves skin glowing and soft.", photo: "Sj1I3y550VA" },
-  { name: "Cocoa Butter Revival", desc: "Deep moisture with rich cocoa and shea.", photo: "03lN2NdfQXc" },
-  { name: "Rose Petal Silk", desc: "Delicate rose infused body butter for silky skin.", photo: "uYURVNf1L60" },
-  { name: "Citrus Burst", desc: "Energizing citrus blend to wake up your skin.", photo: "hZ7wSMMWGMA" },
+  { name: "Original Whipped Shea", desc: "The classic. Rich, whipped, and deeply nourishing.", photo: "1620916566398-39f1143ab7be" },
+  { name: "Lavender & Honey", desc: "Calming lavender meets sweet honey for restful skin.", photo: "1748543668676-ea8241cb3886" },
+  { name: "Vanilla Glow", desc: "Warm vanilla that leaves skin glowing and soft.", photo: "1748543668643-1ada33167539" },
+  { name: "Cocoa Butter Revival", desc: "Deep moisture with rich cocoa and shea.", photo: "1748543668687-624e058c367c" },
+  { name: "Rose Petal Silk", desc: "Delicate rose infused body butter for silky skin.", photo: "1619451427882-6aaaded0cc61" },
+  { name: "Citrus Burst", desc: "Energizing citrus blend to wake up your skin.", photo: "1629380108599-ea06489d66f5" },
 ];
 
 const testimonials = [
@@ -113,7 +113,7 @@ export default function ElevatedGlam() {
       {/* Hero */}
       <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", overflow: "hidden" }}>
         <img
-          src="https://images.unsplash.com/photo-QbHwPe1HE84?w=1600&h=900&fit=crop&q=80"
+          src="https://images.unsplash.com/photo-1748543668646-e81cda0890f3?w=1600&h=900&fit=crop&q=80"
           alt=""
           style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0, opacity: dark ? 0.2 : 0.08 }}
         />

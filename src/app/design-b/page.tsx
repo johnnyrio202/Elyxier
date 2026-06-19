@@ -2,10 +2,10 @@
 import { useState } from "react";
 
 const products = [
-  { name: "Whipped Shea Butter", price: "$25", photo: "p3O5f4u95Lo" },
-  { name: "Lavender Dreams Body Butter", price: "$25", photo: "g6q3lFAe3kA" },
-  { name: "Honey & Vanilla Glow", price: "$25", photo: "Sj1I3y550VA" },
-  { name: "Rose Gold Body Oil", price: "$25", photo: "03lN2NdfQXc" },
+  { name: "Whipped Shea Butter", price: "$25", photo: "1620916566398-39f1143ab7be" },
+  { name: "Lavender Dreams Body Butter", price: "$25", photo: "1748543668676-ea8241cb3886" },
+  { name: "Honey & Vanilla Glow", price: "$25", photo: "1748543668643-1ada33167539" },
+  { name: "Rose Gold Body Oil", price: "$25", photo: "1748543668687-624e058c367c" },
 ];
 
 export default function WarmIvory() {
@@ -71,7 +71,7 @@ export default function WarmIvory() {
       {/* Hero */}
       <section style={{ minHeight: "90vh", display: "flex", alignItems: "center", overflow: "hidden", position: "relative" }}>
         <img
-          src="https://images.unsplash.com/photo-QbHwPe1HE84?w=1600&h=900&fit=crop&q=80"
+          src="https://images.unsplash.com/photo-1748543668646-e81cda0890f3?w=1600&h=900&fit=crop&q=80"
           alt=""
           style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0, opacity: dark ? 0.15 : 0.08 }}
         />
