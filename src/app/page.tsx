@@ -1,65 +1,109 @@
-import Image from "next/image";
+import Link from "next/link";
+
+const designs = [
+  {
+    id: "design-a",
+    name: "Midnight Luxe",
+    tagline: "Dark, editorial luxury — Chanel meets skincare.",
+    font: "Playfair Display + Inter",
+    swatches: ["#0C0C0E", "#C9A257", "#F5F1EA"],
+    border: "#C9A257",
+  },
+  {
+    id: "design-b",
+    name: "Warm Ivory",
+    tagline: "Warm, skin-toned artisan luxury — approachable and glowing.",
+    font: "Cormorant Garamond + DM Sans",
+    swatches: ["#FAF7F2", "#CC8800", "#2A1810"],
+    border: "#CC8800",
+  },
+  {
+    id: "design-c",
+    name: "Bold Canvas",
+    tagline: "High-contrast and social-first — Fashion Nova × Sephora energy.",
+    font: "Montserrat + Nunito",
+    swatches: ["#4A1259", "#D4A0A0", "#C41E3A"],
+    border: "#C41E3A",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div
+      className="min-h-screen flex flex-col items-center justify-center px-6 py-16"
+      style={{ background: "#0A0A0A", color: "#FFFFFF" }}
+    >
+      <div className="max-w-5xl w-full">
+        <p
+          className="text-xs tracking-[0.3em] uppercase mb-4"
+          style={{ color: "#888" }}
+        >
+          Globalist.Pro — Client Review
+        </p>
+        <h1
+          className="text-4xl font-bold tracking-tight mb-2"
+          style={{ fontFamily: "Georgia, serif" }}
+        >
+          ELYXIER
+        </h1>
+        <p className="text-lg mb-14" style={{ color: "#999" }}>
+          Three design directions for your approval, Data.
+        </p>
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {designs.map((d) => (
+            <div
+              key={d.id}
+              className="rounded-2xl p-6 flex flex-col gap-4"
+              style={{
+                background: "#141414",
+                border: `1px solid ${d.border}33`,
+              }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <div className="flex gap-3 mb-1">
+                {d.swatches.map((color, i) => (
+                  <div
+                    key={i}
+                    className="w-7 h-7 rounded-full"
+                    style={{
+                      background: color,
+                      border: "1px solid #333",
+                    }}
+                  />
+                ))}
+              </div>
+              <div>
+                <h2
+                  className="text-xl font-semibold mb-1"
+                  style={{ color: d.border }}
+                >
+                  {d.name}
+                </h2>
+                <p className="text-sm leading-relaxed" style={{ color: "#AAA" }}>
+                  {d.tagline}
+                </p>
+              </div>
+              <p className="text-xs" style={{ color: "#666" }}>
+                {d.font}
+              </p>
+              <Link
+                href={`/${d.id}`}
+                className="mt-auto inline-flex items-center gap-2 text-sm font-medium py-2.5 px-5 rounded-full transition-all"
+                style={{
+                  background: d.border,
+                  color: d.id === "design-b" ? "#2A1810" : "#000",
+                }}
+              >
+                View Design →
+              </Link>
+            </div>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+
+        <p className="text-center text-xs mt-12" style={{ color: "#444" }}>
+          Built by Globalist.Pro · elyxier702@gmail.com
+        </p>
+      </div>
     </div>
   );
 }
