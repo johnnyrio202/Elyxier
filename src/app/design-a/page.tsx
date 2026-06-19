@@ -64,8 +64,9 @@ export default function MidnightLuxe() {
       {/* Nav */}
       <nav style={{ position: "sticky", top: 0, zIndex: 50, background: NAV, backdropFilter: "blur(12px)", borderBottom: `1px solid ${GOLD}22` }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <a href="/" style={{ display: "inline-flex", alignItems: "center", textDecoration: "none" }}>
-            <img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "48px", width: "auto", objectFit: "contain", display: "block", borderRadius: "6px" }} />
+          <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
+            <img src="/elyxier-mark.png" alt="ELYXIER" style={{ height: "60px", width: "auto", objectFit: "contain", display: "block", borderRadius: "6px" }} />
+            <span style={{ fontFamily: "var(--font-playfair), serif", fontSize: 20, fontWeight: 700, color: GOLD, letterSpacing: "0.14em" }}>ELYXIER</span>
           </a>
           <div style={{ display: "flex", gap: 36, alignItems: "center" }}>
             {["Shop", "About", "Live"].map((item) => (

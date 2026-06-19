@@ -66,8 +66,9 @@ export default function BoldCanvas() {
       {/* Nav */}
       <nav style={{ position: "sticky", top: 0, zIndex: 50, background: WHITE, borderBottom: `3px solid ${NAV_BORDER}` }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px", height: 68, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <a href="/" style={{ display: "inline-flex", alignItems: "center", textDecoration: "none" }}>
-            <img src="/elyxier-logo-plum.png" alt="ELYXIER" style={{ height: "48px", width: "auto", objectFit: "contain", display: "block", borderRadius: "6px" }} />
+          <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
+            <img src="/elyxier-mark-plum.png" alt="ELYXIER" style={{ height: "60px", width: "auto", objectFit: "contain", display: "block", borderRadius: "6px" }} />
+            <span style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: 18, fontWeight: 900, color: PLUM, letterSpacing: "0.18em", textTransform: "uppercase" }}>ELYXIER</span>
           </a>
           <div style={{ display: "flex", gap: 36, alignItems: "center" }}>
             {["Shop", "About", "Live"].map((item) => (

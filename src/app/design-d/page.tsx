@@ -105,8 +105,9 @@ export default function ElevatedGlam() {
         borderBottom: `1px solid ${t.NAV_BORDER}`,
       }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <a href="/" style={{ display: "inline-flex", alignItems: "center", textDecoration: "none" }}>
-            <img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "48px", width: "auto", objectFit: "contain", display: "block", borderRadius: "6px" }} />
+          <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
+            <img src="/elyxier-mark.png" alt="ELYXIER" style={{ height: "60px", width: "auto", objectFit: "contain", display: "block", borderRadius: "6px" }} />
+            <span style={{ fontFamily: BEBAS, fontSize: 28, letterSpacing: "0.18em", color: t.AMBER }}>ELYXIER</span>
           </a>
           <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
             {["Shop", "About", "Live", "Contact"].map((item) => (
