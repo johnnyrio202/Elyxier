@@ -1,12 +1,5 @@
 "use client";
-
-const WHITE = "#FFFFFF";
-const PLUM = "#4A1259";
-const ROSE = "#D4A0A0";
-const RED = "#C41E3A";
-const LIGHT_PLUM = "#F5EFF8";
-const TEXT_DARK = "#1A0A20";
-const TEXT_MID = "#7A4A8A";
+import { useState } from "react";
 
 const products = [
   { name: "Whipped Shea Butter", price: "$28", gradient: "linear-gradient(160deg, #9B4DB5 0%, #D4A0A0 50%, #E8C8C8 100%)" },
@@ -16,11 +9,52 @@ const products = [
 ];
 
 export default function BoldCanvas() {
+  const [dark, setDark] = useState(false);
+
+  const t = dark ? {
+    WHITE: "#0D0010",
+    PLUM: "#B060CC",
+    ROSE: "#E8B4B8",
+    RED: "#E83A5A",
+    LIGHT_PLUM: "#1A0025",
+    TEXT_DARK: "#F5F0FF",
+    TEXT_MID: "#C8A0D8",
+    NAV_BORDER: "#B060CC",
+    CARD_BG: "#1A0025",
+  } : {
+    WHITE: "#FFFFFF",
+    PLUM: "#4A1259",
+    ROSE: "#D4A0A0",
+    RED: "#C41E3A",
+    LIGHT_PLUM: "#F5EFF8",
+    TEXT_DARK: "#1A0A20",
+    TEXT_MID: "#7A4A8A",
+    NAV_BORDER: "#4A1259",
+    CARD_BG: "#FFFFFF",
+  };
+
+  const { WHITE, PLUM, ROSE, RED, LIGHT_PLUM, TEXT_DARK, TEXT_MID, NAV_BORDER, CARD_BG } = t;
+
   return (
     <div style={{ background: WHITE, color: TEXT_DARK, fontFamily: "var(--font-nunito), sans-serif", minHeight: "100vh" }}>
 
+      {/* Dark/Light Toggle */}
+      <button
+        onClick={() => setDark(!dark)}
+        style={{
+          position: "fixed", top: 80, right: 16, zIndex: 100,
+          background: dark ? "#F5F0FF" : "#0D0010",
+          color: dark ? "#0D0010" : "#F5F0FF",
+          border: "none", borderRadius: 50, padding: "8px 16px",
+          fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
+          cursor: "pointer", boxShadow: "0 2px 12px rgba(0,0,0,0.3)",
+        }}
+      >
+        {dark ? "☀ LIGHT" : "☾ DARK"}
+      </button>
+
       {/* Nav */}
-      <nav style={{ position: "sticky", top: 0, zIndex: 50, background: WHITE, borderBottom: `3px solid ${PLUM}` }}>
+      <nav style={{ position: "sticky", top: 0, zIndex: 50, background: WHITE, borderBottom: `3px solid ${NAV_BORDER}` }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px", height: 68, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <span style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: 22, fontWeight: 900, color: PLUM, letterSpacing: "0.15em", textTransform: "uppercase" }}>ELYXIER</span>
           <div style={{ display: "flex", gap: 36, alignItems: "center" }}>
@@ -32,7 +66,7 @@ export default function BoldCanvas() {
               </a>
             ))}
             <a href="#" style={{ background: PLUM, color: WHITE, padding: "8px 18px", fontSize: 12, letterSpacing: "0.08em", textDecoration: "none", fontWeight: 700, fontFamily: "var(--font-montserrat), sans-serif", borderRadius: 4 }}>
-              🛒 0
+              Cart 0
             </a>
           </div>
         </div>
@@ -89,9 +123,9 @@ export default function BoldCanvas() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
             {products.map((p) => (
-              <div key={p.name} style={{ background: WHITE, borderRadius: 8, overflow: "hidden", cursor: "pointer", boxShadow: "0 2px 12px rgba(74,18,89,0.08)" }}
-                onMouseEnter={e => (e.currentTarget.style.transform = "translateY(-4px)", e.currentTarget.style.boxShadow = "0 12px 40px rgba(74,18,89,0.15)")}
-                onMouseLeave={e => (e.currentTarget.style.transform = "translateY(0)", e.currentTarget.style.boxShadow = "0 2px 12px rgba(74,18,89,0.08)")}>
+              <div key={p.name} style={{ background: CARD_BG, borderRadius: 8, overflow: "hidden", cursor: "pointer", boxShadow: `0 2px 12px rgba(74,18,89,${dark ? "0.25" : "0.08"})` }}
+                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = `0 12px 40px rgba(74,18,89,${dark ? "0.4" : "0.15"})`; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = `0 2px 12px rgba(74,18,89,${dark ? "0.25" : "0.08"})`; }}>
                 <div style={{ height: 240, background: p.gradient }} />
                 <div style={{ padding: "20px 20px 24px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
@@ -114,13 +148,13 @@ export default function BoldCanvas() {
         <div style={{ position: "absolute", bottom: -60, left: -60, width: 240, height: 240, borderRadius: "50%", background: "rgba(212,160,160,0.1)" }} />
         <div style={{ maxWidth: 900, margin: "0 auto", position: "relative" }}>
           <p style={{ color: ROSE, fontSize: 11, letterSpacing: "0.5em", textTransform: "uppercase", marginBottom: 24, fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 700 }}>About ELYXIER</p>
-          <h2 style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: "clamp(36px, 5vw, 72px)", fontWeight: 900, color: WHITE, textTransform: "uppercase", lineHeight: 1.05, marginBottom: 40, letterSpacing: "-0.02em" }}>
+          <h2 style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: "clamp(36px, 5vw, 72px)", fontWeight: 900, color: "#FFFFFF", textTransform: "uppercase", lineHeight: 1.05, marginBottom: 40, letterSpacing: "-0.02em" }}>
             MADE FOR WOMEN<br />WHO GLOW DIFFERENT.
           </h2>
           <p style={{ color: "rgba(255,255,255,0.75)", fontSize: 18, lineHeight: 1.9, maxWidth: 620, margin: "0 auto 48px", fontFamily: "var(--font-nunito), sans-serif" }}>
             ELYXIER is handcrafted luxury skincare made by women, for women. Every product is made in small batches with premium ingredients to give your skin the royal treatment it deserves.
           </p>
-          <a href="#" style={{ background: ROSE, color: WHITE, padding: "16px 48px", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", fontWeight: 800, borderRadius: 4, fontFamily: "var(--font-montserrat), sans-serif", display: "inline-block" }}>
+          <a href="#" style={{ background: ROSE, color: "#FFFFFF", padding: "16px 48px", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", fontWeight: 800, borderRadius: 4, fontFamily: "var(--font-montserrat), sans-serif", display: "inline-block" }}>
             Our Full Story
           </a>
         </div>
@@ -132,7 +166,7 @@ export default function BoldCanvas() {
           <div style={{ display: "flex", flexWrap: "wrap", gap: 40, justifyContent: "space-between", alignItems: "center" }}>
             <div>
               <p style={{ color: ROSE, fontSize: 11, letterSpacing: "0.5em", textTransform: "uppercase", marginBottom: 12, fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 700 }}>Live Shopping</p>
-              <h2 style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 900, color: WHITE, textTransform: "uppercase", lineHeight: 1.05, marginBottom: 8 }}>
+              <h2 style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 900, color: "#FFFFFF", textTransform: "uppercase", lineHeight: 1.05, marginBottom: 8 }}>
                 SHOP<br />LIVE NOW.
               </h2>
               <p style={{ color: "rgba(255,255,255,0.75)", fontSize: 15, fontFamily: "var(--font-nunito), sans-serif" }}>Exclusive drops, demos & deals — every week.</p>
@@ -145,7 +179,7 @@ export default function BoldCanvas() {
                 { name: "Whatnot", handle: "Coming Soon" },
               ].map((p) => (
                 <div key={p.name} style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: 8, padding: "16px 24px", textAlign: "center", minWidth: 120 }}>
-                  <div style={{ color: WHITE, fontFamily: "var(--font-montserrat), sans-serif", fontSize: 14, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>{p.name}</div>
+                  <div style={{ color: "#FFFFFF", fontFamily: "var(--font-montserrat), sans-serif", fontSize: 14, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>{p.name}</div>
                   <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 11 }}>{p.handle}</div>
                 </div>
               ))}
@@ -158,19 +192,19 @@ export default function BoldCanvas() {
       <section style={{ background: PLUM, padding: "100px 40px" }}>
         <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center" }}>
           <p style={{ color: ROSE, fontSize: 11, letterSpacing: "0.5em", textTransform: "uppercase", marginBottom: 16, fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 700 }}>Get First Access</p>
-          <h2 style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 900, color: WHITE, textTransform: "uppercase", marginBottom: 12, letterSpacing: "-0.01em" }}>
+          <h2 style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 900, color: "#FFFFFF", textTransform: "uppercase", marginBottom: 12, letterSpacing: "-0.01em" }}>
             JOIN THE LIST.
           </h2>
           <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 16, lineHeight: 1.8, marginBottom: 40, fontFamily: "var(--font-nunito), sans-serif" }}>
             New drops, exclusive deals, and early access — only for our community.
           </p>
-          <div style={{ background: WHITE, borderRadius: 8, padding: 6, display: "flex", gap: 6 }}>
+          <div style={{ background: "#FFFFFF", borderRadius: 8, padding: 6, display: "flex", gap: 6 }}>
             <input
               type="email"
               placeholder="Enter your email"
               style={{ flex: 1, background: "transparent", border: "none", padding: "12px 16px", fontSize: 15, outline: "none", color: TEXT_DARK, fontFamily: "var(--font-nunito), sans-serif" }}
             />
-            <button style={{ background: RED, color: WHITE, border: "none", padding: "12px 28px", fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase", fontWeight: 800, cursor: "pointer", borderRadius: 4, fontFamily: "var(--font-montserrat), sans-serif", whiteSpace: "nowrap" }}>
+            <button style={{ background: RED, color: "#FFFFFF", border: "none", padding: "12px 28px", fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase", fontWeight: 800, cursor: "pointer", borderRadius: 4, fontFamily: "var(--font-montserrat), sans-serif", whiteSpace: "nowrap" }}>
               Join Now
             </button>
           </div>
@@ -180,7 +214,7 @@ export default function BoldCanvas() {
       {/* Footer */}
       <footer style={{ background: TEXT_DARK, padding: "48px 40px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: 24, justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: 20, fontWeight: 900, color: WHITE, letterSpacing: "0.15em", textTransform: "uppercase" }}>ELYXIER</span>
+          <span style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: 20, fontWeight: 900, color: "#FFFFFF", letterSpacing: "0.15em", textTransform: "uppercase" }}>ELYXIER</span>
           <div style={{ display: "flex", gap: 28 }}>
             {["TikTok", "Instagram", "Facebook"].map((s) => (
               <a key={s} href="#" style={{ color: ROSE, fontSize: 13, textDecoration: "none", fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em" }}>{s}</a>

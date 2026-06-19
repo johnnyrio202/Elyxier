@@ -1,10 +1,5 @@
 "use client";
-
-const IVORY = "#FAF7F2";
-const CHOC = "#2A1810";
-const AMBER = "#CC8800";
-const BLUSH = "#F2E8E0";
-const TEXT_LIGHT = "#6B4A30";
+import { useState } from "react";
 
 const products = [
   { name: "Whipped Shea Butter", price: "$28", gradient: "radial-gradient(circle at 40% 40%, #F5D78E 0%, #CC8800 50%, #8B5E00 100%)" },
@@ -14,8 +9,45 @@ const products = [
 ];
 
 export default function WarmIvory() {
+  const [dark, setDark] = useState(false);
+
+  const t = dark ? {
+    IVORY: "#1A0C06",
+    CHOC: "#FAF7F2",
+    AMBER: "#E09A1A",
+    BLUSH: "#2A1810",
+    TEXT_LIGHT: "#CC9060",
+    CARD: "#2A1810",
+    FOOTER_BG: "#0D0604",
+  } : {
+    IVORY: "#FAF7F2",
+    CHOC: "#2A1810",
+    AMBER: "#CC8800",
+    BLUSH: "#F2E8E0",
+    TEXT_LIGHT: "#6B4A30",
+    CARD: "#FAF7F2",
+    FOOTER_BG: "#2A1810",
+  };
+
+  const { IVORY, CHOC, AMBER, BLUSH, TEXT_LIGHT, CARD, FOOTER_BG } = t;
+
   return (
     <div style={{ background: IVORY, color: CHOC, fontFamily: "var(--font-dm-sans), sans-serif", minHeight: "100vh" }}>
+
+      {/* Dark/Light Toggle */}
+      <button
+        onClick={() => setDark(!dark)}
+        style={{
+          position: "fixed", top: 80, right: 16, zIndex: 100,
+          background: dark ? "#FAF7F2" : "#2A1810",
+          color: dark ? "#2A1810" : "#FAF7F2",
+          border: "none", borderRadius: 50, padding: "8px 16px",
+          fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
+          cursor: "pointer", boxShadow: "0 2px 12px rgba(0,0,0,0.3)",
+        }}
+      >
+        {dark ? "☀ LIGHT" : "☾ DARK"}
+      </button>
 
       {/* Nav */}
       <nav style={{ position: "sticky", top: 0, zIndex: 50, background: `${IVORY}F0`, backdropFilter: "blur(12px)", borderBottom: `1px solid ${AMBER}22` }}>
@@ -39,7 +71,7 @@ export default function WarmIvory() {
       {/* Hero */}
       <section style={{ minHeight: "90vh", display: "flex", alignItems: "center", overflow: "hidden", position: "relative" }}>
         <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, ${IVORY} 0%, ${BLUSH} 100%)` }} />
-        <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)", width: "44%", height: "80vh", background: "radial-gradient(ellipse, #F5D78E 0%, #CC8800 40%, #8B5E00 80%, #FAF7F2 100%)", borderRadius: "50% 0 0 50%", opacity: 0.15 }} />
+        <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)", width: "44%", height: "80vh", background: `radial-gradient(ellipse, ${AMBER}26 0%, ${AMBER}10 40%, transparent 80%)`, borderRadius: "50% 0 0 50%", opacity: dark ? 0.3 : 0.15 }} />
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px", width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", position: "relative" }}>
           <div>
             <p style={{ color: AMBER, fontSize: 12, letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: 20, fontWeight: 500 }}>Handcrafted with Love</p>
@@ -79,9 +111,9 @@ export default function WarmIvory() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 28 }}>
             {products.map((p) => (
-              <div key={p.name} style={{ background: IVORY, borderRadius: 20, overflow: "hidden", boxShadow: "0 2px 20px #00000010", cursor: "pointer" }}
-                onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 8px 40px #00000018")}
-                onMouseLeave={e => (e.currentTarget.style.boxShadow = "0 2px 20px #00000010")}>
+              <div key={p.name} style={{ background: CARD, borderRadius: 20, overflow: "hidden", boxShadow: dark ? "0 2px 20px #00000030" : "0 2px 20px #00000010", cursor: "pointer" }}
+                onMouseEnter={e => (e.currentTarget.style.boxShadow = dark ? "0 8px 40px #00000050" : "0 8px 40px #00000018")}
+                onMouseLeave={e => (e.currentTarget.style.boxShadow = dark ? "0 2px 20px #00000030" : "0 2px 20px #00000010")}>
                 <div style={{ height: 240, display: "flex", alignItems: "center", justifyContent: "center", background: BLUSH }}>
                   <div style={{ width: 160, height: 160, borderRadius: "50%", background: p.gradient }} />
                 </div>
@@ -169,7 +201,7 @@ export default function WarmIvory() {
       </section>
 
       {/* Footer */}
-      <footer style={{ borderTop: `1px solid ${AMBER}22`, padding: "48px 40px", background: CHOC }}>
+      <footer style={{ borderTop: `1px solid ${AMBER}22`, padding: "48px 40px", background: FOOTER_BG }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: 24, justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontFamily: "var(--font-cormorant), serif", fontSize: 24, color: AMBER, letterSpacing: "0.08em" }}>ELYXIER</span>
           <div style={{ display: "flex", gap: 28 }}>

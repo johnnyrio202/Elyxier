@@ -3,7 +3,7 @@ import Link from "next/link";
 const designs = [
   {
     id: "design-a",
-    name: "Midnight Luxe",
+    name: "A — Midnight Luxe",
     tagline: "Dark, editorial luxury — Chanel meets skincare.",
     font: "Playfair Display + Inter",
     swatches: ["#0C0C0E", "#C9A257", "#F5F1EA"],
@@ -11,7 +11,7 @@ const designs = [
   },
   {
     id: "design-b",
-    name: "Warm Ivory",
+    name: "B — Warm Ivory",
     tagline: "Warm, skin-toned artisan luxury — approachable and glowing.",
     font: "Cormorant Garamond + DM Sans",
     swatches: ["#FAF7F2", "#CC8800", "#2A1810"],
@@ -19,11 +19,19 @@ const designs = [
   },
   {
     id: "design-c",
-    name: "Bold Canvas",
+    name: "C — Bold Canvas",
     tagline: "High-contrast and social-first — Fashion Nova × Sephora energy.",
     font: "Montserrat + Nunito",
     swatches: ["#4A1259", "#D4A0A0", "#C41E3A"],
     border: "#C41E3A",
+  },
+  {
+    id: "design-d",
+    name: "D — Elevated Glam",
+    tagline: "Bold luxury with personality. Your brand's energy meets spa-level sophistication.",
+    font: "Bebas Neue + DM Sans",
+    swatches: ["#0A0A08", "#D4920A", "#FAF7F0"],
+    border: "#D4920A",
   },
 ];
 
@@ -46,11 +54,14 @@ export default function Home() {
         >
           ELYXIER
         </h1>
-        <p className="text-lg mb-14" style={{ color: "#999" }}>
-          Three design directions for your approval, Data.
+        <p className="text-lg mb-3" style={{ color: "#999" }}>
+          Four design directions for your approval, Data.
+        </p>
+        <p className="text-sm mb-14" style={{ color: "#666" }}>
+          Each design includes a light &amp; dark mode toggle — look for the button in the top-right corner.
         </p>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           {designs.map((d) => (
             <div
               key={d.id}
@@ -74,7 +85,7 @@ export default function Home() {
               </div>
               <div>
                 <h2
-                  className="text-xl font-semibold mb-1"
+                  className="text-lg font-semibold mb-1"
                   style={{ color: d.border }}
                 >
                   {d.name}
@@ -86,6 +97,9 @@ export default function Home() {
               <p className="text-xs" style={{ color: "#666" }}>
                 {d.font}
               </p>
+              <div className="text-xs px-2 py-1 rounded-full self-start" style={{ background: "#222", color: "#888", border: "1px solid #333" }}>
+                Light &amp; Dark
+              </div>
               <Link
                 href={`/${d.id}`}
                 className="mt-auto inline-flex items-center gap-2 text-sm font-medium py-2.5 px-5 rounded-full transition-all"
