@@ -2,10 +2,10 @@
 import { useState } from "react";
 
 const products = [
-  { name: "Whipped Shea Butter", price: "$28", gradient: "linear-gradient(135deg, #3D2B00 0%, #C9A257 60%, #6B4A10 100%)" },
-  { name: "Lavender Dreams Body Butter", price: "$35", gradient: "linear-gradient(135deg, #2A1A40 0%, #9B7EC8 60%, #C9A257 100%)" },
-  { name: "Honey & Vanilla Glow", price: "$38", gradient: "linear-gradient(135deg, #5C3800 0%, #E8B84B 60%, #A07020 100%)" },
-  { name: "Rose Gold Body Oil", price: "$45", gradient: "linear-gradient(135deg, #3D1A1A 0%, #E8A0A0 50%, #C9A257 100%)" },
+  { name: "Whipped Shea Butter", price: "$25", photo: "p3O5f4u95Lo" },
+  { name: "Lavender Dreams Body Butter", price: "$25", photo: "g6q3lFAe3kA" },
+  { name: "Honey & Vanilla Glow", price: "$25", photo: "Sj1I3y550VA" },
+  { name: "Rose Gold Body Oil", price: "$25", photo: "03lN2NdfQXc" },
 ];
 
 export default function MidnightLuxe() {
@@ -72,10 +72,15 @@ export default function MidnightLuxe() {
 
       {/* Hero */}
       <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: HERO_GRAD }} />
-        <div style={{ position: "absolute", left: "32%", top: 0, bottom: 0, width: 1, background: `linear-gradient(to bottom, transparent, ${GOLD}80, transparent)` }} />
-        <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 70% 50%, ${GOLD}08 0%, transparent 60%)` }} />
-        <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto", padding: "0 32px", width: "100%", paddingLeft: "36%" }}>
+        <img
+          src="https://images.unsplash.com/photo-QbHwPe1HE84?w=1600&h=900&fit=crop&q=80"
+          alt=""
+          style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0, opacity: dark ? 0.18 : 0.08 }}
+        />
+        <div style={{ position: "absolute", inset: 0, background: HERO_GRAD, zIndex: 1 }} />
+        <div style={{ position: "absolute", left: "32%", top: 0, bottom: 0, width: 1, background: `linear-gradient(to bottom, transparent, ${GOLD}80, transparent)`, zIndex: 2 }} />
+        <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 70% 50%, ${GOLD}08 0%, transparent 60%)`, zIndex: 2 }} />
+        <div style={{ position: "relative", zIndex: 3, maxWidth: 1280, margin: "0 auto", padding: "0 32px", width: "100%", paddingLeft: "36%" }}>
           <p style={{ color: GOLD, fontSize: 11, letterSpacing: "0.4em", textTransform: "uppercase", marginBottom: 24 }}>Luxury Skincare · Handcrafted</p>
           <h1 style={{ fontFamily: "var(--font-playfair), serif", fontSize: "clamp(48px, 7vw, 96px)", fontWeight: 400, lineHeight: 1.1, marginBottom: 32, color: CREAM }}>
             Skin.<br />
@@ -107,8 +112,16 @@ export default function MidnightLuxe() {
             <div key={p.name} style={{ background: CARD, border: `1px solid ${GOLD}33`, display: "flex", flexDirection: "column", cursor: "pointer" }}
               onMouseEnter={e => (e.currentTarget.style.border = `1px solid ${GOLD}88`)}
               onMouseLeave={e => (e.currentTarget.style.border = `1px solid ${GOLD}33`)}>
-              <div style={{ height: 280, background: p.gradient, position: "relative" }}>
-                <span style={{ position: "absolute", top: 16, left: 16, background: GOLD, color: BG, fontSize: 9, letterSpacing: "0.2em", padding: "4px 10px", fontWeight: 700, textTransform: "uppercase" }}>Handcrafted</span>
+              <div style={{ position: "relative", width: "100%", height: "280px", overflow: "hidden" }}>
+                <img
+                  src={`https://images.unsplash.com/photo-${p.photo}?w=600&h=600&fit=crop&q=80`}
+                  alt={p.name}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                />
+                <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(0,0,0,0.55)", color: "#FFFFFF", fontSize: 9, fontWeight: 700, letterSpacing: "2px", padding: "4px 8px", borderRadius: "4px", textTransform: "uppercase", backdropFilter: "blur(4px)" }}>
+                  PLACEHOLDER
+                </div>
+                <span style={{ position: "absolute", top: 10, right: 10, background: GOLD, color: BG, fontSize: 9, letterSpacing: "0.2em", padding: "4px 10px", fontWeight: 700, textTransform: "uppercase" }}>Handcrafted</span>
               </div>
               <div style={{ padding: "24px 20px" }}>
                 <h3 style={{ fontFamily: "var(--font-playfair), serif", fontSize: 18, fontWeight: 400, color: CREAM, marginBottom: 8 }}>{p.name}</h3>

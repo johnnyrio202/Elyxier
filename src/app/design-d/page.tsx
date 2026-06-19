@@ -5,36 +5,12 @@ const BEBAS = "var(--font-bebas), Impact, sans-serif";
 const DM = "var(--font-dm-sans), system-ui, sans-serif";
 
 const products = [
-  {
-    name: "Original Whipped Shea",
-    desc: "The classic. Rich, whipped, and deeply nourishing.",
-    gradient: "linear-gradient(145deg, #5C3800 0%, #D4920A 45%, #F0C040 80%, #E8A820 100%)",
-  },
-  {
-    name: "Lavender & Honey",
-    desc: "Calming lavender meets sweet honey for restful skin.",
-    gradient: "linear-gradient(145deg, #2A1A50 0%, #9B7EC8 40%, #D4920A 80%, #E8B820 100%)",
-  },
-  {
-    name: "Vanilla Glow",
-    desc: "Warm vanilla that leaves skin glowing and soft.",
-    gradient: "linear-gradient(160deg, #3D2000 0%, #C8780A 35%, #F5C842 70%, #FAE090 100%)",
-  },
-  {
-    name: "Cocoa Butter Revival",
-    desc: "Deep moisture with rich cocoa and shea.",
-    gradient: "linear-gradient(130deg, #1A0A00 0%, #6B3A10 40%, #C8780A 75%, #D4920A 100%)",
-  },
-  {
-    name: "Rose Petal Silk",
-    desc: "Delicate rose infused body butter for silky skin.",
-    gradient: "linear-gradient(150deg, #3D1010 0%, #C86040 40%, #E8A080 70%, #D4920A 100%)",
-  },
-  {
-    name: "Citrus Burst",
-    desc: "Energizing citrus blend to wake up your skin.",
-    gradient: "linear-gradient(140deg, #3A2800 0%, #D4920A 35%, #F5D040 65%, #FAEE80 100%)",
-  },
+  { name: "Original Whipped Shea", desc: "The classic. Rich, whipped, and deeply nourishing.", photo: "p3O5f4u95Lo" },
+  { name: "Lavender & Honey", desc: "Calming lavender meets sweet honey for restful skin.", photo: "g6q3lFAe3kA" },
+  { name: "Vanilla Glow", desc: "Warm vanilla that leaves skin glowing and soft.", photo: "Sj1I3y550VA" },
+  { name: "Cocoa Butter Revival", desc: "Deep moisture with rich cocoa and shea.", photo: "03lN2NdfQXc" },
+  { name: "Rose Petal Silk", desc: "Delicate rose infused body butter for silky skin.", photo: "uYURVNf1L60" },
+  { name: "Citrus Burst", desc: "Energizing citrus blend to wake up your skin.", photo: "hZ7wSMMWGMA" },
 ];
 
 const testimonials = [
@@ -136,11 +112,16 @@ export default function ElevatedGlam() {
 
       {/* Hero */}
       <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: t.BG }} />
-        <div style={{ position: "absolute", right: "-10%", top: "50%", transform: "translateY(-50%)", width: "55%", height: "90vh", background: `radial-gradient(ellipse at center, ${t.AMBER_GLOW}18 0%, ${t.AMBER}0A 45%, transparent 70%)`, borderRadius: "50%" }} />
-        <div style={{ position: "absolute", right: "5%", top: "20%", width: 300, height: 300, background: `radial-gradient(circle, ${t.AMBER}12 0%, transparent 70%)`, borderRadius: "50%" }} />
+        <img
+          src="https://images.unsplash.com/photo-QbHwPe1HE84?w=1600&h=900&fit=crop&q=80"
+          alt=""
+          style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0, opacity: dark ? 0.2 : 0.08 }}
+        />
+        <div style={{ position: "absolute", inset: 0, background: t.BG, zIndex: 1, opacity: dark ? 0.78 : 0.88 }} />
+        <div style={{ position: "absolute", right: "-10%", top: "50%", transform: "translateY(-50%)", width: "55%", height: "90vh", background: `radial-gradient(ellipse at center, ${t.AMBER_GLOW}18 0%, ${t.AMBER}0A 45%, transparent 70%)`, borderRadius: "50%", zIndex: 2 }} />
+        <div style={{ position: "absolute", right: "5%", top: "20%", width: 300, height: 300, background: `radial-gradient(circle, ${t.AMBER}12 0%, transparent 70%)`, borderRadius: "50%", zIndex: 2 }} />
 
-        <div style={{ position: "relative", maxWidth: 760, margin: "0 auto", padding: "120px 32px", width: "100%" }}>
+        <div style={{ position: "relative", zIndex: 3, maxWidth: 760, margin: "0 auto", padding: "120px 32px", width: "100%" }}>
           <p style={{ color: t.AMBER, fontSize: 11, letterSpacing: "0.45em", textTransform: "uppercase", marginBottom: 24, fontFamily: DM, fontWeight: 600 }}>
             HANDCRAFTED · LAS VEGAS · SINCE 2026
           </p>
@@ -186,8 +167,16 @@ export default function ElevatedGlam() {
               <div key={p.name} style={{ background: t.CARD, display: "flex", flexDirection: "column", cursor: "pointer", border: `1px solid ${t.AMBER}20` }}
                 onMouseEnter={e => { e.currentTarget.style.border = `1px solid ${t.AMBER}66`; e.currentTarget.style.transform = "translateY(-4px)"; }}
                 onMouseLeave={e => { e.currentTarget.style.border = `1px solid ${t.AMBER}20`; e.currentTarget.style.transform = "translateY(0)"; }}>
-                <div style={{ height: 220, background: p.gradient, position: "relative" }}>
-                  <span style={{ position: "absolute", top: 12, left: 12, color: t.AMBER, fontFamily: BEBAS, fontSize: 11, letterSpacing: "0.2em" }}>HANDCRAFTED</span>
+                <div style={{ position: "relative", width: "100%", height: "220px", overflow: "hidden" }}>
+                  <img
+                    src={`https://images.unsplash.com/photo-${p.photo}?w=600&h=600&fit=crop&q=80`}
+                    alt={p.name}
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  />
+                  <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(0,0,0,0.55)", color: "#FFFFFF", fontSize: 9, fontWeight: 700, letterSpacing: "2px", padding: "4px 8px", borderRadius: "4px", textTransform: "uppercase", backdropFilter: "blur(4px)" }}>
+                    PLACEHOLDER
+                  </div>
+                  <span style={{ position: "absolute", top: 10, right: 10, color: t.AMBER, fontFamily: BEBAS, fontSize: 11, letterSpacing: "0.2em", background: "rgba(0,0,0,0.5)", padding: "2px 8px" }}>HANDCRAFTED</span>
                 </div>
                 <div style={{ padding: "20px 20px 24px", display: "flex", flexDirection: "column", flex: 1 }}>
                   <h3 style={{ fontFamily: BEBAS, fontSize: 22, letterSpacing: "0.06em", color: t.TEXT, marginBottom: 8 }}>{p.name}</h3>

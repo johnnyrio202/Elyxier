@@ -2,10 +2,10 @@
 import { useState } from "react";
 
 const products = [
-  { name: "Whipped Shea Butter", price: "$28", gradient: "radial-gradient(circle at 40% 40%, #F5D78E 0%, #CC8800 50%, #8B5E00 100%)" },
-  { name: "Lavender Dreams Body Butter", price: "$35", gradient: "radial-gradient(circle at 40% 40%, #E8D5F5 0%, #9B7EC8 50%, #5A3080 100%)" },
-  { name: "Honey & Vanilla Glow", price: "$38", gradient: "radial-gradient(circle at 40% 40%, #FFF0C0 0%, #E8B84B 50%, #A07020 100%)" },
-  { name: "Rose Gold Body Oil", price: "$45", gradient: "radial-gradient(circle at 40% 40%, #FFE8E0 0%, #E8A090 50%, #C07060 100%)" },
+  { name: "Whipped Shea Butter", price: "$25", photo: "p3O5f4u95Lo" },
+  { name: "Lavender Dreams Body Butter", price: "$25", photo: "g6q3lFAe3kA" },
+  { name: "Honey & Vanilla Glow", price: "$25", photo: "Sj1I3y550VA" },
+  { name: "Rose Gold Body Oil", price: "$25", photo: "03lN2NdfQXc" },
 ];
 
 export default function WarmIvory() {
@@ -70,9 +70,14 @@ export default function WarmIvory() {
 
       {/* Hero */}
       <section style={{ minHeight: "90vh", display: "flex", alignItems: "center", overflow: "hidden", position: "relative" }}>
-        <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, ${IVORY} 0%, ${BLUSH} 100%)` }} />
-        <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)", width: "44%", height: "80vh", background: `radial-gradient(ellipse, ${AMBER}26 0%, ${AMBER}10 40%, transparent 80%)`, borderRadius: "50% 0 0 50%", opacity: dark ? 0.3 : 0.15 }} />
-        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px", width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", position: "relative" }}>
+        <img
+          src="https://images.unsplash.com/photo-QbHwPe1HE84?w=1600&h=900&fit=crop&q=80"
+          alt=""
+          style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0, opacity: dark ? 0.15 : 0.08 }}
+        />
+        <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, ${IVORY} 0%, ${BLUSH} 100%)`, zIndex: 1, opacity: 0.92 }} />
+        <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)", width: "44%", height: "80vh", background: `radial-gradient(ellipse, ${AMBER}26 0%, ${AMBER}10 40%, transparent 80%)`, borderRadius: "50% 0 0 50%", opacity: dark ? 0.3 : 0.15, zIndex: 2 }} />
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px", width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", position: "relative", zIndex: 3 }}>
           <div>
             <p style={{ color: AMBER, fontSize: 12, letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: 20, fontWeight: 500 }}>Handcrafted with Love</p>
             <h1 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "clamp(44px, 6vw, 80px)", fontWeight: 400, lineHeight: 1.15, color: CHOC, marginBottom: 28 }}>
@@ -114,8 +119,15 @@ export default function WarmIvory() {
               <div key={p.name} style={{ background: CARD, borderRadius: 20, overflow: "hidden", boxShadow: dark ? "0 2px 20px #00000030" : "0 2px 20px #00000010", cursor: "pointer" }}
                 onMouseEnter={e => (e.currentTarget.style.boxShadow = dark ? "0 8px 40px #00000050" : "0 8px 40px #00000018")}
                 onMouseLeave={e => (e.currentTarget.style.boxShadow = dark ? "0 2px 20px #00000030" : "0 2px 20px #00000010")}>
-                <div style={{ height: 240, display: "flex", alignItems: "center", justifyContent: "center", background: BLUSH }}>
-                  <div style={{ width: 160, height: 160, borderRadius: "50%", background: p.gradient }} />
+                <div style={{ position: "relative", width: "100%", height: "240px", overflow: "hidden" }}>
+                  <img
+                    src={`https://images.unsplash.com/photo-${p.photo}?w=600&h=600&fit=crop&q=80`}
+                    alt={p.name}
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  />
+                  <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(0,0,0,0.55)", color: "#FFFFFF", fontSize: 9, fontWeight: 700, letterSpacing: "2px", padding: "4px 8px", borderRadius: "4px", textTransform: "uppercase", backdropFilter: "blur(4px)" }}>
+                    PLACEHOLDER
+                  </div>
                 </div>
                 <div style={{ padding: "24px 24px 28px" }}>
                   <h3 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: 20, fontWeight: 500, color: CHOC, marginBottom: 8 }}>{p.name}</h3>

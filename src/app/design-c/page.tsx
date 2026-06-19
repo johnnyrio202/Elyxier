@@ -2,10 +2,10 @@
 import { useState } from "react";
 
 const products = [
-  { name: "Whipped Shea Butter", price: "$28", gradient: "linear-gradient(160deg, #9B4DB5 0%, #D4A0A0 50%, #E8C8C8 100%)" },
-  { name: "Lavender Dreams Body Butter", price: "$35", gradient: "linear-gradient(160deg, #6A2090 0%, #A070C0 50%, #D4A0D4 100%)" },
-  { name: "Honey & Vanilla Glow", price: "$38", gradient: "linear-gradient(160deg, #C41E3A 0%, #D4A0A0 50%, #FFE0E0 100%)" },
-  { name: "Rose Gold Body Oil", price: "$45", gradient: "linear-gradient(160deg, #8B2050 0%, #D4A0A0 45%, #FFD0E8 100%)" },
+  { name: "Whipped Shea Butter", price: "$25", photo: "p3O5f4u95Lo" },
+  { name: "Lavender Dreams Body Butter", price: "$25", photo: "g6q3lFAe3kA" },
+  { name: "Honey & Vanilla Glow", price: "$25", photo: "Sj1I3y550VA" },
+  { name: "Rose Gold Body Oil", price: "$25", photo: "03lN2NdfQXc" },
 ];
 
 export default function BoldCanvas() {
@@ -95,14 +95,15 @@ export default function BoldCanvas() {
             </a>
           </div>
         </div>
-        <div style={{ background: `linear-gradient(135deg, #7A1A9B 0%, #C41E3A 40%, #D4A0A0 75%, #FFE8E8 100%)`, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
-          <div style={{ position: "absolute", top: "10%", right: "10%", width: 200, height: 200, borderRadius: "50%", background: "rgba(255,255,255,0.08)" }} />
-          <div style={{ position: "absolute", bottom: "15%", left: "5%", width: 140, height: 140, borderRadius: "50%", background: "rgba(255,255,255,0.06)" }} />
-          <div style={{ textAlign: "center", position: "relative", zIndex: 1 }}>
-            <div style={{ width: 240, height: 300, margin: "0 auto", borderRadius: "50% 50% 45% 45%", background: "rgba(255,255,255,0.15)", backdropFilter: "blur(4px)", border: "1px solid rgba(255,255,255,0.25)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 14, letterSpacing: "0.1em", textTransform: "uppercase", fontFamily: "var(--font-montserrat), sans-serif" }}>Product Image</span>
-            </div>
-            <div style={{ marginTop: 20, background: "rgba(255,255,255,0.15)", borderRadius: 50, padding: "8px 24px", display: "inline-block" }}>
+        <div style={{ position: "relative", overflow: "hidden" }}>
+          <img
+            src="https://images.unsplash.com/photo-QbHwPe1HE84?w=900&h=900&fit=crop&q=80"
+            alt=""
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", minHeight: "95vh" }}
+          />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(122,26,155,0.65) 0%, rgba(196,30,58,0.5) 60%, rgba(212,160,160,0.3) 100%)" }} />
+          <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ marginTop: 20, background: "rgba(255,255,255,0.15)", borderRadius: 50, padding: "8px 24px", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.3)" }}>
               <span style={{ color: WHITE, fontSize: 12, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" }}>NEW DROP</span>
             </div>
           </div>
@@ -126,7 +127,16 @@ export default function BoldCanvas() {
               <div key={p.name} style={{ background: CARD_BG, borderRadius: 8, overflow: "hidden", cursor: "pointer", boxShadow: `0 2px 12px rgba(74,18,89,${dark ? "0.25" : "0.08"})` }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = `0 12px 40px rgba(74,18,89,${dark ? "0.4" : "0.15"})`; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = `0 2px 12px rgba(74,18,89,${dark ? "0.25" : "0.08"})`; }}>
-                <div style={{ height: 240, background: p.gradient }} />
+                <div style={{ position: "relative", width: "100%", height: "240px", overflow: "hidden" }}>
+                  <img
+                    src={`https://images.unsplash.com/photo-${p.photo}?w=600&h=600&fit=crop&q=80`}
+                    alt={p.name}
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  />
+                  <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(0,0,0,0.55)", color: "#FFFFFF", fontSize: 9, fontWeight: 700, letterSpacing: "2px", padding: "4px 8px", borderRadius: "4px", textTransform: "uppercase", backdropFilter: "blur(4px)" }}>
+                    PLACEHOLDER
+                  </div>
+                </div>
                 <div style={{ padding: "20px 20px 24px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
                     <h3 style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: 15, fontWeight: 800, color: PLUM, textTransform: "uppercase", letterSpacing: "0.04em", lineHeight: 1.3 }}>{p.name}</h3>
