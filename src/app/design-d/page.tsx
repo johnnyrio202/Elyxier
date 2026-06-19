@@ -135,7 +135,6 @@ export default function ElevatedGlam() {
         <div style={{ position: "absolute", right: "5%", top: "20%", width: 300, height: 300, background: `radial-gradient(circle, ${t.AMBER}12 0%, transparent 70%)`, borderRadius: "50%", zIndex: 2 }} />
 
         <div style={{ position: "relative", zIndex: 3, maxWidth: 760, margin: "0 auto", padding: "120px 32px", width: "100%" }}>
-          <img src="/elyxier-logo.png" alt="ELYXIER" style={{ width: "220px", height: "auto", borderRadius: "12px", marginBottom: "32px", display: "block" }} />
           <p style={{ color: t.AMBER, fontSize: 11, letterSpacing: "0.45em", textTransform: "uppercase", marginBottom: 24, fontFamily: DM, fontWeight: 600 }}>
             HANDCRAFTED · LAS VEGAS · SINCE 2026
           </p>

@@ -93,7 +93,6 @@ export default function MidnightLuxe() {
         <div style={{ position: "absolute", left: "32%", top: 0, bottom: 0, width: 1, background: `linear-gradient(to bottom, transparent, ${GOLD}80, transparent)`, zIndex: 2 }} />
         <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 70% 50%, ${GOLD}08 0%, transparent 60%)`, zIndex: 2 }} />
         <div style={{ position: "relative", zIndex: 3, maxWidth: 1280, margin: "0 auto", padding: "0 32px", width: "100%", paddingLeft: "36%" }}>
-          <img src="/elyxier-logo.png" alt="ELYXIER" style={{ width: "180px", height: "auto", borderRadius: "10px", marginBottom: "28px", display: "block" }} />
           <p style={{ color: GOLD, fontSize: 11, letterSpacing: "0.4em", textTransform: "uppercase", marginBottom: 24 }}>Luxury Skincare · Handcrafted</p>
           <h1 style={{ fontFamily: "var(--font-playfair), serif", fontSize: "clamp(48px, 7vw, 96px)", fontWeight: 400, lineHeight: 1.1, marginBottom: 32, color: CREAM }}>
             Skin.<br />
