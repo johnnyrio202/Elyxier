@@ -133,9 +133,6 @@ export default function BoldCanvas() {
                     alt={p.name}
                     style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                   />
-                  <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(0,0,0,0.55)", color: "#FFFFFF", fontSize: 9, fontWeight: 700, letterSpacing: "2px", padding: "4px 8px", borderRadius: "4px", textTransform: "uppercase", backdropFilter: "blur(4px)" }}>
-                    PLACEHOLDER
-                  </div>
                 </div>
                 <div style={{ padding: "20px 20px 24px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
@@ -159,10 +156,16 @@ export default function BoldCanvas() {
         <div style={{ maxWidth: 900, margin: "0 auto", position: "relative" }}>
           <p style={{ color: ROSE, fontSize: 11, letterSpacing: "0.5em", textTransform: "uppercase", marginBottom: 24, fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 700 }}>About ELYXIER</p>
           <h2 style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: "clamp(36px, 5vw, 72px)", fontWeight: 900, color: "#FFFFFF", textTransform: "uppercase", lineHeight: 1.05, marginBottom: 40, letterSpacing: "-0.02em" }}>
-            MADE FOR WOMEN<br />WHO GLOW DIFFERENT.
+            THE STORY BEHIND<br />THE BUTTER.
           </h2>
-          <p style={{ color: "rgba(255,255,255,0.75)", fontSize: 18, lineHeight: 1.9, maxWidth: 620, margin: "0 auto 48px", fontFamily: "var(--font-nunito), sans-serif" }}>
-            ELYXIER is handcrafted luxury skincare made by women, for women. Every product is made in small batches with premium ingredients to give your skin the royal treatment it deserves.
+          <p style={{ color: "rgba(255,255,255,0.8)", fontSize: 18, lineHeight: 1.9, maxWidth: 620, margin: "0 auto 24px", fontFamily: "var(--font-nunito), sans-serif" }}>
+            Founded by Data Gladden in Las Vegas, ELYXIER is a luxury body care brand built on the belief that self-care is a ritual, not a trend. Every body butter and oil is handcrafted by hand using premium ingredients chosen to nourish, protect, and celebrate your skin.
+          </p>
+          <p style={{ color: "rgba(255,255,255,0.8)", fontSize: 18, lineHeight: 1.9, maxWidth: 620, margin: "0 auto 16px", fontFamily: "var(--font-nunito), sans-serif" }}>
+            We believe luxury should never have a limit — ELYXIER is made for women of all backgrounds who invest in themselves.
+          </p>
+          <p style={{ color: ROSE, fontSize: 17, fontStyle: "italic", marginBottom: 48, fontFamily: "var(--font-nunito), sans-serif" }}>
+            Your skin. Your ritual. Your ELYXIER.
           </p>
           <a href="#" style={{ background: ROSE, color: "#FFFFFF", padding: "16px 48px", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", fontWeight: 800, borderRadius: 4, fontFamily: "var(--font-montserrat), sans-serif", display: "inline-block" }}>
             Our Full Story

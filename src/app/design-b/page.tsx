@@ -125,9 +125,6 @@ export default function WarmIvory() {
                     alt={p.name}
                     style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                   />
-                  <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(0,0,0,0.55)", color: "#FFFFFF", fontSize: 9, fontWeight: 700, letterSpacing: "2px", padding: "4px 8px", borderRadius: "4px", textTransform: "uppercase", backdropFilter: "blur(4px)" }}>
-                    PLACEHOLDER
-                  </div>
                 </div>
                 <div style={{ padding: "24px 24px 28px" }}>
                   <h3 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: 20, fontWeight: 500, color: CHOC, marginBottom: 8 }}>{p.name}</h3>
@@ -156,13 +153,16 @@ export default function WarmIvory() {
           <div>
             <p style={{ color: AMBER, fontSize: 12, letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: 16 }}>Our Story</p>
             <h2 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "clamp(36px, 4vw, 54px)", fontWeight: 400, color: CHOC, lineHeight: 1.2, marginBottom: 28 }}>
-              Skincare born from<br /><em>a desire to glow.</em>
+              Made with Love.<br /><em>Worn with Confidence.</em>
             </h2>
             <p style={{ color: TEXT_LIGHT, fontSize: 16, lineHeight: 1.9, marginBottom: 20 }}>
-              ELYXIER was founded with a simple belief: every woman deserves to feel luxurious in her own skin. Our handcrafted body butters and oils are made in small batches with premium, skin-loving ingredients.
+              Founded by Data Gladden in Las Vegas, ELYXIER is a luxury body care brand built on the belief that self-care is a ritual, not a trend. Every body butter and oil is handcrafted by hand using premium ingredients chosen to nourish, protect, and celebrate your skin.
             </p>
-            <p style={{ color: TEXT_LIGHT, fontSize: 16, lineHeight: 1.9, marginBottom: 36 }}>
-              From our kitchen to your skin — made with intention, love, and the finest naturals.
+            <p style={{ color: TEXT_LIGHT, fontSize: 16, lineHeight: 1.9, marginBottom: 12 }}>
+              We believe luxury should never have a limit — ELYXIER is made for women of all backgrounds who invest in themselves.
+            </p>
+            <p style={{ fontFamily: "var(--font-cormorant), serif", fontStyle: "italic", color: AMBER, fontSize: 18, marginBottom: 36 }}>
+              Your skin. Your ritual. Your ELYXIER.
             </p>
             <a href="#" style={{ color: CHOC, fontSize: 14, fontWeight: 600, textDecoration: "none", borderBottom: `2px solid ${AMBER}`, paddingBottom: 3 }}>
               Read Our Full Story →

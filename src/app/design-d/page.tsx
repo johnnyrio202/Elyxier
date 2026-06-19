@@ -173,9 +173,6 @@ export default function ElevatedGlam() {
                     alt={p.name}
                     style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                   />
-                  <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(0,0,0,0.55)", color: "#FFFFFF", fontSize: 9, fontWeight: 700, letterSpacing: "2px", padding: "4px 8px", borderRadius: "4px", textTransform: "uppercase", backdropFilter: "blur(4px)" }}>
-                    PLACEHOLDER
-                  </div>
                   <span style={{ position: "absolute", top: 10, right: 10, color: t.AMBER, fontFamily: BEBAS, fontSize: 11, letterSpacing: "0.2em", background: "rgba(0,0,0,0.5)", padding: "2px 8px" }}>HANDCRAFTED</span>
                 </div>
                 <div style={{ padding: "20px 20px 24px", display: "flex", flexDirection: "column", flex: 1 }}>
@@ -207,8 +204,17 @@ export default function ElevatedGlam() {
             <h2 style={{ fontFamily: BEBAS, fontSize: "clamp(36px, 4.5vw, 60px)", color: t.STORY_TEXT, lineHeight: 1.05, letterSpacing: "0.04em", marginBottom: 28 }}>
               MADE WITH INTENTION.<br />WORN WITH CONFIDENCE.
             </h2>
-            <p style={{ color: dark ? "#C0B090" : "#3A2800", fontSize: 16, lineHeight: 1.85, marginBottom: 36, fontFamily: DM }}>
-              ELYXIER was born from a deep love of self-care and a commitment to quality. Every body butter is handcrafted in Las Vegas with premium ingredients chosen to nourish, protect, and celebrate your skin. We believe luxury shouldn&apos;t be reserved for a few — it&apos;s your daily ritual.
+            <p style={{ color: dark ? "#C0B090" : "#3A2800", fontSize: 16, lineHeight: 1.85, marginBottom: 24, fontFamily: DM }}>
+              ELYXIER was born from a simple truth: your skin deserves more. Founded by Data Gladden in Las Vegas, ELYXIER is a luxury body care brand built on the belief that self-care isn&apos;t a trend — it&apos;s a ritual. Every whipped butter and nourishing oil in our collection is handcrafted with intention, using premium ingredients chosen to nourish, protect, and celebrate your skin.
+            </p>
+            <p style={{ color: dark ? "#C0B090" : "#3A2800", fontSize: 16, lineHeight: 1.85, marginBottom: 24, fontFamily: DM }}>
+              What started as a personal obsession with finding products that actually worked became a passion for creating them. Data blends every formula herself, pouring care and craftsmanship into each jar so you receive something truly made with you in mind.
+            </p>
+            <p style={{ color: dark ? "#C0B090" : "#3A2800", fontSize: 16, lineHeight: 1.85, marginBottom: 28, fontFamily: DM }}>
+              ELYXIER is designed for women who invest in themselves — women who know that how you treat your body is a reflection of how you see yourself. We proudly celebrate women of all backgrounds, all skin tones, and all sizes, because luxury should never have a limit.
+            </p>
+            <p style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 20, letterSpacing: "0.1em", marginBottom: 36 }}>
+              YOUR SKIN. YOUR RITUAL. YOUR ELYXIER.
             </p>
             <a href="#" style={{ background: t.AMBER, color: "#0A0A08", padding: "14px 36px", fontFamily: BEBAS, fontSize: 16, letterSpacing: "0.12em", textDecoration: "none", display: "inline-block" }}>
               MEET THE MAKER

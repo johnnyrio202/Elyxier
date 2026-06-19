@@ -118,9 +118,6 @@ export default function MidnightLuxe() {
                   alt={p.name}
                   style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                 />
-                <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(0,0,0,0.55)", color: "#FFFFFF", fontSize: 9, fontWeight: 700, letterSpacing: "2px", padding: "4px 8px", borderRadius: "4px", textTransform: "uppercase", backdropFilter: "blur(4px)" }}>
-                  PLACEHOLDER
-                </div>
                 <span style={{ position: "absolute", top: 10, right: 10, background: GOLD, color: BG, fontSize: 9, letterSpacing: "0.2em", padding: "4px 10px", fontWeight: 700, textTransform: "uppercase" }}>Handcrafted</span>
               </div>
               <div style={{ padding: "24px 20px" }}>
@@ -139,9 +136,16 @@ export default function MidnightLuxe() {
       <section style={{ background: SECTION, padding: "120px 32px", textAlign: "center" }}>
         <div style={{ maxWidth: 800, margin: "0 auto" }}>
           <div style={{ width: 1, height: 80, background: `linear-gradient(to bottom, transparent, ${GOLD})`, margin: "0 auto 48px" }} />
-          <blockquote style={{ fontFamily: "var(--font-playfair), serif", fontSize: "clamp(24px, 3.5vw, 44px)", fontStyle: "italic", color: GOLD, lineHeight: 1.5, marginBottom: 40 }}>
-            &ldquo;Every jar is a love letter to your skin — made with intention, care, and the finest ingredients.&rdquo;
-          </blockquote>
+          <p style={{ color: GOLD, fontSize: 11, letterSpacing: "0.4em", textTransform: "uppercase", marginBottom: 24 }}>Our Story</p>
+          <h2 style={{ fontFamily: "var(--font-playfair), serif", fontSize: "clamp(28px, 3.5vw, 44px)", fontStyle: "italic", color: GOLD, lineHeight: 1.4, marginBottom: 36 }}>
+            Your Skin Deserves More
+          </h2>
+          <p style={{ color: MUTED, fontSize: 16, lineHeight: 1.9, marginBottom: 28, maxWidth: 620, margin: "0 auto 28px" }}>
+            Founded by Data Gladden in Las Vegas, ELYXIER is a luxury body care brand built on the belief that self-care is a ritual, not a trend. Every body butter and oil is handcrafted by hand using premium ingredients chosen to nourish, protect, and celebrate your skin. We believe luxury should never have a limit — ELYXIER is made for women of all backgrounds who invest in themselves.
+          </p>
+          <p style={{ fontFamily: "var(--font-playfair), serif", fontStyle: "italic", color: GOLD, fontSize: 18, letterSpacing: "0.05em", marginBottom: 36 }}>
+            &ldquo;Your skin. Your ritual. Your ELYXIER.&rdquo;
+          </p>
           <p style={{ color: MUTED, fontSize: 14, letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 8 }}>Data Gladden</p>
           <p style={{ color: `${MUTED}88`, fontSize: 13 }}>Founder, ELYXIER</p>
           <div style={{ width: 1, height: 80, background: `linear-gradient(to bottom, ${GOLD}, transparent)`, margin: "48px auto 0" }} />
