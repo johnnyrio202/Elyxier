@@ -65,11 +65,7 @@ export default function BoldCanvas() {
 
       {/* Nav */}
       <nav style={{ position: "sticky", top: 0, zIndex: 50, background: WHITE, borderBottom: `3px solid ${NAV_BORDER}` }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px", height: 68, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
-            <img src="/elyxier-mark-plum.png" alt="ELYXIER" style={{ height: "60px", width: "auto", objectFit: "contain", display: "block", borderRadius: "6px" }} />
-            <span style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: 18, fontWeight: 900, color: PLUM, letterSpacing: "0.18em", textTransform: "uppercase" }}>ELYXIER</span>
-          </a>
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", gap: 36, alignItems: "center" }}>
             {["Shop", "About", "Live"].map((item) => (
               <a key={item} href={item === "About" ? "#about" : "#"} style={{ color: TEXT_DARK, fontSize: 13, letterSpacing: "0.12em", textTransform: "uppercase", textDecoration: "none", fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 600 }}
@@ -84,6 +80,11 @@ export default function BoldCanvas() {
           </div>
         </div>
       </nav>
+
+      {/* Logo Band */}
+      <div style={{ background: WHITE, display: "flex", justifyContent: "center", alignItems: "center", padding: "20px 0 16px", borderBottom: `3px solid ${PLUM}` }}>
+        <a href="/"><img src="/elyxier-logo-plum.png" alt="ELYXIER" style={{ height: "130px", width: "auto", display: "block" }} /></a>
+      </div>
 
       {/* Hero */}
       <section style={{ minHeight: "95vh", display: "grid", gridTemplateColumns: "1fr 1fr", overflow: "hidden" }}>

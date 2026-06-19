@@ -61,11 +61,7 @@ export default function WarmIvory() {
 
       {/* Nav */}
       <nav style={{ position: "sticky", top: 0, zIndex: 50, background: `${IVORY}F0`, backdropFilter: "blur(12px)", borderBottom: `1px solid ${AMBER}22` }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
-            <img src="/elyxier-mark.png" alt="ELYXIER" style={{ height: "60px", width: "auto", objectFit: "contain", display: "block", borderRadius: "6px" }} />
-            <span style={{ fontFamily: "var(--font-cormorant), serif", fontSize: 22, fontWeight: 600, color: CHOC, letterSpacing: "0.1em" }}>ELYXIER</span>
-          </a>
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", gap: 36, alignItems: "center" }}>
             {["Shop", "About", "Live"].map((item) => (
               <a key={item} href={item === "About" ? "#about" : "#"} style={{ color: TEXT_LIGHT, fontSize: 14, letterSpacing: "0.04em", textDecoration: "none" }}
@@ -80,6 +76,11 @@ export default function WarmIvory() {
           </div>
         </div>
       </nav>
+
+      {/* Logo Band */}
+      <div style={{ background: IVORY, display: "flex", justifyContent: "center", alignItems: "center", padding: "20px 0 16px", borderBottom: `1px solid ${AMBER}22` }}>
+        <a href="/"><img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "130px", width: "auto", display: "block" }} /></a>
+      </div>
 
       {/* Hero */}
       <section style={{ minHeight: "90vh", display: "flex", alignItems: "center", overflow: "hidden", position: "relative" }}>

@@ -104,11 +104,7 @@ export default function ElevatedGlam() {
         background: `${t.BG}F0`, backdropFilter: "blur(16px)",
         borderBottom: `1px solid ${t.NAV_BORDER}`,
       }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <a href="/" style={{ display: "inline-flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
-            <img src="/elyxier-mark.png" alt="ELYXIER" style={{ height: "60px", width: "auto", objectFit: "contain", display: "block", borderRadius: "6px" }} />
-            <span style={{ fontFamily: BEBAS, fontSize: 28, letterSpacing: "0.18em", color: t.AMBER }}>ELYXIER</span>
-          </a>
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
             {["Shop", "About", "Live", "Contact"].map((item) => (
               <a key={item} href={item === "About" ? "#about" : "#"} style={{ color: t.MUTED, fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", fontFamily: DM, fontWeight: 500 }}
@@ -123,6 +119,11 @@ export default function ElevatedGlam() {
           </div>
         </div>
       </nav>
+
+      {/* Logo Band */}
+      <div style={{ background: t.BG, display: "flex", justifyContent: "center", alignItems: "center", padding: "20px 0 16px", borderBottom: `1px solid ${t.NAV_BORDER}` }}>
+        <a href="/"><img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "130px", width: "auto", display: "block" }} /></a>
+      </div>
 
       {/* Hero */}
       <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", overflow: "hidden" }}>
