@@ -87,6 +87,17 @@ export default function ElevatedGlam() {
         {dark ? "☀ LIGHT" : "☾ DARK"}
       </button>
 
+      {/* Back button */}
+      <a href="/" style={{
+        position: "fixed", top: 80, left: 16, zIndex: 100,
+        background: dark ? "#D4920A" : "#0A0A08",
+        color: dark ? "#0A0A08" : "#FAF7F0",
+        padding: "8px 16px", borderRadius: "999px",
+        fontSize: "12px", fontWeight: 700, letterSpacing: "1px",
+        textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.3)", fontFamily: DM,
+      }}>← All Designs</a>
+
       {/* Nav */}
       <nav style={{
         position: "sticky", top: 0, zIndex: 50,

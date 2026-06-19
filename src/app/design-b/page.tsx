@@ -49,6 +49,16 @@ export default function WarmIvory() {
         {dark ? "☀ LIGHT" : "☾ DARK"}
       </button>
 
+      {/* Back button */}
+      <a href="/" style={{
+        position: "fixed", top: 80, left: 16, zIndex: 100,
+        background: "#FAF7F2", color: "#2A1810", border: "1px solid #CC8800",
+        padding: "8px 16px", borderRadius: "999px",
+        fontSize: "12px", fontWeight: 700, letterSpacing: "1px",
+        textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+      }}>← All Designs</a>
+
       {/* Nav */}
       <nav style={{ position: "sticky", top: 0, zIndex: 50, background: `${IVORY}F0`, backdropFilter: "blur(12px)", borderBottom: `1px solid ${AMBER}22` }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between" }}>

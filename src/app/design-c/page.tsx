@@ -53,6 +53,16 @@ export default function BoldCanvas() {
         {dark ? "☀ LIGHT" : "☾ DARK"}
       </button>
 
+      {/* Back button */}
+      <a href="/" style={{
+        position: "fixed", top: 80, left: 16, zIndex: 100,
+        background: "#4A1259", color: "#FFFFFF",
+        padding: "8px 16px", borderRadius: "999px",
+        fontSize: "12px", fontWeight: 700, letterSpacing: "1px",
+        textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+      }}>← All Designs</a>
+
       {/* Nav */}
       <nav style={{ position: "sticky", top: 0, zIndex: 50, background: WHITE, borderBottom: `3px solid ${NAV_BORDER}` }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px", height: 68, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
