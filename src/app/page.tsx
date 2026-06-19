@@ -97,6 +97,7 @@ export default function Home() {
 
         {/* Hero */}
         <div style={{ textAlign: "center", padding: "72px 0 56px" }}>
+          <img src="/elyxier-logo.png" alt="ELYXIER" style={{ width: "160px", height: "auto", borderRadius: "10px", marginBottom: "24px", display: "block", margin: "0 auto 24px" }} />
           <div style={{ display: "inline-block", background: "#F0EFE9", borderRadius: 999, padding: "4px 16px", fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", color: "#888", textTransform: "uppercase", marginBottom: 24 }}>
             Client Presentation
           </div>

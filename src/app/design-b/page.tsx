@@ -62,7 +62,9 @@ export default function WarmIvory() {
       {/* Nav */}
       <nav style={{ position: "sticky", top: 0, zIndex: 50, background: `${IVORY}F0`, backdropFilter: "blur(12px)", borderBottom: `1px solid ${AMBER}22` }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ fontFamily: "var(--font-cormorant), serif", fontSize: 28, fontWeight: 600, color: CHOC, letterSpacing: "0.08em" }}>ELYXIER</span>
+          <a href="/" style={{ display: "inline-flex", alignItems: "center", textDecoration: "none" }}>
+            <img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "48px", width: "auto", objectFit: "contain", display: "block", borderRadius: "6px" }} />
+          </a>
           <div style={{ display: "flex", gap: 36, alignItems: "center" }}>
             {["Shop", "About", "Live"].map((item) => (
               <a key={item} href={item === "About" ? "#about" : "#"} style={{ color: TEXT_LIGHT, fontSize: 14, letterSpacing: "0.04em", textDecoration: "none" }}
@@ -225,7 +227,7 @@ export default function WarmIvory() {
       {/* Footer */}
       <footer style={{ borderTop: `1px solid ${AMBER}22`, padding: "48px 40px", background: FOOTER_BG }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: 24, justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontFamily: "var(--font-cormorant), serif", fontSize: 24, color: AMBER, letterSpacing: "0.08em" }}>ELYXIER</span>
+          <img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "56px", width: "auto", objectFit: "contain", borderRadius: "8px" }} />
           <div style={{ display: "flex", gap: 28 }}>
             {["TikTok", "Instagram", "Facebook"].map((s) => (
               <a key={s} href="#" style={{ color: BLUSH, fontSize: 13, textDecoration: "none", opacity: 0.7 }}>{s}</a>

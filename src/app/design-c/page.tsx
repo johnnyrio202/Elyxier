@@ -66,7 +66,9 @@ export default function BoldCanvas() {
       {/* Nav */}
       <nav style={{ position: "sticky", top: 0, zIndex: 50, background: WHITE, borderBottom: `3px solid ${NAV_BORDER}` }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px", height: 68, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: 22, fontWeight: 900, color: PLUM, letterSpacing: "0.15em", textTransform: "uppercase" }}>ELYXIER</span>
+          <a href="/" style={{ display: "inline-flex", alignItems: "center", textDecoration: "none" }}>
+            <img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "48px", width: "auto", objectFit: "contain", display: "block", borderRadius: "6px" }} />
+          </a>
           <div style={{ display: "flex", gap: 36, alignItems: "center" }}>
             {["Shop", "About", "Live"].map((item) => (
               <a key={item} href={item === "About" ? "#about" : "#"} style={{ color: TEXT_DARK, fontSize: 13, letterSpacing: "0.12em", textTransform: "uppercase", textDecoration: "none", fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 600 }}
@@ -237,7 +239,7 @@ export default function BoldCanvas() {
       {/* Footer */}
       <footer style={{ background: TEXT_DARK, padding: "48px 40px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: 24, justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: 20, fontWeight: 900, color: "#FFFFFF", letterSpacing: "0.15em", textTransform: "uppercase" }}>ELYXIER</span>
+          <img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "56px", width: "auto", objectFit: "contain", borderRadius: "8px" }} />
           <div style={{ display: "flex", gap: 28 }}>
             {["TikTok", "Instagram", "Facebook"].map((s) => (
               <a key={s} href="#" style={{ color: ROSE, fontSize: 13, textDecoration: "none", fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em" }}>{s}</a>

@@ -105,7 +105,9 @@ export default function ElevatedGlam() {
         borderBottom: `1px solid ${t.NAV_BORDER}`,
       }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ fontFamily: BEBAS, fontSize: 30, letterSpacing: "0.18em", color: t.AMBER }}>ELYXIER</span>
+          <a href="/" style={{ display: "inline-flex", alignItems: "center", textDecoration: "none" }}>
+            <img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "48px", width: "auto", objectFit: "contain", display: "block", borderRadius: "6px" }} />
+          </a>
           <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
             {["Shop", "About", "Live", "Contact"].map((item) => (
               <a key={item} href={item === "About" ? "#about" : "#"} style={{ color: t.MUTED, fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", fontFamily: DM, fontWeight: 500 }}
@@ -133,6 +135,7 @@ export default function ElevatedGlam() {
         <div style={{ position: "absolute", right: "5%", top: "20%", width: 300, height: 300, background: `radial-gradient(circle, ${t.AMBER}12 0%, transparent 70%)`, borderRadius: "50%", zIndex: 2 }} />
 
         <div style={{ position: "relative", zIndex: 3, maxWidth: 760, margin: "0 auto", padding: "120px 32px", width: "100%" }}>
+          <img src="/elyxier-logo.png" alt="ELYXIER" style={{ width: "220px", height: "auto", borderRadius: "12px", marginBottom: "32px", display: "block" }} />
           <p style={{ color: t.AMBER, fontSize: 11, letterSpacing: "0.45em", textTransform: "uppercase", marginBottom: 24, fontFamily: DM, fontWeight: 600 }}>
             HANDCRAFTED · LAS VEGAS · SINCE 2026
           </p>
@@ -305,7 +308,7 @@ export default function ElevatedGlam() {
       <footer style={{ background: t.FOOTER_BG, padding: "56px 32px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 32 }}>
-            <span style={{ fontFamily: BEBAS, fontSize: 40, letterSpacing: "0.2em", color: t.AMBER }}>ELYXIER</span>
+            <img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "56px", width: "auto", objectFit: "contain", borderRadius: "8px" }} />
             <p style={{ color: "#6B6050", fontSize: 13, marginTop: 8, letterSpacing: "0.1em", fontFamily: DM }}>
               Luxury Body Butters & Oils · Handcrafted in Las Vegas
             </p>
