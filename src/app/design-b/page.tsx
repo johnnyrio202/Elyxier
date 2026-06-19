@@ -78,7 +78,7 @@ export default function WarmIvory() {
       </nav>
 
       {/* Logo Band */}
-      <div style={{ background: IVORY, display: "flex", justifyContent: "center", alignItems: "center", padding: "20px 0 16px", borderBottom: `1px solid ${AMBER}22` }}>
+      <div style={{ background: "#000000", display: "flex", justifyContent: "center", alignItems: "center", padding: "20px 0 16px", borderBottom: `2px solid ${AMBER}` }}>
         <a href="/"><img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "130px", width: "auto", display: "block" }} /></a>
       </div>
 

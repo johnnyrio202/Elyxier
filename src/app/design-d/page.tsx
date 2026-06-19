@@ -121,7 +121,7 @@ export default function ElevatedGlam() {
       </nav>
 
       {/* Logo Band */}
-      <div style={{ background: t.BG, display: "flex", justifyContent: "center", alignItems: "center", padding: "20px 0 16px", borderBottom: `1px solid ${t.NAV_BORDER}` }}>
+      <div style={{ background: "#000000", display: "flex", justifyContent: "center", alignItems: "center", padding: "20px 0 16px", borderBottom: `1px solid ${t.AMBER}55` }}>
         <a href="/"><img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "130px", width: "auto", display: "block" }} /></a>
       </div>
 

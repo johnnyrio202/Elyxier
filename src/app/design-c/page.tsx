@@ -82,7 +82,7 @@ export default function BoldCanvas() {
       </nav>
 
       {/* Logo Band */}
-      <div style={{ background: WHITE, display: "flex", justifyContent: "center", alignItems: "center", padding: "20px 0 16px", borderBottom: `3px solid ${PLUM}` }}>
+      <div style={{ background: "#000000", display: "flex", justifyContent: "center", alignItems: "center", padding: "20px 0 16px", borderBottom: `3px solid ${PLUM}` }}>
         <a href="/"><img src="/elyxier-logo-plum.png" alt="ELYXIER" style={{ height: "130px", width: "auto", display: "block" }} /></a>
       </div>
 
