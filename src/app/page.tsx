@@ -59,6 +59,15 @@ export default function Home() {
       desc: "Your brand's personality in design form. Bold amber luxury with commanding typography that matches your energy as a creator.",
       recommended: true,
     },
+    {
+      id: "design-e",
+      label: "E",
+      name: "Serif Luxe",
+      font: "Playfair Display + Inter",
+      swatches: ["#0A0A08", "#D4920A", "#FAF7F0"],
+      desc: "Design D's bold amber palette meets Design A's elegant Playfair Display serif. Same energy — refined with editorial luxury typography.",
+      recommended: false,
+    },
   ];
 
   const steps = [
@@ -85,15 +94,22 @@ export default function Home() {
         .explore-btn:hover { background: #333 !important; }
         .card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-2px); }
         .card { transition: box-shadow 0.2s, transform 0.2s; }
+        @media (max-width: 767px) {
+          .top-bar { padding: 12px 16px !important; }
+          .main-wrap { padding-left: 16px !important; padding-right: 16px !important; padding-bottom: 48px !important; }
+          .brief-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+          .steps-grid { grid-template-columns: 1fr !important; }
+          .footer-bar { padding: 20px 16px !important; flex-direction: column !important; gap: 8px !important; text-align: center !important; }
+        }
       `}</style>
 
       {/* Top bar */}
-      <div style={{ borderBottom: "1px solid #E8E8E4", padding: "12px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div className="top-bar" style={{ borderBottom: "1px solid #E8E8E4", padding: "12px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", color: "#888", textTransform: "uppercase" }}>Globalist.Pro × ELYXIER</span>
         <span style={{ fontSize: 11, color: "#AAA" }}>Design Review — June 2026</span>
       </div>
 
-      <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 40px 80px" }}>
+      <div className="main-wrap" style={{ maxWidth: 1120, margin: "0 auto", padding: "0 40px 80px" }}>
 
         {/* Hero */}
         <div style={{ textAlign: "center", padding: "72px 0 56px" }}>
@@ -105,10 +121,10 @@ export default function Home() {
             ELYXIER Design Review
           </h1>
           <p style={{ fontSize: 18, color: "#666", maxWidth: 560, margin: "0 auto 28px", lineHeight: 1.6 }}>
-            Four creative directions crafted for your brand. Review, compare, and choose the look that feels like you.
+            Five creative directions crafted for your brand. Review, compare, and choose the look that feels like you.
           </p>
           <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-            {["4 Designs", "Light & Dark Mode"].map((chip) => (
+            {["5 Designs", "Light & Dark Mode"].map((chip) => (
               <span key={chip} style={{ background: "#F0EFE9", borderRadius: 999, padding: "6px 16px", fontSize: 12, fontWeight: 600, color: "#555", border: "1px solid #E8E8E4" }}>
                 {chip}
               </span>
@@ -117,7 +133,7 @@ export default function Home() {
         </div>
 
         {/* Brief Card */}
-        <div style={{ border: "1px solid #E8E8E4", borderRadius: 16, padding: "40px", marginBottom: 32, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48 }}>
+        <div className="brief-grid" style={{ border: "1px solid #E8E8E4", borderRadius: 16, padding: "40px", marginBottom: 32, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48 }}>
           {/* Left: snapshot */}
           <div>
             <div style={{ borderLeft: "3px solid #C8860A", paddingLeft: 16, marginBottom: 28 }}>
@@ -161,9 +177,9 @@ export default function Home() {
 
         {/* Design cards */}
         <div style={{ marginBottom: 72 }}>
-          <h2 style={{ fontSize: 32, fontWeight: 800, letterSpacing: "-0.02em", marginBottom: 8 }}>The Four Directions</h2>
+          <h2 style={{ fontSize: 32, fontWeight: 800, letterSpacing: "-0.02em", marginBottom: 8 }}>The Five Directions</h2>
           <p style={{ fontSize: 15, color: "#888", marginBottom: 40 }}>Each design includes a light and dark mode toggle. Click to explore.</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 24 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
             {designs.map((d) => (
               <div key={d.id} className="card" style={{ background: "#FFFFFF", border: "1px solid #E8E8E4", borderRadius: 16, overflow: "hidden" }}>
                 {/* Swatch bar */}
@@ -174,7 +190,7 @@ export default function Home() {
                 </div>
                 {/* Body */}
                 <div style={{ padding: 24 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, flexWrap: "wrap" }}>
                     <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#F0EFE9", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 800, color: "#333", flexShrink: 0 }}>
                       {d.label}
                     </div>
@@ -203,7 +219,7 @@ export default function Home() {
         {/* Next Steps */}
         <div style={{ marginBottom: 72 }}>
           <h2 style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-0.01em", marginBottom: 32 }}>What Happens After You Choose</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+          <div className="steps-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
             {steps.map((s) => (
               <div key={s.num} style={{ background: "#FFFFFF", border: "1px solid #E8E8E4", borderRadius: 12, padding: 28 }}>
                 <div style={{ fontSize: 32, fontWeight: 800, color: "#E8E8E4", marginBottom: 12, lineHeight: 1 }}>{s.num}</div>
@@ -216,7 +232,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <div style={{ borderTop: "1px solid #E8E8E4", padding: "24px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div className="footer-bar" style={{ borderTop: "1px solid #E8E8E4", padding: "24px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span style={{ fontSize: 12, color: "#AAA" }}>Prepared by Globalist.Pro for ELYXIER · June 2026</span>
         <span style={{ fontSize: 12, color: "#AAA" }}>Questions? advisor@globalist.pro</span>
       </div>
