@@ -1,15 +1,23 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const products = [
-  { name: "Whipped Shea Butter", price: "$25", photo: "1620916566398-39f1143ab7be" },
-  { name: "Lavender Dreams Body Butter", price: "$25", photo: "1748543668676-ea8241cb3886" },
-  { name: "Honey & Vanilla Glow", price: "$25", photo: "1748543668643-1ada33167539" },
-  { name: "Rose Gold Body Oil", price: "$25", photo: "1748543668687-624e058c367c" },
+  { name: "Whipped Shea Butter", price: "$25", photo: "/product-1.jpeg" },
+  { name: "Lavender Dreams Body Butter", price: "$25", photo: "/product-2.jpeg" },
+  { name: "Honey & Vanilla Glow", price: "$25", photo: "/product-3.jpeg" },
+  { name: "Rose Gold Body Oil", price: "$25", photo: "/product-4.jpeg" },
 ];
 
 export default function MidnightLuxe() {
   const [dark, setDark] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const t = dark ? {
     BG: "#0C0C0E",
@@ -40,7 +48,7 @@ export default function MidnightLuxe() {
       <button
         onClick={() => setDark(!dark)}
         style={{
-          position: "fixed", top: 80, right: 16, zIndex: 100,
+          position: "fixed", top: isMobile ? 16 : 80, right: 16, zIndex: 100,
           background: dark ? "#FAF7F2" : "#0C0C0E",
           color: dark ? "#0C0C0E" : "#FAF7F2",
           border: "none", borderRadius: 50, padding: "8px 16px",
@@ -53,7 +61,7 @@ export default function MidnightLuxe() {
 
       {/* Back button */}
       <a href="/" style={{
-        position: "fixed", top: 80, left: 16, zIndex: 100,
+        position: "fixed", top: isMobile ? 16 : 80, left: 16, zIndex: 100,
         background: "#C9A257", color: "#0C0C0E",
         padding: "8px 16px", borderRadius: "999px",
         fontSize: "12px", fontWeight: 700, letterSpacing: "1px",
@@ -65,7 +73,7 @@ export default function MidnightLuxe() {
       <nav style={{ position: "sticky", top: 0, zIndex: 50, background: NAV, backdropFilter: "blur(12px)", borderBottom: `1px solid ${GOLD}22` }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", gap: 36, alignItems: "center" }}>
-            {["Shop", "About", "Live"].map((item) => (
+            {!isMobile && ["Shop", "About", "Live"].map((item) => (
               <a key={item} href={item === "About" ? "#about" : "#"} style={{ color: MUTED, fontSize: 13, letterSpacing: "0.12em", textTransform: "uppercase", textDecoration: "none" }}
                 onMouseEnter={e => (e.currentTarget.style.color = GOLD)}
                 onMouseLeave={e => (e.currentTarget.style.color = MUTED)}>
@@ -80,21 +88,23 @@ export default function MidnightLuxe() {
       </nav>
 
       {/* Logo Band */}
-      <div style={{ background: "#000000", display: "flex", justifyContent: "center", alignItems: "center", padding: "20px 0 16px", borderBottom: `1px solid ${GOLD}55` }}>
-        <a href="/"><img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "130px", width: "auto", display: "block" }} /></a>
+      <div style={{ background: "#000000", display: "flex", justifyContent: "center", alignItems: "center", padding: isMobile ? "10px 0" : "20px 0 16px", borderBottom: `1px solid ${GOLD}55` }}>
+        <a href="/"><img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: isMobile ? "72px" : "130px", width: "auto", display: "block" }} /></a>
       </div>
 
       {/* Hero */}
-      <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", overflow: "hidden" }}>
+      <section style={{ position: "relative", minHeight: isMobile ? "80vh" : "100vh", display: "flex", alignItems: "center", overflow: "hidden" }}>
         <img
           src="https://images.unsplash.com/photo-1748543668646-e81cda0890f3?w=1600&h=900&fit=crop&q=80"
           alt=""
           style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0, opacity: dark ? 0.18 : 0.08 }}
         />
         <div style={{ position: "absolute", inset: 0, background: HERO_GRAD, zIndex: 1 }} />
-        <div style={{ position: "absolute", left: "32%", top: 0, bottom: 0, width: 1, background: `linear-gradient(to bottom, transparent, ${GOLD}80, transparent)`, zIndex: 2 }} />
+        {!isMobile && (
+          <div style={{ position: "absolute", left: "32%", top: 0, bottom: 0, width: 1, background: `linear-gradient(to bottom, transparent, ${GOLD}80, transparent)`, zIndex: 2 }} />
+        )}
         <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 70% 50%, ${GOLD}08 0%, transparent 60%)`, zIndex: 2 }} />
-        <div style={{ position: "relative", zIndex: 3, maxWidth: 1280, margin: "0 auto", padding: "0 32px", width: "100%", paddingLeft: "36%" }}>
+        <div style={{ position: "relative", zIndex: 3, maxWidth: 1280, margin: "0 auto", padding: isMobile ? "80px 24px" : "0 32px", width: "100%", paddingLeft: isMobile ? "24px" : "36%" }}>
           <p style={{ color: GOLD, fontSize: 11, letterSpacing: "0.4em", textTransform: "uppercase", marginBottom: 24 }}>Luxury Skincare · Handcrafted</p>
           <h1 style={{ fontFamily: "var(--font-playfair), serif", fontSize: "clamp(48px, 7vw, 96px)", fontWeight: 400, lineHeight: 1.1, marginBottom: 32, color: CREAM }}>
             Skin.<br />
@@ -116,19 +126,19 @@ export default function MidnightLuxe() {
       </section>
 
       {/* Products */}
-      <section style={{ maxWidth: 1280, margin: "0 auto", padding: "120px 32px" }}>
+      <section style={{ maxWidth: 1280, margin: "0 auto", padding: isMobile ? "64px 16px" : "120px 32px" }}>
         <div style={{ textAlign: "center", marginBottom: 72 }}>
           <p style={{ color: GOLD, fontSize: 11, letterSpacing: "0.4em", textTransform: "uppercase", marginBottom: 12 }}>The Collection</p>
           <h2 style={{ fontFamily: "var(--font-playfair), serif", fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 400, color: CREAM }}>Crafted for Your Ritual</h2>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 24 }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fill, minmax(260px, 1fr))", gap: 24 }}>
           {products.map((p) => (
             <div key={p.name} style={{ background: CARD, border: `1px solid ${GOLD}33`, display: "flex", flexDirection: "column", cursor: "pointer" }}
               onMouseEnter={e => (e.currentTarget.style.border = `1px solid ${GOLD}88`)}
               onMouseLeave={e => (e.currentTarget.style.border = `1px solid ${GOLD}33`)}>
               <div style={{ position: "relative", width: "100%", height: "280px", overflow: "hidden" }}>
                 <img
-                  src={`https://images.unsplash.com/photo-${p.photo}?w=600&h=600&fit=crop&q=80`}
+                  src={p.photo}
                   alt={p.name}
                   style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                 />
@@ -147,7 +157,7 @@ export default function MidnightLuxe() {
       </section>
 
       {/* About */}
-      <section id="about" style={{ background: SECTION, padding: "120px 32px", textAlign: "center" }}>
+      <section id="about" style={{ background: SECTION, padding: isMobile ? "64px 16px" : "120px 32px", textAlign: "center" }}>
         <div style={{ maxWidth: 800, margin: "0 auto" }}>
           <div style={{ width: 1, height: 80, background: `linear-gradient(to bottom, transparent, ${GOLD})`, margin: "0 auto 48px" }} />
           <p style={{ color: GOLD, fontSize: 11, letterSpacing: "0.4em", textTransform: "uppercase", marginBottom: 24 }}>Our Story</p>
@@ -167,7 +177,7 @@ export default function MidnightLuxe() {
       </section>
 
       {/* Live Shopping */}
-      <section style={{ background: "#C9A257", padding: "80px 32px" }}>
+      <section style={{ background: "#C9A257", padding: isMobile ? "48px 16px" : "80px 32px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: 32, alignItems: "center", justifyContent: "space-between" }}>
           <div>
             <p style={{ color: "#0C0C0E", fontSize: 11, letterSpacing: "0.4em", textTransform: "uppercase", marginBottom: 12, fontWeight: 600 }}>Shop in Real Time</p>
@@ -185,7 +195,7 @@ export default function MidnightLuxe() {
       </section>
 
       {/* Email Capture */}
-      <section style={{ background: BG, padding: "120px 32px", textAlign: "center" }}>
+      <section style={{ background: BG, padding: isMobile ? "64px 16px" : "120px 32px", textAlign: "center" }}>
         <div style={{ maxWidth: 520, margin: "0 auto" }}>
           <p style={{ color: GOLD, fontSize: 11, letterSpacing: "0.4em", textTransform: "uppercase", marginBottom: 16 }}>Inner Circle</p>
           <h2 style={{ fontFamily: "var(--font-playfair), serif", fontSize: 36, color: CREAM, marginBottom: 12 }}>First Access. Always.</h2>
@@ -204,7 +214,7 @@ export default function MidnightLuxe() {
       </section>
 
       {/* Footer */}
-      <footer style={{ borderTop: `1px solid ${GOLD}22`, padding: "48px 32px", background: SECTION }}>
+      <footer style={{ borderTop: `1px solid ${GOLD}22`, padding: isMobile ? "32px 16px" : "48px 32px", background: SECTION }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: 24, justifyContent: "space-between", alignItems: "center" }}>
           <img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "56px", width: "auto", objectFit: "contain", borderRadius: "8px" }} />
           <div style={{ display: "flex", gap: 28 }}>

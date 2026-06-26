@@ -1,15 +1,23 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const products = [
-  { name: "Whipped Shea Butter", price: "$25", photo: "1620916566398-39f1143ab7be" },
-  { name: "Lavender Dreams Body Butter", price: "$25", photo: "1748543668676-ea8241cb3886" },
-  { name: "Honey & Vanilla Glow", price: "$25", photo: "1748543668643-1ada33167539" },
-  { name: "Rose Gold Body Oil", price: "$25", photo: "1748543668687-624e058c367c" },
+  { name: "Whipped Shea Butter", price: "$25", photo: "/product-1.jpeg" },
+  { name: "Lavender Dreams Body Butter", price: "$25", photo: "/product-2.jpeg" },
+  { name: "Honey & Vanilla Glow", price: "$25", photo: "/product-3.jpeg" },
+  { name: "Rose Gold Body Oil", price: "$25", photo: "/product-4.jpeg" },
 ];
 
 export default function WarmIvory() {
   const [dark, setDark] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const t = dark ? {
     IVORY: "#1A0C06",
@@ -38,7 +46,7 @@ export default function WarmIvory() {
       <button
         onClick={() => setDark(!dark)}
         style={{
-          position: "fixed", top: 80, right: 16, zIndex: 100,
+          position: "fixed", top: isMobile ? 16 : 80, right: 16, zIndex: 100,
           background: dark ? "#FAF7F2" : "#2A1810",
           color: dark ? "#2A1810" : "#FAF7F2",
           border: "none", borderRadius: 50, padding: "8px 16px",
@@ -51,7 +59,7 @@ export default function WarmIvory() {
 
       {/* Back button */}
       <a href="/" style={{
-        position: "fixed", top: 80, left: 16, zIndex: 100,
+        position: "fixed", top: isMobile ? 16 : 80, left: 16, zIndex: 100,
         background: "#FAF7F2", color: "#2A1810", border: "1px solid #CC8800",
         padding: "8px 16px", borderRadius: "999px",
         fontSize: "12px", fontWeight: 700, letterSpacing: "1px",
@@ -63,7 +71,7 @@ export default function WarmIvory() {
       <nav style={{ position: "sticky", top: 0, zIndex: 50, background: `${IVORY}F0`, backdropFilter: "blur(12px)", borderBottom: `1px solid ${AMBER}22` }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", gap: 36, alignItems: "center" }}>
-            {["Shop", "About", "Live"].map((item) => (
+            {!isMobile && ["Shop", "About", "Live"].map((item) => (
               <a key={item} href={item === "About" ? "#about" : "#"} style={{ color: TEXT_LIGHT, fontSize: 14, letterSpacing: "0.04em", textDecoration: "none" }}
                 onMouseEnter={e => (e.currentTarget.style.color = AMBER)}
                 onMouseLeave={e => (e.currentTarget.style.color = TEXT_LIGHT)}>
@@ -78,8 +86,8 @@ export default function WarmIvory() {
       </nav>
 
       {/* Logo Band */}
-      <div style={{ background: "#000000", display: "flex", justifyContent: "center", alignItems: "center", padding: "20px 0 16px", borderBottom: `2px solid ${AMBER}` }}>
-        <a href="/"><img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "130px", width: "auto", display: "block" }} /></a>
+      <div style={{ background: "#000000", display: "flex", justifyContent: "center", alignItems: "center", padding: isMobile ? "10px 0" : "20px 0 16px", borderBottom: `2px solid ${AMBER}` }}>
+        <a href="/"><img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: isMobile ? "72px" : "130px", width: "auto", display: "block" }} /></a>
       </div>
 
       {/* Hero */}
@@ -91,7 +99,7 @@ export default function WarmIvory() {
         />
         <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, ${IVORY} 0%, ${BLUSH} 100%)`, zIndex: 1, opacity: 0.92 }} />
         <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)", width: "44%", height: "80vh", background: `radial-gradient(ellipse, ${AMBER}26 0%, ${AMBER}10 40%, transparent 80%)`, borderRadius: "50% 0 0 50%", opacity: dark ? 0.3 : 0.15, zIndex: 2 }} />
-        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px", width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", position: "relative", zIndex: 3 }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: isMobile ? "80px 24px" : "80px 40px", width: "100%", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 0 : 64, alignItems: "center", position: "relative", zIndex: 3 }}>
           <div>
             <p style={{ color: AMBER, fontSize: 12, letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: 20, fontWeight: 500 }}>Handcrafted with Love</p>
             <h1 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "clamp(44px, 6vw, 80px)", fontWeight: 400, lineHeight: 1.15, color: CHOC, marginBottom: 28 }}>
@@ -111,31 +119,33 @@ export default function WarmIvory() {
               </a>
             </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <div style={{ position: "relative" }}>
-              <div style={{ width: 380, height: 480, borderRadius: "50%", background: "radial-gradient(ellipse at 40% 35%, #FFF0C0 0%, #E8B84B 35%, #CC8800 60%, #8B5500 85%, #3D2800 100%)", overflow: "hidden" }} />
-              <div style={{ position: "absolute", bottom: -20, right: -20, width: 120, height: 120, borderRadius: "50%", background: BLUSH, border: `3px solid ${AMBER}44` }} />
-              <div style={{ position: "absolute", top: -10, left: -20, width: 80, height: 80, borderRadius: "50%", background: BLUSH, border: `2px solid ${AMBER}33` }} />
+          {!isMobile && (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <div style={{ position: "relative" }}>
+                <div style={{ width: 380, height: 480, borderRadius: "50%", background: "radial-gradient(ellipse at 40% 35%, #FFF0C0 0%, #E8B84B 35%, #CC8800 60%, #8B5500 85%, #3D2800 100%)", overflow: "hidden" }} />
+                <div style={{ position: "absolute", bottom: -20, right: -20, width: 120, height: 120, borderRadius: "50%", background: BLUSH, border: `3px solid ${AMBER}44` }} />
+                <div style={{ position: "absolute", top: -10, left: -20, width: 80, height: 80, borderRadius: "50%", background: BLUSH, border: `2px solid ${AMBER}33` }} />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
       {/* Products */}
-      <section style={{ background: BLUSH, padding: "120px 40px" }}>
+      <section style={{ background: BLUSH, padding: isMobile ? "64px 16px" : "120px 40px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 72 }}>
             <p style={{ color: AMBER, fontSize: 12, letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: 12 }}>Our Products</p>
             <h2 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "clamp(36px, 4vw, 60px)", fontWeight: 400, color: CHOC }}>Made for Your Skin</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 28 }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fill, minmax(260px, 1fr))", gap: 28 }}>
             {products.map((p) => (
               <div key={p.name} style={{ background: CARD, borderRadius: 20, overflow: "hidden", boxShadow: dark ? "0 2px 20px #00000030" : "0 2px 20px #00000010", cursor: "pointer" }}
                 onMouseEnter={e => (e.currentTarget.style.boxShadow = dark ? "0 8px 40px #00000050" : "0 8px 40px #00000018")}
                 onMouseLeave={e => (e.currentTarget.style.boxShadow = dark ? "0 2px 20px #00000030" : "0 2px 20px #00000010")}>
                 <div style={{ position: "relative", width: "100%", height: "240px", overflow: "hidden" }}>
                   <img
-                    src={`https://images.unsplash.com/photo-${p.photo}?w=600&h=600&fit=crop&q=80`}
+                    src={p.photo}
                     alt={p.name}
                     style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                   />
@@ -156,14 +166,16 @@ export default function WarmIvory() {
       </section>
 
       {/* About */}
-      <section id="about" style={{ padding: "120px 40px", background: IVORY }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "center" }}>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <div style={{ position: "relative" }}>
-              <div style={{ width: 340, height: 420, borderRadius: "50% 50% 50% 50% / 60% 60% 40% 40%", background: "linear-gradient(160deg, #FFF0C0 0%, #E8B84B 30%, #CC8800 60%, #8B5500 100%)" }} />
-              <div style={{ position: "absolute", bottom: -24, right: -24, width: 140, height: 140, borderRadius: "50%", background: BLUSH, border: `3px solid ${AMBER}` }} />
+      <section id="about" style={{ padding: isMobile ? "64px 16px" : "120px 40px", background: IVORY }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 40 : 80, alignItems: "center" }}>
+          {!isMobile && (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div style={{ position: "relative" }}>
+                <div style={{ width: 340, height: 420, borderRadius: "50% 50% 50% 50% / 60% 60% 40% 40%", background: "linear-gradient(160deg, #FFF0C0 0%, #E8B84B 30%, #CC8800 60%, #8B5500 100%)" }} />
+                <div style={{ position: "absolute", bottom: -24, right: -24, width: 140, height: 140, borderRadius: "50%", background: BLUSH, border: `3px solid ${AMBER}` }} />
+              </div>
             </div>
-          </div>
+          )}
           <div>
             <p style={{ color: AMBER, fontSize: 12, letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: 16 }}>Our Story</p>
             <h2 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "clamp(36px, 4vw, 54px)", fontWeight: 400, color: CHOC, lineHeight: 1.2, marginBottom: 28 }}>
@@ -186,7 +198,7 @@ export default function WarmIvory() {
       </section>
 
       {/* Live Shopping */}
-      <section style={{ background: `linear-gradient(135deg, #CC7700, #E8A030)`, padding: "80px 40px" }}>
+      <section style={{ background: `linear-gradient(135deg, #CC7700, #E8A030)`, padding: isMobile ? "48px 16px" : "80px 40px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", textAlign: "center" }}>
           <p style={{ color: "#FFF8EE", fontSize: 12, letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: 16 }}>Live Shopping</p>
           <h2 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "clamp(36px, 4vw, 56px)", color: "#FFF", marginBottom: 16 }}>Watch. Shop. Glow.</h2>
@@ -208,8 +220,8 @@ export default function WarmIvory() {
       </section>
 
       {/* Email */}
-      <section style={{ background: IVORY, padding: "120px 40px", textAlign: "center" }}>
-        <div style={{ maxWidth: 560, margin: "0 auto", background: BLUSH, borderRadius: 24, padding: "64px 48px" }}>
+      <section style={{ background: IVORY, padding: isMobile ? "64px 16px" : "120px 40px", textAlign: "center" }}>
+        <div style={{ maxWidth: 560, margin: "0 auto", background: BLUSH, borderRadius: 24, padding: isMobile ? "40px 24px" : "64px 48px" }}>
           <p style={{ color: AMBER, fontSize: 12, letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: 16 }}>Stay in the Glow</p>
           <h2 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: 40, color: CHOC, marginBottom: 12 }}>Join Our Community</h2>
           <p style={{ color: TEXT_LIGHT, fontSize: 15, lineHeight: 1.8, marginBottom: 36 }}>New arrivals, self-care rituals, and exclusive offers — just for you.</p>
@@ -227,7 +239,7 @@ export default function WarmIvory() {
       </section>
 
       {/* Footer */}
-      <footer style={{ borderTop: `1px solid ${AMBER}22`, padding: "48px 40px", background: FOOTER_BG }}>
+      <footer style={{ borderTop: `1px solid ${AMBER}22`, padding: isMobile ? "32px 16px" : "48px 40px", background: FOOTER_BG }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: 24, justifyContent: "space-between", alignItems: "center" }}>
           <img src="/elyxier-logo.png" alt="ELYXIER" style={{ height: "56px", width: "auto", objectFit: "contain", borderRadius: "8px" }} />
           <div style={{ display: "flex", gap: 28 }}>
