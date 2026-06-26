@@ -2,15 +2,16 @@
 import { useState, useEffect } from "react";
 
 const products = [
-  { name: "Whipped Shea Butter", price: "$25", photo: "/product-1.jpeg" },
-  { name: "Lavender Dreams Body Butter", price: "$25", photo: "/product-2.jpeg" },
-  { name: "Honey & Vanilla Glow", price: "$25", photo: "/product-3.jpeg" },
-  { name: "Rose Gold Body Oil", price: "$25", photo: "/product-4.jpeg" },
+  { name: "Whipped Shea Butter", price: "$25", photo: "/product-1.jpeg", blurb: "Our original formula. Premium African shea whipped to a cloud-light texture that melts on contact. Warm jasmine and musk leave your skin soft, supple, and radiant for hours." },
+  { name: "Lavender Dreams Body Butter", price: "$25", photo: "/product-2.jpeg", blurb: "Hand-blended lavender essential oil with raw honey creates a deeply calming, restorative formula. Perfect for evening rituals — glide it on before bed and wake up to velvet-soft skin." },
+  { name: "Honey & Vanilla Glow", price: "$25", photo: "/product-3.jpeg", blurb: "Sweet Madagascar vanilla beans meet golden raw honey in this glow-inducing blend. The warm, irresistible fragrance lingers for hours, leaving you luminous from head to toe." },
+  { name: "Rose Gold Body Oil", price: "$25", photo: "/product-4.jpeg", blurb: "Rich rosehip and argan oils infused with crushed rose petals. A silky, fast-absorbing formula that delivers instant luminosity and a light, romantic floral scent." },
 ];
 
 export default function BoldCanvas() {
   const [dark, setDark] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [flippedCard, setFlippedCard] = useState<string | null>(null);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -148,24 +149,75 @@ export default function BoldCanvas() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
             {products.map((p) => (
-              <div key={p.name} style={{ background: CARD_BG, borderRadius: 8, overflow: "hidden", cursor: "pointer", boxShadow: `0 2px 12px rgba(74,18,89,${dark ? "0.25" : "0.08"})` }}
-                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = `0 12px 40px rgba(74,18,89,${dark ? "0.4" : "0.15"})`; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = `0 2px 12px rgba(74,18,89,${dark ? "0.25" : "0.08"})`; }}>
-                <div style={{ position: "relative", width: "100%", height: "240px", overflow: "hidden" }}>
-                  <img
-                    src={p.photo}
-                    alt={p.name}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                  />
-                </div>
-                <div style={{ padding: "20px 20px 24px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
-                    <h3 style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: 15, fontWeight: 800, color: PLUM, textTransform: "uppercase", letterSpacing: "0.04em", lineHeight: 1.3 }}>{p.name}</h3>
-                    <span style={{ background: ROSE, color: WHITE, fontSize: 13, fontWeight: 800, padding: "4px 12px", borderRadius: 50, whiteSpace: "nowrap", fontFamily: "var(--font-montserrat), sans-serif", flexShrink: 0, marginLeft: 8 }}>{p.price}</span>
+              <div
+                key={p.name}
+                style={{ perspective: "1000px", height: isMobile ? "320px" : "380px", cursor: "pointer" }}
+                onMouseEnter={() => !isMobile && setFlippedCard(p.name)}
+                onMouseLeave={() => !isMobile && setFlippedCard(null)}
+                onClick={() => setFlippedCard(flippedCard === p.name ? null : p.name)}
+              >
+                <div style={{
+                  position: "relative", width: "100%", height: "100%",
+                  transformStyle: "preserve-3d" as const,
+                  transition: "transform 0.65s cubic-bezier(0.4, 0, 0.2, 1)",
+                  transform: flippedCard === p.name ? "rotateY(180deg)" : "rotateY(0deg)",
+                }}>
+                  {/* FRONT */}
+                  <div style={{
+                    position: "absolute", inset: 0,
+                    backfaceVisibility: "hidden" as const,
+                    WebkitBackfaceVisibility: "hidden" as const,
+                    background: CARD_BG, overflow: "hidden",
+                    borderRadius: 8,
+                    boxShadow: `0 2px 12px rgba(74,18,89,${dark ? "0.25" : "0.08"})`,
+                  }}>
+                    <div style={{ height: "72%", overflow: "hidden" }}>
+                      <img src={p.photo} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                    </div>
+                    <div style={{ padding: "16px 20px 12px" }}>
+                      <h3 style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: 14, fontWeight: 800, color: PLUM, textTransform: "uppercase" as const, letterSpacing: "0.04em", marginBottom: 6 }}>{p.name}</h3>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <span style={{ background: ROSE, color: WHITE, fontSize: 12, fontWeight: 800, padding: "3px 10px", borderRadius: 50, fontFamily: "var(--font-montserrat), sans-serif" }}>{p.price}</span>
+                        <span style={{ color: TEXT_MID, fontSize: 10, letterSpacing: "0.15em" }}>✦ DISCOVER</span>
+                      </div>
+                    </div>
                   </div>
-                  <button style={{ width: "100%", background: PLUM, color: WHITE, border: "none", padding: "12px 0", fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase", fontWeight: 700, cursor: "pointer", borderRadius: 4, fontFamily: "var(--font-montserrat), sans-serif" }}>
-                    Add to Cart
-                  </button>
+                  {/* BACK */}
+                  <div style={{
+                    position: "absolute", inset: 0,
+                    backfaceVisibility: "hidden" as const,
+                    WebkitBackfaceVisibility: "hidden" as const,
+                    transform: "rotateY(180deg)",
+                    background: dark ? "#280038" : "#F0E0F8",
+                    display: "flex", flexDirection: "column", justifyContent: "center",
+                    padding: "28px 24px",
+                    borderRadius: 8,
+                    boxShadow: `0 2px 12px rgba(74,18,89,${dark ? "0.25" : "0.08"})`,
+                  }}>
+                    <p style={{ color: PLUM, fontSize: 10, letterSpacing: "0.35em", textTransform: "uppercase" as const, marginBottom: 10 }}>The Blend</p>
+                    <h3 style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: 14, fontWeight: 800, color: dark ? TEXT_DARK : PLUM, textTransform: "uppercase" as const, letterSpacing: "0.04em", marginBottom: 14 }}>{p.name}</h3>
+                    <p style={{ color: TEXT_MID, fontSize: 13, lineHeight: 1.75, flex: 1, marginBottom: 20 }}>{p.blurb}</p>
+                    <span style={{ background: ROSE, color: WHITE, fontSize: 13, fontWeight: 800, padding: "4px 12px", borderRadius: 50, display: "inline-block", marginBottom: 16, fontFamily: "var(--font-montserrat), sans-serif" }}>{p.price}</span>
+                    <button
+                      onClick={e => e.stopPropagation()}
+                      style={{
+                        background: `linear-gradient(135deg, ${PLUM}, ${RED})`,
+                        color: "#FFFFFF",
+                        border: "none",
+                        padding: "15px 0",
+                        fontSize: 11,
+                        letterSpacing: "0.28em",
+                        textTransform: "uppercase" as const,
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        borderRadius: 4,
+                        boxShadow: `0 4px 20px ${PLUM}50`,
+                        fontFamily: "var(--font-montserrat), sans-serif",
+                      }}
+                    >
+                      Add to Ritual ✦
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -225,25 +277,34 @@ export default function BoldCanvas() {
         </div>
       </section>
 
-      {/* Email */}
+      {/* Community */}
       <section style={{ background: PLUM, padding: isMobile ? "64px 16px" : "100px 40px" }}>
-        <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center" }}>
-          <p style={{ color: ROSE, fontSize: 11, letterSpacing: "0.5em", textTransform: "uppercase", marginBottom: 16, fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 700 }}>Get First Access</p>
-          <h2 style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 900, color: "#FFFFFF", textTransform: "uppercase", marginBottom: 12, letterSpacing: "-0.01em" }}>
-            JOIN THE LIST.
-          </h2>
-          <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 16, lineHeight: 1.8, marginBottom: 40, fontFamily: "var(--font-nunito), sans-serif" }}>
-            New drops, exclusive deals, and early access — only for our community.
+        <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+          <span style={{ display: "inline-block", background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", color: ROSE, fontSize: 10, letterSpacing: "0.4em", textTransform: "uppercase" as const, padding: "6px 18px", borderRadius: 4, marginBottom: 24, fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 700 }}>Join the Inner Circle</span>
+          <h2 style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: "clamp(26px, 4vw, 48px)", fontWeight: 900, color: "#FFFFFF", textTransform: "uppercase" as const, marginBottom: 16, letterSpacing: "-0.01em" }}>Your Backstage Pass to ELYXIER</h2>
+          <p style={{ color: "rgba(255,255,255,0.75)", fontSize: 16, lineHeight: 1.8, maxWidth: 580, margin: "0 auto 48px", fontFamily: "var(--font-nunito), sans-serif" }}>
+            This isn&apos;t just a newsletter — it&apos;s your all-access pass to the ELYXIER world. Join a community of women who invest in themselves.
           </p>
-          <div style={{ background: "#FFFFFF", borderRadius: 8, padding: 6, display: "flex", gap: 6, flexWrap: "wrap" }}>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              style={{ flex: 1, minWidth: 180, background: "transparent", border: "none", padding: "12px 16px", fontSize: 15, outline: "none", color: TEXT_DARK, fontFamily: "var(--font-nunito), sans-serif" }}
-            />
-            <button style={{ background: RED, color: "#FFFFFF", border: "none", padding: "12px 28px", fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase", fontWeight: 800, cursor: "pointer", borderRadius: 4, fontFamily: "var(--font-montserrat), sans-serif", whiteSpace: "nowrap" }}>
-              Join Now
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 16, marginBottom: 48 }}>
+            {[
+              { title: "✦ Beauty Tips & Rituals", body: "Weekly skin care hacks, DIY recipes, and insider routines curated by Data herself." },
+              { title: "✦ Subscriber-Only Access", body: "Exclusive tutorials, behind-the-scenes content, and members-only live sessions." },
+              { title: "✦ First at the Drop", body: "Priority access to limited product releases before they go public. Never miss a drop." },
+            ].map((b) => (
+              <div key={b.title} style={{ background: "rgba(255,255,255,0.08)", borderRadius: 8, padding: "24px 20px", textAlign: "left", border: "1px solid rgba(255,255,255,0.15)" }}>
+                <p style={{ color: ROSE, fontSize: 13, fontWeight: 700, fontFamily: "var(--font-montserrat), sans-serif", marginBottom: 10 }}>{b.title}</p>
+                <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, lineHeight: 1.7, fontFamily: "var(--font-nunito), sans-serif" }}>{b.body}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ maxWidth: 480, margin: "0 auto", display: "flex", flexDirection: "column" as const, gap: 12 }}>
+            <input type="text" placeholder="Full Name" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 4, color: "#FFFFFF", fontSize: 15, padding: "14px 18px", outline: "none", fontFamily: "var(--font-nunito), sans-serif" }} />
+            <input type="email" placeholder="Email Address" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 4, color: "#FFFFFF", fontSize: 15, padding: "14px 18px", outline: "none", fontFamily: "var(--font-nunito), sans-serif" }} />
+            <input type="tel" placeholder="Phone Number" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 4, color: "#FFFFFF", fontSize: 15, padding: "14px 18px", outline: "none", fontFamily: "var(--font-nunito), sans-serif" }} />
+            <button style={{ background: `linear-gradient(135deg, ${RED}, ${PLUM})`, color: "#FFFFFF", border: "none", padding: "16px 0", fontSize: 12, letterSpacing: "0.25em", textTransform: "uppercase" as const, fontWeight: 800, cursor: "pointer", borderRadius: 4, fontFamily: "var(--font-montserrat), sans-serif", boxShadow: `0 4px 24px ${RED}50`, marginTop: 4 }}>
+              Join the Circle
             </button>
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, marginTop: 4 }}>No spam. Ever. Unsubscribe anytime.</p>
           </div>
         </div>
       </section>

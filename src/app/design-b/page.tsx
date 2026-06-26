@@ -2,15 +2,16 @@
 import { useState, useEffect } from "react";
 
 const products = [
-  { name: "Whipped Shea Butter", price: "$25", photo: "/product-1.jpeg" },
-  { name: "Lavender Dreams Body Butter", price: "$25", photo: "/product-2.jpeg" },
-  { name: "Honey & Vanilla Glow", price: "$25", photo: "/product-3.jpeg" },
-  { name: "Rose Gold Body Oil", price: "$25", photo: "/product-4.jpeg" },
+  { name: "Whipped Shea Butter", price: "$25", photo: "/product-1.jpeg", blurb: "Our original formula. Premium African shea whipped to a cloud-light texture that melts on contact. Warm jasmine and musk leave your skin soft, supple, and radiant for hours." },
+  { name: "Lavender Dreams Body Butter", price: "$25", photo: "/product-2.jpeg", blurb: "Hand-blended lavender essential oil with raw honey creates a deeply calming, restorative formula. Perfect for evening rituals — glide it on before bed and wake up to velvet-soft skin." },
+  { name: "Honey & Vanilla Glow", price: "$25", photo: "/product-3.jpeg", blurb: "Sweet Madagascar vanilla beans meet golden raw honey in this glow-inducing blend. The warm, irresistible fragrance lingers for hours, leaving you luminous from head to toe." },
+  { name: "Rose Gold Body Oil", price: "$25", photo: "/product-4.jpeg", blurb: "Rich rosehip and argan oils infused with crushed rose petals. A silky, fast-absorbing formula that delivers instant luminosity and a light, romantic floral scent." },
 ];
 
 export default function WarmIvory() {
   const [dark, setDark] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [flippedCard, setFlippedCard] = useState<string | null>(null);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -140,22 +141,73 @@ export default function WarmIvory() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fill, minmax(260px, 1fr))", gap: 28 }}>
             {products.map((p) => (
-              <div key={p.name} style={{ background: CARD, borderRadius: 20, overflow: "hidden", boxShadow: dark ? "0 2px 20px #00000030" : "0 2px 20px #00000010", cursor: "pointer" }}
-                onMouseEnter={e => (e.currentTarget.style.boxShadow = dark ? "0 8px 40px #00000050" : "0 8px 40px #00000018")}
-                onMouseLeave={e => (e.currentTarget.style.boxShadow = dark ? "0 2px 20px #00000030" : "0 2px 20px #00000010")}>
-                <div style={{ position: "relative", width: "100%", height: "240px", overflow: "hidden" }}>
-                  <img
-                    src={p.photo}
-                    alt={p.name}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                  />
-                </div>
-                <div style={{ padding: "24px 24px 28px" }}>
-                  <h3 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: 20, fontWeight: 500, color: CHOC, marginBottom: 8 }}>{p.name}</h3>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span style={{ color: AMBER, fontSize: 18, fontFamily: "var(--font-cormorant), serif", fontWeight: 600 }}>{p.price}</span>
-                    <button style={{ background: AMBER, color: "#FFF", border: "none", padding: "8px 20px", borderRadius: 50, fontSize: 13, cursor: "pointer", fontFamily: "var(--font-dm-sans), sans-serif" }}>
-                      Add to Cart
+              <div
+                key={p.name}
+                style={{ perspective: "1000px", height: isMobile ? "320px" : "380px", cursor: "pointer" }}
+                onMouseEnter={() => !isMobile && setFlippedCard(p.name)}
+                onMouseLeave={() => !isMobile && setFlippedCard(null)}
+                onClick={() => setFlippedCard(flippedCard === p.name ? null : p.name)}
+              >
+                <div style={{
+                  position: "relative", width: "100%", height: "100%",
+                  transformStyle: "preserve-3d" as const,
+                  transition: "transform 0.65s cubic-bezier(0.4, 0, 0.2, 1)",
+                  transform: flippedCard === p.name ? "rotateY(180deg)" : "rotateY(0deg)",
+                }}>
+                  {/* FRONT */}
+                  <div style={{
+                    position: "absolute", inset: 0,
+                    backfaceVisibility: "hidden" as const,
+                    WebkitBackfaceVisibility: "hidden" as const,
+                    background: CARD, overflow: "hidden",
+                    borderRadius: 20,
+                    boxShadow: dark ? "0 2px 20px #00000030" : "0 2px 20px #00000010",
+                  }}>
+                    <div style={{ height: "72%", overflow: "hidden" }}>
+                      <img src={p.photo} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                    </div>
+                    <div style={{ padding: "16px 20px 12px" }}>
+                      <h3 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: 19, fontWeight: 500, color: CHOC, marginBottom: 6 }}>{p.name}</h3>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <span style={{ fontFamily: "var(--font-cormorant), serif", fontSize: 19, fontWeight: 600, color: AMBER }}>{p.price}</span>
+                        <span style={{ color: TEXT_LIGHT, fontSize: 10, letterSpacing: "0.15em" }}>✦ DISCOVER</span>
+                      </div>
+                    </div>
+                  </div>
+                  {/* BACK */}
+                  <div style={{
+                    position: "absolute", inset: 0,
+                    backfaceVisibility: "hidden" as const,
+                    WebkitBackfaceVisibility: "hidden" as const,
+                    transform: "rotateY(180deg)",
+                    background: dark ? "#3A2210" : "#FFF8EE",
+                    display: "flex", flexDirection: "column", justifyContent: "center",
+                    padding: "28px 24px",
+                    borderRadius: 20,
+                    boxShadow: dark ? "0 2px 20px #00000030" : "0 2px 20px #00000010",
+                  }}>
+                    <p style={{ color: AMBER, fontSize: 10, letterSpacing: "0.35em", textTransform: "uppercase" as const, marginBottom: 10 }}>The Blend</p>
+                    <h3 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: 19, fontWeight: 500, color: CHOC, marginBottom: 14 }}>{p.name}</h3>
+                    <p style={{ color: TEXT_LIGHT, fontSize: 13, lineHeight: 1.75, flex: 1, marginBottom: 20 }}>{p.blurb}</p>
+                    <span style={{ fontFamily: "var(--font-cormorant), serif", fontSize: 19, fontWeight: 600, color: AMBER, display: "block", marginBottom: 16 }}>{p.price}</span>
+                    <button
+                      onClick={e => e.stopPropagation()}
+                      style={{
+                        background: `linear-gradient(135deg, ${AMBER}, ${dark ? "#EAB030" : "#E09A1A"})`,
+                        color: "#FFFFFF",
+                        border: "none",
+                        padding: "15px 0",
+                        fontSize: 11,
+                        letterSpacing: "0.28em",
+                        textTransform: "uppercase" as const,
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        borderRadius: 50,
+                        boxShadow: `0 4px 20px ${AMBER}50`,
+                        fontFamily: "var(--font-dm-sans), sans-serif",
+                      }}
+                    >
+                      Add to Ritual ✦
                     </button>
                   </div>
                 </div>
@@ -219,21 +271,34 @@ export default function WarmIvory() {
         </div>
       </section>
 
-      {/* Email */}
-      <section style={{ background: IVORY, padding: isMobile ? "64px 16px" : "120px 40px", textAlign: "center" }}>
-        <div style={{ maxWidth: 560, margin: "0 auto", background: BLUSH, borderRadius: 24, padding: isMobile ? "40px 24px" : "64px 48px" }}>
-          <p style={{ color: AMBER, fontSize: 12, letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: 16 }}>Stay in the Glow</p>
-          <h2 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: 40, color: CHOC, marginBottom: 12 }}>Join Our Community</h2>
-          <p style={{ color: TEXT_LIGHT, fontSize: 15, lineHeight: 1.8, marginBottom: 36 }}>New arrivals, self-care rituals, and exclusive offers — just for you.</p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <input
-              type="email"
-              placeholder="Enter your email address"
-              style={{ background: "#FFF", border: `1.5px solid ${AMBER}44`, borderRadius: 50, padding: "14px 24px", fontSize: 15, outline: "none", color: CHOC, textAlign: "center" }}
-            />
-            <button style={{ background: AMBER, color: "#FFF", border: "none", borderRadius: 50, padding: "14px 0", fontSize: 15, cursor: "pointer", fontWeight: 500, fontFamily: "var(--font-dm-sans), sans-serif" }}>
-              Subscribe
+      {/* Community */}
+      <section style={{ background: IVORY, padding: isMobile ? "64px 16px" : "120px 40px" }}>
+        <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+          <span style={{ display: "inline-block", background: `${AMBER}18`, border: `1px solid ${AMBER}44`, color: AMBER, fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase" as const, padding: "6px 20px", borderRadius: 50, marginBottom: 24 }}>Join the Inner Circle</span>
+          <h2 style={{ fontFamily: "var(--font-cormorant), serif", fontSize: "clamp(30px, 4vw, 52px)", fontWeight: 400, color: CHOC, marginBottom: 16, lineHeight: 1.2 }}>Your Backstage Pass to ELYXIER</h2>
+          <p style={{ color: TEXT_LIGHT, fontSize: 16, lineHeight: 1.8, maxWidth: 580, margin: "0 auto 48px" }}>
+            This isn&apos;t just a newsletter — it&apos;s your all-access pass to the ELYXIER world. Join a community of women who invest in themselves.
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 16, marginBottom: 48 }}>
+            {[
+              { title: "✦ Beauty Tips & Rituals", body: "Weekly skin care hacks, DIY recipes, and insider routines curated by Data herself." },
+              { title: "✦ Subscriber-Only Access", body: "Exclusive tutorials, behind-the-scenes content, and members-only live sessions." },
+              { title: "✦ First at the Drop", body: "Priority access to limited product releases before they go public. Never miss a drop." },
+            ].map((b) => (
+              <div key={b.title} style={{ background: BLUSH, borderRadius: 16, padding: "24px 20px", textAlign: "left", border: `1px solid ${AMBER}22` }}>
+                <p style={{ color: AMBER, fontSize: 13, fontWeight: 600, marginBottom: 10 }}>{b.title}</p>
+                <p style={{ color: TEXT_LIGHT, fontSize: 13, lineHeight: 1.7 }}>{b.body}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ maxWidth: 480, margin: "0 auto", display: "flex", flexDirection: "column" as const, gap: 12 }}>
+            <input type="text" placeholder="Full Name" style={{ background: "#FFF", border: `1.5px solid ${AMBER}44`, borderRadius: 50, padding: "14px 24px", fontSize: 15, outline: "none", color: CHOC, fontFamily: "var(--font-dm-sans), sans-serif" }} />
+            <input type="email" placeholder="Email Address" style={{ background: "#FFF", border: `1.5px solid ${AMBER}44`, borderRadius: 50, padding: "14px 24px", fontSize: 15, outline: "none", color: CHOC, fontFamily: "var(--font-dm-sans), sans-serif" }} />
+            <input type="tel" placeholder="Phone Number" style={{ background: "#FFF", border: `1.5px solid ${AMBER}44`, borderRadius: 50, padding: "14px 24px", fontSize: 15, outline: "none", color: CHOC, fontFamily: "var(--font-dm-sans), sans-serif" }} />
+            <button style={{ background: `linear-gradient(135deg, ${AMBER}, ${dark ? "#EAB030" : "#E09A1A"})`, color: "#FFF", border: "none", borderRadius: 50, padding: "16px 0", fontSize: 13, cursor: "pointer", fontWeight: 600, fontFamily: "var(--font-dm-sans), sans-serif", boxShadow: `0 4px 24px ${AMBER}40`, marginTop: 4 }}>
+              Join the Circle
             </button>
+            <p style={{ color: `${TEXT_LIGHT}88`, fontSize: 12, marginTop: 4 }}>No spam. Ever. Unsubscribe anytime.</p>
           </div>
         </div>
       </section>
