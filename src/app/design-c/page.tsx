@@ -2,10 +2,10 @@
 import { useState, useEffect } from "react";
 
 const products = [
-  { name: "Whipped Shea Butter", price: "$25", photo: "/product-1.jpeg", blurb: "Our original formula. Premium African shea whipped to a cloud-light texture that melts on contact. Warm jasmine and musk leave your skin soft, supple, and radiant for hours." },
-  { name: "Lavender Dreams Body Butter", price: "$25", photo: "/product-2.jpeg", blurb: "Hand-blended lavender essential oil with raw honey creates a deeply calming, restorative formula. Perfect for evening rituals — glide it on before bed and wake up to velvet-soft skin." },
-  { name: "Honey & Vanilla Glow", price: "$25", photo: "/product-3.jpeg", blurb: "Sweet Madagascar vanilla beans meet golden raw honey in this glow-inducing blend. The warm, irresistible fragrance lingers for hours, leaving you luminous from head to toe." },
-  { name: "Rose Gold Body Oil", price: "$25", photo: "/product-4.jpeg", blurb: "Rich rosehip and argan oils infused with crushed rose petals. A silky, fast-absorbing formula that delivers instant luminosity and a light, romantic floral scent." },
+  { name: "Bare Bliss", price: "$25", photo: "/bare-bliss.jpeg", blurb: "Pure, nourishing hydration without added scents. Made with organic shea butter, mango butter, and skin-loving oils that deeply moisturize and soften even the most sensitive skin. No fragrance. No unnecessary additives. Just pure hydration your skin will love." },
+  { name: "Champagne Glow", price: "$25", photo: "/champagne-glow.jpeg", blurb: "A radiant body butter infused with soft shimmer and bubbly champagne notes with bright citrus accords. Shea and mango butter deliver deep hydration while a delicate shimmer leaves skin luminous and sun-kissed with every application." },
+  { name: "Lilac Dreams", price: "$25", photo: "/lilac-dreams.jpeg", blurb: "A soothing blend of chamomile and soft lavender designed for your nighttime ritual. Rich shea and mango butter melt effortlessly into skin, leaving it silky smooth and beautifully nourished. Breathe it in, let go of the day, and drift into rest." },
+  { name: "Pink Silk", price: "$25", photo: "/pink-silk.jpeg", blurb: "A sweet, feminine blend of juicy fruits, sparkling citrus, soft florals, and warm vanilla. This rich, creamy formula melts into skin for lasting moisture without greasiness — leaving behind a silky, irresistible scent that is both playful and elegant." },
 ];
 
 export default function BoldCanvas() {
