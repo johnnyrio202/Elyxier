@@ -5,10 +5,12 @@ const PLAYFAIR = "var(--font-playfair), Georgia, serif";
 const INTER = "var(--font-inter), system-ui, sans-serif";
 
 const products = [
-  { name: "Bare Bliss", desc: "Fragrance-free hydration for sensitive skin.", photo: "/bare-bliss.jpeg", blurb: "Pure, nourishing hydration without added scents. Made with organic shea butter, mango butter, and skin-loving oils that deeply moisturize and soften even the most sensitive skin. No fragrance. No unnecessary additives. Just pure hydration your skin will love." },
-  { name: "Champagne Glow", desc: "Shimmer-infused butter with champagne and citrus.", photo: "/champagne-glow.jpeg", blurb: "A radiant body butter infused with soft shimmer and bubbly champagne notes with bright citrus accords. Shea and mango butter deliver deep hydration while a delicate shimmer leaves skin luminous and sun-kissed with every application." },
-  { name: "Lilac Dreams", desc: "Calming chamomile and lavender for nighttime rituals.", photo: "/lilac-dreams.jpeg", blurb: "A soothing blend of chamomile and soft lavender designed for your nighttime ritual. Rich shea and mango butter melt effortlessly into skin, leaving it silky smooth and beautifully nourished. Breathe it in, let go of the day, and drift into rest." },
-  { name: "Pink Silk", desc: "Sweet fruits, florals, and warm vanilla in silky cream.", photo: "/pink-silk.jpeg", blurb: "A sweet, feminine blend of juicy fruits, sparkling citrus, soft florals, and warm vanilla. This rich, creamy formula melts into skin for lasting moisture without greasiness — leaving behind a silky, irresistible scent that is both playful and elegant." },
+  { name: "Bare Bliss", desc: "Fragrance-free hydration for sensitive skin.", photos: ["/bare-bliss-hero.jpeg", "/bare-bliss-swirl.jpeg"], blurb: "Pure, nourishing hydration without added scents. Made with organic shea butter, mango butter, and skin-loving oils that deeply moisturize and soften even the most sensitive skin. No fragrance. No unnecessary additives. Just pure hydration your skin will love." },
+  { name: "Champagne Glow", desc: "Shimmer-infused butter with champagne and citrus.", photos: ["/champagne-glow-hero.jpeg", "/champagne-glow-swirl.jpeg"], blurb: "A radiant body butter infused with soft shimmer and bubbly champagne notes with bright citrus accords. Shea and mango butter deliver deep hydration while a delicate shimmer leaves skin luminous and sun-kissed with every application." },
+  { name: "Lilac Dreams", desc: "Calming chamomile and lavender for nighttime rituals.", photos: ["/lilac-dreams-hero.jpeg", "/lilac-dreams-swirl.jpeg"], blurb: "A soothing blend of chamomile and soft lavender designed for your nighttime ritual. Rich shea and mango butter melt effortlessly into skin, leaving it silky smooth and beautifully nourished. Breathe it in, let go of the day, and drift into rest." },
+  { name: "Pink Silk", desc: "Sweet fruits, florals, and warm vanilla in silky cream.", photos: ["/pink-silk-hero.jpeg", "/pink-silk-swirl.jpeg"], blurb: "A sweet, feminine blend of juicy fruits, sparkling citrus, soft florals, and warm vanilla. This rich, creamy formula melts into skin for lasting moisture without greasiness — leaving behind a silky, irresistible scent that is both playful and elegant." },
+  { name: "Rose Petal Silk", desc: "Delicate rose infused body butter for silky skin.", photos: ["https://images.unsplash.com/photo-1619451427882-6aaaded0cc61?w=600&h=600&fit=crop&q=80"], blurb: "Pressed rose petals and jojoba oil combine for a silky, weightless butter that glides on effortlessly. A signature floral scent you'll reach for every single day." },
+  { name: "Citrus Burst", desc: "Energizing citrus blend to wake up your skin.", photos: ["https://images.unsplash.com/photo-1629380108599-ea06489d66f5?w=600&h=600&fit=crop&q=80"], blurb: "Blood orange zest and grapefruit in a lightweight whipped butter. Energizes your senses and leaves skin glowing with a fresh, vibrant citrus finish." },
 ];
 
 const testimonials = [
@@ -21,6 +23,7 @@ export default function SerifLuxe() {
   const [dark, setDark] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [flippedCard, setFlippedCard] = useState<string | null>(null);
+  const [activePhotoIdx, setActivePhotoIdx] = useState<{ [key: string]: number }>({});
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -207,8 +210,19 @@ export default function SerifLuxe() {
                     background: t.CARD, overflow: "hidden",
                     border: `1px solid ${t.AMBER}20`,
                   }}>
-                    <div style={{ height: "72%", overflow: "hidden" }}>
-                      <img src={p.photo} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                    <div style={{ height: "72%", overflow: "hidden", position: "relative" }}>
+                      <img src={p.photos[activePhotoIdx[p.name] ?? 0]} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                      {p.photos.length > 1 && (
+                        <div style={{ position: "absolute", bottom: 8, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 6, zIndex: 2 }}>
+                          {p.photos.map((_, idx) => (
+                            <div
+                              key={idx}
+                              onClick={(e) => { e.stopPropagation(); setActivePhotoIdx(prev => ({ ...prev, [p.name]: idx })); }}
+                              style={{ width: 6, height: 6, borderRadius: "50%", background: (activePhotoIdx[p.name] ?? 0) === idx ? "#fff" : "rgba(255,255,255,0.45)", cursor: "pointer", transition: "background 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.4)" }}
+                            />
+                          ))}
+                        </div>
+                      )}
                     </div>
                     <div style={{ padding: "16px 20px 12px" }}>
                       <h3 style={{ fontFamily: PLAYFAIR, fontSize: 20, fontWeight: 400, color: t.TEXT, marginBottom: 6 }}>{p.name}</h3>

@@ -2,16 +2,17 @@
 import { useState, useEffect } from "react";
 
 const products = [
-  { name: "Bare Bliss", price: "$25", photo: "/bare-bliss.jpeg", blurb: "Pure, nourishing hydration without added scents. Made with organic shea butter, mango butter, and skin-loving oils that deeply moisturize and soften even the most sensitive skin. No fragrance. No unnecessary additives. Just pure hydration your skin will love." },
-  { name: "Champagne Glow", price: "$25", photo: "/champagne-glow.jpeg", blurb: "A radiant body butter infused with soft shimmer and bubbly champagne notes with bright citrus accords. Shea and mango butter deliver deep hydration while a delicate shimmer leaves skin luminous and sun-kissed with every application." },
-  { name: "Lilac Dreams", price: "$25", photo: "/lilac-dreams.jpeg", blurb: "A soothing blend of chamomile and soft lavender designed for your nighttime ritual. Rich shea and mango butter melt effortlessly into skin, leaving it silky smooth and beautifully nourished. Breathe it in, let go of the day, and drift into rest." },
-  { name: "Pink Silk", price: "$25", photo: "/pink-silk.jpeg", blurb: "A sweet, feminine blend of juicy fruits, sparkling citrus, soft florals, and warm vanilla. This rich, creamy formula melts into skin for lasting moisture without greasiness — leaving behind a silky, irresistible scent that is both playful and elegant." },
+  { name: "Bare Bliss", price: "$25", photos: ["/bare-bliss-hero.jpeg", "/bare-bliss-swirl.jpeg"], blurb: "Pure, nourishing hydration without added scents. Made with organic shea butter, mango butter, and skin-loving oils that deeply moisturize and soften even the most sensitive skin. No fragrance. No unnecessary additives. Just pure hydration your skin will love." },
+  { name: "Champagne Glow", price: "$25", photos: ["/champagne-glow-hero.jpeg", "/champagne-glow-swirl.jpeg"], blurb: "A radiant body butter infused with soft shimmer and bubbly champagne notes with bright citrus accords. Shea and mango butter deliver deep hydration while a delicate shimmer leaves skin luminous and sun-kissed with every application." },
+  { name: "Lilac Dreams", price: "$25", photos: ["/lilac-dreams-hero.jpeg", "/lilac-dreams-swirl.jpeg"], blurb: "A soothing blend of chamomile and soft lavender designed for your nighttime ritual. Rich shea and mango butter melt effortlessly into skin, leaving it silky smooth and beautifully nourished. Breathe it in, let go of the day, and drift into rest." },
+  { name: "Pink Silk", price: "$25", photos: ["/pink-silk-hero.jpeg", "/pink-silk-swirl.jpeg"], blurb: "A sweet, feminine blend of juicy fruits, sparkling citrus, soft florals, and warm vanilla. This rich, creamy formula melts into skin for lasting moisture without greasiness — leaving behind a silky, irresistible scent that is both playful and elegant." },
 ];
 
 export default function BoldCanvas() {
   const [dark, setDark] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [flippedCard, setFlippedCard] = useState<string | null>(null);
+  const [activePhotoIdx, setActivePhotoIdx] = useState<{ [key: string]: number }>({});
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -171,8 +172,19 @@ export default function BoldCanvas() {
                     borderRadius: 8,
                     boxShadow: `0 2px 12px rgba(74,18,89,${dark ? "0.25" : "0.08"})`,
                   }}>
-                    <div style={{ height: "72%", overflow: "hidden" }}>
-                      <img src={p.photo} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                    <div style={{ height: "72%", overflow: "hidden", position: "relative" }}>
+                      <img src={p.photos[activePhotoIdx[p.name] ?? 0]} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                      {p.photos.length > 1 && (
+                        <div style={{ position: "absolute", bottom: 8, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 6, zIndex: 2 }}>
+                          {p.photos.map((_, idx) => (
+                            <div
+                              key={idx}
+                              onClick={(e) => { e.stopPropagation(); setActivePhotoIdx(prev => ({ ...prev, [p.name]: idx })); }}
+                              style={{ width: 6, height: 6, borderRadius: "50%", background: (activePhotoIdx[p.name] ?? 0) === idx ? "#fff" : "rgba(255,255,255,0.45)", cursor: "pointer", transition: "background 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.4)" }}
+                            />
+                          ))}
+                        </div>
+                      )}
                     </div>
                     <div style={{ padding: "16px 20px 12px" }}>
                       <h3 style={{ fontFamily: "var(--font-montserrat), sans-serif", fontSize: 14, fontWeight: 800, color: PLUM, textTransform: "uppercase" as const, letterSpacing: "0.04em", marginBottom: 6 }}>{p.name}</h3>
