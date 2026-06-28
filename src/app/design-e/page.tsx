@@ -32,6 +32,18 @@ export default function SerifLuxe() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
+  useEffect(() => {
+    const intervals = products
+      .filter(p => p.photos.length > 1)
+      .map(p => setInterval(() => {
+        setActivePhotoIdx(prev => ({
+          ...prev,
+          [p.name]: ((prev[p.name] ?? 0) + 1) % p.photos.length,
+        }));
+      }, 3000));
+    return () => intervals.forEach(clearInterval);
+  }, []);
+
   const t = dark ? {
     BG: "#0A0A08",
     TEXT: "#FAF7F0",
@@ -217,8 +229,7 @@ export default function SerifLuxe() {
                           {p.photos.map((_, idx) => (
                             <div
                               key={idx}
-                              onClick={(e) => { e.stopPropagation(); setActivePhotoIdx(prev => ({ ...prev, [p.name]: idx })); }}
-                              style={{ width: 6, height: 6, borderRadius: "50%", background: (activePhotoIdx[p.name] ?? 0) === idx ? "#fff" : "rgba(255,255,255,0.45)", cursor: "pointer", transition: "background 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.4)" }}
+                              style={{ width: 6, height: 6, borderRadius: "50%", background: (activePhotoIdx[p.name] ?? 0) === idx ? "#fff" : "rgba(255,255,255,0.45)", transition: "background 0.4s", boxShadow: "0 1px 3px rgba(0,0,0,0.4)" }}
                             />
                           ))}
                         </div>
