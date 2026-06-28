@@ -57,6 +57,7 @@ export default function MidnightLuxe() {
 
   return (
     <div style={{ background: BG, color: CREAM, fontFamily: "var(--font-inter), sans-serif", minHeight: "100vh" }}>
+      <style>{`@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }`}</style>
 
       {/* Dark/Light Toggle */}
       <button
@@ -169,7 +170,7 @@ export default function MidnightLuxe() {
                   border: `1px solid ${GOLD}33`,
                 }}>
                   <div style={{ height: "72%", overflow: "hidden", position: "relative" }}>
-                    <img src={p.photos[activePhotoIdx[p.name] ?? 0]} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                    <img key={p.photos[activePhotoIdx[p.name] ?? 0]} src={p.photos[activePhotoIdx[p.name] ?? 0]} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", animation: "fadeIn 0.9s ease-in-out" }} />
                     {p.photos.length > 1 && (
                       <div style={{ position: "absolute", bottom: 8, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 6, zIndex: 2 }}>
                         {p.photos.map((_, idx) => (
