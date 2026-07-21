@@ -1,0 +1,383 @@
+<title>ELYXIER Content Studio Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #FAF7F0;
+    --ink: #211a0c;
+    --amber: #a8690a;
+    --amber-strong: #8a5606;
+    --muted: #6b5a40;
+    --card: #ffffff;
+    --card-border: rgba(168,105,10,0.22);
+    --rule: rgba(168,105,10,0.35);
+    --callout-bg: #fff4e0;
+    --code-bg: #f3ede0;
+    --shadow: 0 2px 20px rgba(33,26,12,0.06);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0A0A08;
+    --ink: #FAF7F0;
+    --amber: #D4920A;
+    --amber-strong: #E8A820;
+    --muted: #9A8A70;
+    --card: #141410;
+    --card-border: rgba(212,146,10,0.22);
+    --rule: rgba(212,146,10,0.35);
+    --callout-bg: #1A1408;
+    --code-bg: #17140c;
+    --shadow: 0 2px 24px rgba(0,0,0,0.4);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0A0A08;
+      --ink: #FAF7F0;
+      --amber: #D4920A;
+      --amber-strong: #E8A820;
+      --muted: #9A8A70;
+      --card: #141410;
+      --card-border: rgba(212,146,10,0.22);
+      --rule: rgba(212,146,10,0.35);
+      --callout-bg: #1A1408;
+      --code-bg: #17140c;
+      --shadow: 0 2px 24px rgba(0,0,0,0.4);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Inter, system-ui, sans-serif;
+    line-height: 1.65;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  h1, h2, h3 {
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    font-weight: 400;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  .eyebrow {
+    font-family: -apple-system, "Segoe UI", Inter, system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+  a { color: var(--amber); }
+
+  .shell {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 220px minmax(0, 720px);
+    gap: 64px;
+    padding: 72px 32px 120px;
+  }
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: 1fr; padding: 40px 20px 80px; gap: 32px; }
+    nav.toc { display: none; }
+  }
+
+  header.masthead {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 28px;
+    margin-bottom: 12px;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  header.masthead .brand {
+    font-family: Georgia, serif;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+  }
+  header.masthead .brand b { color: var(--amber); font-style: italic; }
+  header.masthead .date {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  nav.toc {
+    position: sticky;
+    top: 48px;
+    align-self: start;
+    font-size: 13px;
+  }
+  nav.toc a {
+    display: block;
+    padding: 7px 0;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    padding-left: 14px;
+    margin-left: -15px;
+  }
+  nav.toc a:hover { color: var(--ink); border-left-color: var(--rule); }
+
+  main h1 {
+    font-size: clamp(32px, 4vw, 44px);
+    margin: 0 0 10px;
+  }
+  main .lede {
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 60ch;
+    margin: 0 0 56px;
+  }
+
+  section { margin-bottom: 56px; scroll-margin-top: 32px; }
+  section h2 {
+    font-size: 24px;
+    margin: 0 0 4px;
+  }
+  section .eyebrow { display: block; margin-bottom: 10px; }
+  section > p { max-width: 65ch; }
+
+  .field-list { display: grid; gap: 14px; margin-top: 24px; }
+  .field-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 18px;
+    padding: 16px 20px;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 3px;
+    box-shadow: var(--shadow);
+  }
+  @media (max-width: 640px) {
+    .field-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+  .field-row .name {
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+  .field-row .desc { color: var(--muted); font-size: 14.5px; }
+
+  .callout {
+    background: var(--callout-bg);
+    border: 1px solid var(--card-border);
+    border-left: 3px solid var(--amber);
+    border-radius: 2px;
+    padding: 18px 22px;
+    margin-top: 24px;
+    font-size: 14.5px;
+  }
+  .callout .label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber-strong);
+    margin-bottom: 6px;
+  }
+
+  ol.steps {
+    list-style: none;
+    margin: 24px 0 0;
+    padding: 0;
+    counter-reset: step;
+  }
+  ol.steps li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 28px 44px;
+    border-left: 1px solid var(--rule);
+    margin-left: 15px;
+  }
+  ol.steps li:last-child { border-left-color: transparent; padding-bottom: 0; }
+  ol.steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: -15px;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  ol.steps h3 { font-size: 17px; margin: 0 0 6px; }
+  ol.steps p { margin: 0; color: var(--muted); font-size: 14.5px; max-width: 58ch; }
+
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  @media (max-width: 640px) { .compare { grid-template-columns: 1fr; } }
+  .compare .opt {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 3px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+  }
+  .compare .opt h3 { font-size: 15px; margin: 0 0 8px; font-family: -apple-system, Inter, sans-serif; letter-spacing: 0.01em; }
+  .compare .opt p { font-size: 13.5px; color: var(--muted); margin: 0; }
+  .compare .opt .tag {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 8px;
+  }
+
+  code, .path {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    background: var(--code-bg);
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+
+  footer {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--rule);
+    margin-top: 24px;
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+</style>
+
+<div class="shell">
+  <header class="masthead">
+    <div class="brand">GLOBALIST.PRO × <b>ELYXIER</b></div>
+    <div class="date">Content Studio Guide — July 2026</div>
+  </header>
+
+  <nav class="toc">
+    <a href="#login">Logging In</a>
+    <a href="#editing">What You Can Edit</a>
+    <a href="#live">Going Live</a>
+    <a href="#shopify">Connecting Shopify</a>
+    <a href="#domain">Your Domain</a>
+  </nav>
+
+  <main>
+    <span class="eyebrow">For Data Gladden</span>
+    <h1>Running ELYXIER without touching a line of code</h1>
+    <p class="lede">Your site's words, photos, and prices now live in a simple dashboard called Sanity Studio — separate from the website itself, so you can update it any time without waiting on us.</p>
+
+    <section id="login">
+      <span class="eyebrow">Step One</span>
+      <h2>Logging In</h2>
+      <p>Your Studio lives right on your site, at:</p>
+      <div class="field-row" style="grid-template-columns: 1fr; margin-top: 16px;">
+        <div><span class="path">elyxier.vercel.app/studio</span></div>
+      </div>
+      <p style="margin-top: 20px;">You'll get an email invite from Sanity at the address we have on file. Open it, pick a sign-in method (Google is easiest), and you're in. Bookmark the link above — that's your permanent front door.</p>
+    </section>
+
+    <section id="editing">
+      <span class="eyebrow">Step Two</span>
+      <h2>What You Can Edit</h2>
+      <p>The Studio sidebar is split into two groups: <b>Page Content</b> (the wording and images around the site) and <b>Products / Testimonials</b> (things you'll add to and reorder more often).</p>
+      <div class="field-list">
+        <div class="field-row">
+          <div class="name">Hero</div>
+          <div class="desc">The big opening headline, subtext, and background photo — the very first thing a visitor sees.</div>
+        </div>
+        <div class="field-row">
+          <div class="name">Marquee Ticker</div>
+          <div class="desc">The scrolling gold banner of words ("Whipped · Handmade · Skin Ritual...") just under the hero.</div>
+        </div>
+        <div class="field-row">
+          <div class="name">Products</div>
+          <div class="desc">Each body butter's name, price, description, and photos. Reorder them with the sort number — lower shows first.</div>
+        </div>
+        <div class="field-row">
+          <div class="name">Brand Story (About)</div>
+          <div class="desc">Your story section — the paragraphs about why ELYXIER exists, plus the pull-quote.</div>
+        </div>
+        <div class="field-row">
+          <div class="name">Live Selling CTA</div>
+          <div class="desc">The "Shop With Us Live" section and its TikTok / Instagram / Facebook / Whatnot buttons.</div>
+        </div>
+        <div class="field-row">
+          <div class="name">Testimonials</div>
+          <div class="desc">Customer quotes shown in the reviews section.</div>
+        </div>
+        <div class="field-row">
+          <div class="name">Community Sign-up</div>
+          <div class="desc">The email-capture section's headline, the three benefit cards, and the fine print.</div>
+        </div>
+        <div class="field-row">
+          <div class="name">Site Settings</div>
+          <div class="desc">Your logo, nav menu labels, footer text, and social links — the things that appear on every page.</div>
+        </div>
+      </div>
+      <div class="callout">
+        <div class="label">Before you launch</div>
+        Two products — <b>Rose Petal Silk</b> and <b>Citrus Burst</b> — are currently showing stock stand-in photos, not your own. Swap those in the <span class="path">Products</span> section whenever your real photos are ready.
+      </div>
+    </section>
+
+    <section id="live">
+      <span class="eyebrow">Step Three</span>
+      <h2>Going Live</h2>
+      <p>Hit <b>Publish</b> on anything you change and it appears on <span class="path">elyxier.vercel.app</span> within a few seconds — no waiting, no re-deploying, nothing else to do.</p>
+    </section>
+
+    <section id="shopify">
+      <span class="eyebrow">When You're Ready</span>
+      <h2>Connecting Shopify</h2>
+      <p>Right now, "Add to Ritual" is a display-only button — there's no checkout wired up yet. When you're ready to actually sell, here's the path:</p>
+      <ol class="steps">
+        <li>
+          <h3>Open a Shopify store</h3>
+          <p>Add your six products there with the same names and photos you're using in the Studio, so everything matches across TikTok Shop, Amazon, and your site.</p>
+        </li>
+        <li>
+          <h3>Pick how deep you want to go</h3>
+          <p>Two options below — talk to us if you're not sure which fits.</p>
+        </li>
+      </ol>
+      <div class="compare">
+        <div class="opt">
+          <div class="tag">Simplest</div>
+          <h3>Shopify Buy Button</h3>
+          <p>A small "buy" snippet Shopify generates for each product, dropped into the site. Fastest and cheapest to set up — checkout looks and feels like Shopify's, not fully custom.</p>
+        </div>
+        <div class="opt">
+          <div class="tag">Full Custom</div>
+          <h3>Headless Checkout</h3>
+          <p>Cart and checkout built to match your site's exact look, powered behind the scenes by Shopify. More capable, but it's a real build — this one's on us, not a DIY step.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="domain">
+      <span class="eyebrow">One More Thing</span>
+      <h2>Your Domain</h2>
+      <p>You mentioned having a GoDaddy account — that's fine to keep exactly as is. Your site needs to stay hosted where it is now (Vercel); GoDaddy just needs to point <span class="path">elyxier.com</span> at it, a quick DNS change we can walk you through when you're ready to switch off the <span class="path">.vercel.app</span> address.</p>
+    </section>
+  </main>
+
+  <footer>
+    <span>Prepared by Globalist.Pro for ELYXIER · July 2026</span>
+    <span>Questions? advisor@globalist.pro</span>
+  </footer>
+</div>
