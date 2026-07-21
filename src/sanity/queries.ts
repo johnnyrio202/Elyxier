@@ -1,5 +1,6 @@
 import { groq } from "next-sanity";
 import { apiVersion, dataset, projectId } from "./env";
+import { previewClient } from "./client";
 
 export const DESIGN_E_TAG = "design-e";
 
@@ -112,9 +113,15 @@ export type DesignEContent = {
   testimonials: { _id: string; quote: string; name: string }[];
 };
 
-export async function getDesignEContent(): Promise<DesignEContent> {
-  // Queried via native fetch (not @sanity/client) so Next's fetch cache
-  // actually sees the `next.tags` option — @sanity/client's own request
+export async function getDesignEContent(preview = false): Promise<DesignEContent> {
+  if (preview) {
+    // Draft-mode / Presentation tool: bypass Next's fetch cache entirely,
+    // read unpublished drafts, and stega-encode for the visual editing overlay.
+    return previewClient.fetch(designEQuery, {}, { perspective: "drafts" });
+  }
+
+  // Published reads go via native fetch (not @sanity/client) so Next's fetch
+  // cache actually sees the `next.tags` option — @sanity/client's own request
   // layer doesn't reliably forward it, which breaks revalidateTag.
   const url = `https://${projectId}.apicdn.sanity.io/v${apiVersion}/data/query/${dataset}?query=${encodeURIComponent(designEQuery)}`;
   const res = await fetch(url, { next: { tags: [DESIGN_E_TAG] } });

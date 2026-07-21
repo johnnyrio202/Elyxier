@@ -1,5 +1,6 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
+import { presentationTool } from "sanity/presentation";
 import { visionTool } from "@sanity/vision";
 
 import { apiVersion, dataset, projectId } from "./src/sanity/env";
@@ -11,5 +12,14 @@ export default defineConfig({
   projectId,
   dataset,
   schema,
-  plugins: [structureTool({ structure }), visionTool({ defaultApiVersion: apiVersion })],
+  plugins: [
+    structureTool({ structure }),
+    presentationTool({
+      previewUrl: {
+        initial: "/design-e",
+        previewMode: { enable: "/api/draft-mode/enable" },
+      },
+    }),
+    visionTool({ defaultApiVersion: apiVersion }),
+  ],
 });
