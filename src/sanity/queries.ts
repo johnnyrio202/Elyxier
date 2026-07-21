@@ -1,5 +1,5 @@
 import { groq } from "next-sanity";
-import { client } from "./client";
+import { apiVersion, dataset, projectId } from "./env";
 
 export const DESIGN_E_TAG = "design-e";
 
@@ -113,5 +113,14 @@ export type DesignEContent = {
 };
 
 export async function getDesignEContent(): Promise<DesignEContent> {
-  return client.fetch(designEQuery, {}, { next: { tags: [DESIGN_E_TAG] } });
+  // Queried via native fetch (not @sanity/client) so Next's fetch cache
+  // actually sees the `next.tags` option — @sanity/client's own request
+  // layer doesn't reliably forward it, which breaks revalidateTag.
+  const url = `https://${projectId}.apicdn.sanity.io/v${apiVersion}/data/query/${dataset}?query=${encodeURIComponent(designEQuery)}`;
+  const res = await fetch(url, { next: { tags: [DESIGN_E_TAG] } });
+  if (!res.ok) {
+    throw new Error(`Sanity query failed: ${res.status} ${await res.text()}`);
+  }
+  const json = (await res.json()) as { result: DesignEContent };
+  return json.result;
 }
