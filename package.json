@@ -6,12 +6,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "sanity exec scripts/seed.ts --with-user-token"
   },
   "dependencies": {
+    "@sanity/image-url": "^2.1.1",
+    "@sanity/vision": "^6.5.0",
+    "@sanity/webhook": "^4.0.4",
     "next": "16.2.9",
+    "next-sanity": "^13.1.5",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "sanity": "^6.5.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
