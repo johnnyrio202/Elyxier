@@ -46,7 +46,7 @@ export const designEQuery = groq`{
     benefits[]{ title, body },
     disclaimer,
   },
-  "products": *[_type == "product"] | order(order asc){
+  "products": *[_type == "product"] | order(orderRank asc){
     _id,
     name,
     "slug": slug.current,
@@ -55,7 +55,7 @@ export const designEQuery = groq`{
     blurb,
     photos,
   },
-  "testimonials": *[_type == "testimonial"] | order(order asc){
+  "testimonials": *[_type == "testimonial"] | order(orderRank asc){
     _id,
     quote,
     name,

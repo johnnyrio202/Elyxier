@@ -1,4 +1,5 @@
 import type { StructureResolver } from "sanity/structure";
+import { orderableDocumentListDeskItem } from "@sanity/orderable-document-list";
 
 const SINGLETONS = [
   { id: "siteSettings", title: "Site Settings" },
@@ -9,7 +10,7 @@ const SINGLETONS = [
   { id: "community", title: "Community Sign-up" },
 ];
 
-export const structure: StructureResolver = (S) =>
+export const structure: StructureResolver = (S, context) =>
   S.list()
     .title("ELYXIER Content")
     .items([
@@ -28,6 +29,6 @@ export const structure: StructureResolver = (S) =>
             )
         ),
       S.divider(),
-      S.documentTypeListItem("product").title("Products"),
-      S.documentTypeListItem("testimonial").title("Testimonials"),
+      orderableDocumentListDeskItem({ type: "product", title: "Products", S, context }),
+      orderableDocumentListDeskItem({ type: "testimonial", title: "Testimonials", S, context }),
     ]);

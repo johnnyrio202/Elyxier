@@ -208,7 +208,7 @@ async function run() {
   });
 
   console.log("Seeding products...");
-  for (const [i, p] of productsData.entries()) {
+  for (const p of productsData) {
     const photoAssets = [];
     for (const [photoIdx, src] of p.photos.entries()) {
       const asset = src.startsWith("http")
@@ -225,7 +225,6 @@ async function run() {
       shortDesc: p.shortDesc,
       blurb: p.blurb,
       photos: photoAssets,
-      order: i,
     });
     if (p.isPlaceholderPhoto) {
       console.log(`  ⚠ ${p.name}: seeded with a stock placeholder photo — swap for a real product photo in Studio.`);
@@ -233,13 +232,13 @@ async function run() {
   }
 
   console.log("Seeding testimonials...");
-  for (const [i, r] of testimonialsData.entries()) {
+  for (const r of testimonialsData) {
+    const slug = r.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
     await client.createOrReplace({
-      _id: `testimonial-${i}`,
+      _id: `testimonial-${slug}`,
       _type: "testimonial",
       quote: r.quote,
       name: r.name,
-      order: i,
     });
   }
 
