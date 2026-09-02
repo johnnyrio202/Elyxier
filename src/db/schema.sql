@@ -22,12 +22,29 @@ CREATE TABLE IF NOT EXISTS products (
 );
 ALTER TABLE products ADD COLUMN IF NOT EXISTS weight_oz INTEGER NOT NULL DEFAULT 6;
 
+-- Accounts are optional — guest checkout never creates a row here. A row is
+-- lazily created the first time a signed-in Clerk user places an order.
+CREATE TABLE IF NOT EXISTS customers (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  clerk_user_id TEXT NOT NULL UNIQUE,
+  email TEXT,
+  name TEXT,
+  phone TEXT,
+  -- Populated on first checkout so Stripe can remember/prefill their
+  -- shipping address and payment details on future orders.
+  stripe_customer_id TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
 CREATE TABLE IF NOT EXISTS orders (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   -- Split the way Shopify does: whether the customer paid and whether the
   -- order has shipped are independent facts with independent triggers.
   payment_status TEXT NOT NULL DEFAULT 'pending' CHECK (payment_status IN ('pending', 'paid', 'refunded', 'failed')),
   fulfillment_status TEXT NOT NULL DEFAULT 'unfulfilled' CHECK (fulfillment_status IN ('unfulfilled', 'fulfilled', 'canceled')),
+  -- Null for guest checkout — accounts are optional, never required to buy.
+  customer_id UUID REFERENCES customers(id),
   customer_name TEXT,
   customer_email TEXT,
   customer_phone TEXT,
@@ -52,9 +69,11 @@ ALTER TABLE orders DROP COLUMN IF EXISTS status;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS fulfillment_status TEXT NOT NULL DEFAULT 'unfulfilled' CHECK (fulfillment_status IN ('unfulfilled', 'fulfilled', 'canceled'));
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS shipping_address JSONB;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS shippo_order_id TEXT;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS customer_id UUID REFERENCES customers(id);
 
 CREATE INDEX IF NOT EXISTS orders_provider_reference_idx ON orders (provider_reference);
 CREATE INDEX IF NOT EXISTS orders_shippo_order_id_idx ON orders (shippo_order_id);
+CREATE INDEX IF NOT EXISTS orders_customer_id_idx ON orders (customer_id);
 
 CREATE TABLE IF NOT EXISTS order_items (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

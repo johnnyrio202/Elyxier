@@ -19,6 +19,7 @@ export type Order = {
   id: string;
   paymentStatus: "pending" | "paid" | "refunded" | "failed";
   fulfillmentStatus: "unfulfilled" | "fulfilled" | "canceled";
+  customerId: string | null;
   customerName: string | null;
   customerEmail: string | null;
   customerPhone: string | null;
@@ -34,23 +35,32 @@ export type Order = {
 export type OrderItem = { productSlug: string; productName: string; unitPriceCents: number; quantity: number };
 
 const ORDER_COLUMNS = `
-  id, payment_status, fulfillment_status, customer_name, customer_email, customer_phone,
+  id, payment_status, fulfillment_status, customer_id, customer_name, customer_email, customer_phone,
   shipping_address, subtotal_cents, total_cents, currency, payment_provider, provider_reference, shippo_order_id
 `;
 
 export async function createOrder(input: {
   items: OrderItemInput[];
   customer?: { name?: string; email?: string; phone?: string };
+  customerId?: string;
   source?: string;
 }): Promise<Order> {
   const sql = getSql();
   const subtotalCents = input.items.reduce((sum, i) => sum + i.unitPriceCents * i.quantity, 0);
 
   const [orderRow] = (await sql.query(
-    `INSERT INTO orders (customer_name, customer_email, customer_phone, subtotal_cents, total_cents, source)
-     VALUES ($1, $2, $3, $4, $5, $6)
+    `INSERT INTO orders (customer_id, customer_name, customer_email, customer_phone, subtotal_cents, total_cents, source)
+     VALUES ($1, $2, $3, $4, $5, $6, $7)
      RETURNING ${ORDER_COLUMNS}`,
-    [input.customer?.name ?? null, input.customer?.email ?? null, input.customer?.phone ?? null, subtotalCents, subtotalCents, input.source ?? null]
+    [
+      input.customerId ?? null,
+      input.customer?.name ?? null,
+      input.customer?.email ?? null,
+      input.customer?.phone ?? null,
+      subtotalCents,
+      subtotalCents,
+      input.source ?? null,
+    ]
   )) as Record<string, unknown>[];
 
   for (const item of input.items) {
@@ -160,6 +170,7 @@ function mapOrder(row: Record<string, unknown>): Order {
     id: row.id as string,
     paymentStatus: row.payment_status as Order["paymentStatus"],
     fulfillmentStatus: row.fulfillment_status as Order["fulfillmentStatus"],
+    customerId: (row.customer_id as string | null) ?? null,
     customerName: (row.customer_name as string | null) ?? null,
     customerEmail: (row.customer_email as string | null) ?? null,
     customerPhone: (row.customer_phone as string | null) ?? null,

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import type { CatalogProduct } from "@/lib/catalog";
 import { urlFor } from "@/sanity/image";
 import type { SanityImageSource } from "@sanity/image-url";
+import { UserButton, useUser } from "@clerk/nextjs";
 
 const BEBAS = "var(--font-bebas), Impact, sans-serif";
 const DM = "var(--font-dm-sans), system-ui, sans-serif";
@@ -22,6 +23,7 @@ function resolveImage(image: unknown, width: number): string {
 }
 
 export default function ElevatedGlam({ products }: { products: CatalogProduct[] }) {
+  const { isSignedIn, isLoaded } = useUser();
   const [dark, setDark] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [flippedCard, setFlippedCard] = useState<string | null>(null);
@@ -214,6 +216,17 @@ export default function ElevatedGlam({ products }: { products: CatalogProduct[] 
                 </span>
               )}
             </button>
+            {isLoaded && (isSignedIn ? (
+              <a href="/account" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
+                <UserButton />
+              </a>
+            ) : (
+              <a href="/sign-in" style={{ color: t.MUTED, fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", fontFamily: DM, fontWeight: 500 }}
+                onMouseEnter={e => (e.currentTarget.style.color = t.AMBER)}
+                onMouseLeave={e => (e.currentTarget.style.color = t.MUTED)}>
+                Sign In
+              </a>
+            ))}
           </div>
         </div>
       </nav>

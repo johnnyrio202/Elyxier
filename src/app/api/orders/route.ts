@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { getCatalog } from "@/lib/catalog";
 import { createOrder } from "@/db/orders";
+import { getOrCreateCustomerByClerkId } from "@/db/customers";
 
 type CartItem = { slug: string; quantity: number };
 
@@ -35,6 +37,19 @@ export async function POST(req: NextRequest) {
     orderItems.push({ slug: product.slug, name: product.name, unitPriceCents: product.priceCents, quantity: item.quantity });
   }
 
-  const order = await createOrder({ items: orderItems, customer: body.customer, source: body.source });
+  // Signed-in customers get their order linked to their account; guest
+  // checkout (no session) is unaffected.
+  const { userId } = await auth();
+  let customerId: string | undefined;
+  if (userId) {
+    const user = await currentUser();
+    const customer = await getOrCreateCustomerByClerkId(userId, {
+      email: user?.primaryEmailAddress?.emailAddress ?? null,
+      name: user?.fullName ?? null,
+    });
+    customerId = customer.id;
+  }
+
+  const order = await createOrder({ items: orderItems, customer: body.customer, customerId, source: body.source });
   return NextResponse.json({ order });
 }
