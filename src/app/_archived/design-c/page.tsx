@@ -29,7 +29,7 @@ export default function BoldCanvas() {
           ...prev,
           [p.name]: ((prev[p.name] ?? 0) + 1) % p.photos.length,
         }));
-      }, 3000));
+      }, 5000));
     return () => intervals.forEach(clearInterval);
   }, []);
 
@@ -186,7 +186,7 @@ export default function BoldCanvas() {
                     boxShadow: `0 2px 12px rgba(74,18,89,${dark ? "0.25" : "0.08"})`,
                   }}>
                     <div style={{ height: "72%", overflow: "hidden", position: "relative" }}>
-                      <img key={p.photos[activePhotoIdx[p.name] ?? 0]} src={p.photos[activePhotoIdx[p.name] ?? 0]} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", animation: "fadeIn 0.9s ease-in-out" }} />
+                      <img key={p.photos[activePhotoIdx[p.name] ?? 0]} src={p.photos[activePhotoIdx[p.name] ?? 0]} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", animation: "fadeIn 1.4s ease-in-out" }} />
                       {p.photos.length > 1 && (
                         <div style={{ position: "absolute", bottom: 8, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 6, zIndex: 2 }}>
                           {p.photos.map((_, idx) => (

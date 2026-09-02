@@ -16,7 +16,7 @@ export default defineConfig({
     structureTool({ structure }),
     presentationTool({
       previewUrl: {
-        initial: "/design-e",
+        initial: "/design-d",
         previewMode: { enable: "/api/draft-mode/enable" },
       },
     }),

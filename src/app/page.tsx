@@ -121,10 +121,10 @@ export default function Home() {
             ELYXIER Design Review
           </h1>
           <p style={{ fontSize: 18, color: "#666", maxWidth: 560, margin: "0 auto 28px", lineHeight: 1.6 }}>
-            Five creative directions crafted for your brand. Review, compare, and choose the look that feels like you.
+            Design D — Elevated Glam — was selected and is now being built out. The other four directions are archived below for reference.
           </p>
           <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-            {["5 Designs", "Light & Dark Mode"].map((chip) => (
+            {["Design D Selected", "Light & Dark Mode"].map((chip) => (
               <span key={chip} style={{ background: "#F0EFE9", borderRadius: 999, padding: "6px 16px", fontSize: 12, fontWeight: 600, color: "#555", border: "1px solid #E8E8E4" }}>
                 {chip}
               </span>
@@ -178,10 +178,12 @@ export default function Home() {
         {/* Design cards */}
         <div style={{ marginBottom: 72 }}>
           <h2 style={{ fontSize: 32, fontWeight: 800, letterSpacing: "-0.02em", marginBottom: 8 }}>The Five Directions</h2>
-          <p style={{ fontSize: 15, color: "#888", marginBottom: 40 }}>Each design includes a light and dark mode toggle. Click to explore.</p>
+          <p style={{ fontSize: 15, color: "#888", marginBottom: 40 }}>Design D is live and in active development. The rest are archived — not deleted, just not routed.</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
-            {designs.map((d) => (
-              <div key={d.id} className="card" style={{ background: "#FFFFFF", border: "1px solid #E8E8E4", borderRadius: 16, overflow: "hidden" }}>
+            {designs.map((d) => {
+              const isSelected = d.id === "design-d";
+              return (
+              <div key={d.id} className="card" style={{ background: "#FFFFFF", border: "1px solid #E8E8E4", borderRadius: 16, overflow: "hidden", opacity: isSelected ? 1 : 0.6 }}>
                 {/* Swatch bar */}
                 <div style={{ display: "flex", height: 80 }}>
                   {d.swatches.map((color) => (
@@ -195,24 +197,35 @@ export default function Home() {
                       {d.label}
                     </div>
                     <span style={{ fontSize: 18, fontWeight: 700, color: "#111" }}>{d.name}</span>
-                    {d.recommended && (
+                    {isSelected && (
                       <span style={{ background: "#C8860A", color: "#fff", fontSize: 10, fontWeight: 700, padding: "3px 10px", borderRadius: 999, letterSpacing: "0.08em", textTransform: "uppercase", marginLeft: "auto" }}>
-                        ★ Recommended
+                        ✓ Selected
                       </span>
                     )}
                   </div>
                   <p style={{ fontSize: 12, color: "#AAA", marginBottom: 10 }}>{d.font}</p>
                   <p style={{ fontSize: 14, color: "#555", lineHeight: 1.6, marginBottom: 20 }}>{d.desc}</p>
-                  <a href={`/${d.id}`} className="explore-btn" style={{
-                    display: "block", textAlign: "center", background: "#111111", color: "#FFFFFF",
-                    padding: "12px 0", borderRadius: 8, fontSize: 13, fontWeight: 700,
-                    letterSpacing: "0.04em", textDecoration: "none", transition: "background 0.2s",
-                  }}>
-                    Explore Design →
-                  </a>
+                  {isSelected ? (
+                    <a href={`/${d.id}`} className="explore-btn" style={{
+                      display: "block", textAlign: "center", background: "#111111", color: "#FFFFFF",
+                      padding: "12px 0", borderRadius: 8, fontSize: 13, fontWeight: 700,
+                      letterSpacing: "0.04em", textDecoration: "none", transition: "background 0.2s",
+                    }}>
+                      Explore Design →
+                    </a>
+                  ) : (
+                    <div style={{
+                      display: "block", textAlign: "center", background: "#F0EFE9", color: "#999",
+                      padding: "12px 0", borderRadius: 8, fontSize: 13, fontWeight: 700,
+                      letterSpacing: "0.04em",
+                    }}>
+                      Archived
+                    </div>
+                  )}
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
