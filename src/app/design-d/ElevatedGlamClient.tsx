@@ -8,6 +8,13 @@ import { UserButton, useUser } from "@clerk/nextjs";
 const BEBAS = "var(--font-bebas), Impact, sans-serif";
 const DM = "var(--font-dm-sans), system-ui, sans-serif";
 
+// Only TikTok and Instagram have confirmed handles — Facebook/Whatnot/Amazon
+// stay unlinked (#) until real URLs are provided, rather than guessing them.
+const SOCIAL_LINKS: Record<string, string> = {
+  TikTok: "https://www.tiktok.com/@ELYXIER702",
+  Instagram: "https://www.instagram.com/ELYXIER_702",
+};
+
 const testimonials = [
   { quote: "This body butter changed my entire routine. My skin has never felt so soft!", name: "Jasmine T." },
   { quote: "I bought the Lavender & Honey and I'm obsessed. Already ordered 3 more!", name: "Monique R." },
@@ -430,12 +437,12 @@ export default function ElevatedGlam({ products }: { products: CatalogProduct[] 
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 32 }}>
             {["TikTok", "Instagram", "Facebook", "Whatnot"].map((p) => (
-              <a key={p} href="#" style={{ background: t.BTN_PRIMARY_BG, color: t.BTN_PRIMARY_TEXT, padding: "12px 28px", fontFamily: BEBAS, fontSize: 16, letterSpacing: "0.12em", textDecoration: "none", display: "inline-block", borderRadius: 2 }}>
+              <a key={p} href={SOCIAL_LINKS[p] ?? "#"} target={SOCIAL_LINKS[p] ? "_blank" : undefined} rel={SOCIAL_LINKS[p] ? "noopener noreferrer" : undefined} style={{ background: t.BTN_PRIMARY_BG, color: t.BTN_PRIMARY_TEXT, padding: "12px 28px", fontFamily: BEBAS, fontSize: 16, letterSpacing: "0.12em", textDecoration: "none", display: "inline-block", borderRadius: 2 }}>
                 {p}
               </a>
             ))}
           </div>
-          <p style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 16, letterSpacing: "0.2em" }}>FOLLOW @ELYXIER702 FOR LIVE ALERTS</p>
+          <a href={SOCIAL_LINKS.TikTok} target="_blank" rel="noopener noreferrer" style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 16, letterSpacing: "0.2em", textDecoration: "none" }}>FOLLOW @ELYXIER702 FOR LIVE ALERTS</a>
         </div>
       </section>
 
@@ -507,7 +514,7 @@ export default function ElevatedGlam({ products }: { products: CatalogProduct[] 
           </div>
           <div style={{ display: "flex", justifyContent: "center", gap: isMobile ? 16 : 28, flexWrap: "wrap", marginBottom: 32 }}>
             {["TikTok", "Instagram", "Facebook", "Whatnot", "Amazon"].map((s) => (
-              <a key={s} href="#" style={{ color: "#6B6050", fontSize: 12, textDecoration: "none", letterSpacing: "0.1em", fontFamily: DM, textTransform: "uppercase" }}
+              <a key={s} href={SOCIAL_LINKS[s] ?? "#"} target={SOCIAL_LINKS[s] ? "_blank" : undefined} rel={SOCIAL_LINKS[s] ? "noopener noreferrer" : undefined} style={{ color: "#6B6050", fontSize: 12, textDecoration: "none", letterSpacing: "0.1em", fontFamily: DM, textTransform: "uppercase" }}
                 onMouseEnter={e => (e.currentTarget.style.color = t.AMBER)}
                 onMouseLeave={e => (e.currentTarget.style.color = "#6B6050")}>
                 {s}
