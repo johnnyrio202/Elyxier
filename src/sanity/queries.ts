@@ -3,6 +3,7 @@ import { apiVersion, dataset, projectId } from "./env";
 import { previewClient } from "./client";
 
 export const DESIGN_E_TAG = "design-e";
+export const PRODUCTS_TAG = "products";
 
 const headlineLineProjection = groq`{ text, emphasis }`;
 const linkProjection = groq`{ label, href }`;
@@ -112,6 +113,36 @@ export type DesignEContent = {
   }[];
   testimonials: { _id: string; quote: string; name: string }[];
 };
+
+export const productsQuery = groq`*[_type == "product"] | order(orderRank asc){
+  _id,
+  name,
+  "slug": slug.current,
+  shortDesc,
+  blurb,
+  photos,
+}`;
+
+export type SanityProductContent = {
+  _id: string;
+  name: string;
+  slug: string;
+  shortDesc: string;
+  blurb: string;
+  photos: unknown[];
+};
+
+// Marketing content only (name/description/photos) — price and inventory come
+// from the commerce database. See src/lib/catalog.ts for the merged view.
+export async function getProductsContent(): Promise<SanityProductContent[]> {
+  const url = `https://${projectId}.apicdn.sanity.io/v${apiVersion}/data/query/${dataset}?query=${encodeURIComponent(productsQuery)}`;
+  const res = await fetch(url, { next: { tags: [PRODUCTS_TAG] } });
+  if (!res.ok) {
+    throw new Error(`Sanity query failed: ${res.status} ${await res.text()}`);
+  }
+  const json = (await res.json()) as { result: SanityProductContent[] };
+  return json.result;
+}
 
 export async function getDesignEContent(preview = false): Promise<DesignEContent> {
   if (preview) {

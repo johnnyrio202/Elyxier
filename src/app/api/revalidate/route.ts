@@ -1,6 +1,6 @@
 import { revalidateTag } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
-import { DESIGN_E_TAG } from "@/sanity/queries";
+import { DESIGN_E_TAG, PRODUCTS_TAG } from "@/sanity/queries";
 
 export async function POST(req: NextRequest) {
   const expectedSecret = process.env.SANITY_REVALIDATE_SECRET;
@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
   }
 
   revalidateTag(DESIGN_E_TAG, { expire: 0 });
+  revalidateTag(PRODUCTS_TAG, { expire: 0 });
 
-  return NextResponse.json({ revalidated: true, tag: DESIGN_E_TAG, now: Date.now() });
+  return NextResponse.json({ revalidated: true, tags: [DESIGN_E_TAG, PRODUCTS_TAG], now: Date.now() });
 }

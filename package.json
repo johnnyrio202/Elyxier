@@ -7,9 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed": "sanity exec scripts/seed.ts --with-user-token"
+    "seed": "sanity exec scripts/seed.ts --with-user-token",
+    "db:migrate": "dotenv -e .env.local -- tsx scripts/db/migrate.ts",
+    "db:seed": "dotenv -e .env.local -- tsx scripts/db/seed-commerce.ts"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
     "@sanity/image-url": "^2.1.1",
     "@sanity/orderable-document-list": "^2.0.15",
     "@sanity/vision": "^6.5.0",
@@ -18,16 +21,20 @@
     "next-sanity": "^13.1.5",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "sanity": "^6.5.0"
+    "sanity": "^6.5.0",
+    "server-only": "^0.0.1",
+    "stripe": "^22.6.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
     "tailwindcss": "^4",
+    "tsx": "^4.23.13",
     "typescript": "^5"
   }
 }
