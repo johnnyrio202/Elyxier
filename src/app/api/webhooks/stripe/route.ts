@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { markOrderPaid } from "@/db/orders";
+import { handleOrderPaid } from "@/lib/orderFulfillment";
 import type Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
@@ -22,7 +23,29 @@ export async function POST(req: NextRequest) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
     const orderId = session.metadata?.orderId;
-    if (orderId) await markOrderPaid(orderId);
+    if (orderId) {
+      const shipping = session.collected_information?.shipping_details;
+      const justPaid = await markOrderPaid(orderId, {
+        customer: {
+          name: session.customer_details?.name ?? undefined,
+          email: session.customer_details?.email ?? undefined,
+          phone: session.customer_details?.phone ?? undefined,
+        },
+        shippingAddress: shipping
+          ? {
+              name: shipping.name,
+              line1: shipping.address.line1 ?? "",
+              line2: shipping.address.line2 ?? null,
+              city: shipping.address.city ?? "",
+              state: shipping.address.state ?? "",
+              postalCode: shipping.address.postal_code ?? "",
+              country: shipping.address.country ?? "",
+              phone: session.customer_details?.phone ?? null,
+            }
+          : undefined,
+      });
+      if (justPaid) await handleOrderPaid(orderId);
+    }
   }
 
   return NextResponse.json({ received: true });

@@ -11,19 +11,27 @@ CREATE TABLE IF NOT EXISTS products (
   price_cents INTEGER NOT NULL CHECK (price_cents > 0),
   inventory_count INTEGER NOT NULL DEFAULT 0 CHECK (inventory_count >= 0),
   active BOOLEAN NOT NULL DEFAULT true,
+  -- Shipping weight, for building the Shippo order (see src/lib/shippo.ts).
+  -- Defaults to a rough single-jar estimate until real per-product weights are on file.
+  weight_oz INTEGER NOT NULL DEFAULT 6,
   -- Populated only if/when the client connects a Shopify store.
   shopify_product_id TEXT,
   shopify_synced_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+ALTER TABLE products ADD COLUMN IF NOT EXISTS weight_oz INTEGER NOT NULL DEFAULT 6;
 
 CREATE TABLE IF NOT EXISTS orders (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'paid', 'failed', 'canceled')),
+  -- Split the way Shopify does: whether the customer paid and whether the
+  -- order has shipped are independent facts with independent triggers.
+  payment_status TEXT NOT NULL DEFAULT 'pending' CHECK (payment_status IN ('pending', 'paid', 'refunded', 'failed')),
+  fulfillment_status TEXT NOT NULL DEFAULT 'unfulfilled' CHECK (fulfillment_status IN ('unfulfilled', 'fulfilled', 'canceled')),
   customer_name TEXT,
   customer_email TEXT,
   customer_phone TEXT,
+  shipping_address JSONB,
   subtotal_cents INTEGER NOT NULL,
   total_cents INTEGER NOT NULL,
   currency TEXT NOT NULL DEFAULT 'usd',
@@ -31,14 +39,22 @@ CREATE TABLE IF NOT EXISTS orders (
   provider_reference TEXT,
   -- Which front-end direction the order came from (design-a..e), while that's still undecided.
   source TEXT,
+  -- Populated once the paid order is pushed to Shippo for fulfillment.
+  shippo_order_id TEXT,
   -- Populated only if/when the client connects a Shopify store.
   shopify_order_id TEXT,
   shopify_synced_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_status TEXT NOT NULL DEFAULT 'pending' CHECK (payment_status IN ('pending', 'paid', 'refunded', 'failed'));
+ALTER TABLE orders DROP COLUMN IF EXISTS status;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS fulfillment_status TEXT NOT NULL DEFAULT 'unfulfilled' CHECK (fulfillment_status IN ('unfulfilled', 'fulfilled', 'canceled'));
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS shipping_address JSONB;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS shippo_order_id TEXT;
 
 CREATE INDEX IF NOT EXISTS orders_provider_reference_idx ON orders (provider_reference);
+CREATE INDEX IF NOT EXISTS orders_shippo_order_id_idx ON orders (shippo_order_id);
 
 CREATE TABLE IF NOT EXISTS order_items (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -50,6 +66,22 @@ CREATE TABLE IF NOT EXISTS order_items (
 );
 
 CREATE INDEX IF NOT EXISTS order_items_order_id_idx ON order_items (order_id);
+
+-- One row per order (boutique-scale orders ship in a single package; a
+-- multi-package model can be added later if that stops being true).
+CREATE TABLE IF NOT EXISTS fulfillments (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  order_id UUID NOT NULL UNIQUE REFERENCES orders(id) ON DELETE CASCADE,
+  status TEXT NOT NULL DEFAULT 'awaiting_label' CHECK (status IN ('awaiting_label', 'label_purchased', 'in_transit', 'delivered', 'failed')),
+  carrier TEXT,
+  tracking_number TEXT,
+  tracking_url TEXT,
+  label_url TEXT,
+  shipped_at TIMESTAMPTZ,
+  delivered_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
 
 CREATE TABLE IF NOT EXISTS leads (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

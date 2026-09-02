@@ -7,6 +7,7 @@ export type CommerceProduct = {
   priceCents: number;
   inventoryCount: number;
   active: boolean;
+  weightOz: number;
 };
 
 function mapRow(row: Record<string, unknown>): CommerceProduct {
@@ -16,18 +17,19 @@ function mapRow(row: Record<string, unknown>): CommerceProduct {
     priceCents: Number(row.price_cents),
     inventoryCount: Number(row.inventory_count),
     active: row.active as boolean,
+    weightOz: Number(row.weight_oz),
   };
 }
 
 export async function listCommerceProducts(): Promise<CommerceProduct[]> {
   const sql = getSql();
-  const rows = await sql`SELECT slug, sku, price_cents, inventory_count, active FROM products`;
+  const rows = await sql`SELECT slug, sku, price_cents, inventory_count, active, weight_oz FROM products`;
   return (rows as Record<string, unknown>[]).map(mapRow);
 }
 
 export async function getCommerceProduct(slug: string): Promise<CommerceProduct | null> {
   const sql = getSql();
-  const rows = await sql`SELECT slug, sku, price_cents, inventory_count, active FROM products WHERE slug = ${slug}`;
+  const rows = await sql`SELECT slug, sku, price_cents, inventory_count, active, weight_oz FROM products WHERE slug = ${slug}`;
   const row = (rows as Record<string, unknown>[])[0];
   return row ? mapRow(row) : null;
 }
@@ -38,11 +40,12 @@ export async function upsertProduct(input: {
   inventoryCount: number;
   sku?: string | null;
   active?: boolean;
+  weightOz?: number;
 }): Promise<void> {
   const sql = getSql();
   await sql`
-    INSERT INTO products (slug, sku, price_cents, inventory_count, active)
-    VALUES (${input.slug}, ${input.sku ?? null}, ${input.priceCents}, ${input.inventoryCount}, ${input.active ?? true})
+    INSERT INTO products (slug, sku, price_cents, inventory_count, active, weight_oz)
+    VALUES (${input.slug}, ${input.sku ?? null}, ${input.priceCents}, ${input.inventoryCount}, ${input.active ?? true}, ${input.weightOz ?? 6})
     ON CONFLICT (slug) DO UPDATE SET
       sku = EXCLUDED.sku,
       price_cents = EXCLUDED.price_cents,

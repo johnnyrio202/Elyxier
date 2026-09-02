@@ -13,10 +13,15 @@ async function run() {
   const sql = neon(url);
   const schema = fs.readFileSync(path.join(process.cwd(), "src/db/schema.sql"), "utf-8");
 
-  const statements = schema
+  const withoutComments = schema
+    .split("\n")
+    .filter((line) => !line.trim().startsWith("--"))
+    .join("\n");
+
+  const statements = withoutComments
     .split(";")
     .map((s) => s.trim())
-    .filter((s) => s.length > 0 && !s.startsWith("--"));
+    .filter((s) => s.length > 0);
 
   for (const statement of statements) {
     console.log(`Running: ${statement.slice(0, 60)}...`);

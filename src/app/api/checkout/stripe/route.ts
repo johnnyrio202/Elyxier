@@ -22,6 +22,10 @@ export async function POST(req: NextRequest) {
       quantity: item.quantity,
     })),
     metadata: { orderId: order.id },
+    // Required to ship a physical product — collected on Stripe's hosted page,
+    // read back in the webhook once payment completes.
+    shipping_address_collection: { allowed_countries: ["US"] },
+    phone_number_collection: { enabled: true },
     success_url: body.successUrl ?? `${origin}/order/success?orderId=${order.id}`,
     cancel_url: body.cancelUrl ?? `${origin}/order/canceled?orderId=${order.id}`,
   });

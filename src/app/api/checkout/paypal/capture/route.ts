@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { capturePaypalOrder } from "@/lib/paypal";
 import { markOrderPaid } from "@/db/orders";
+import { handleOrderPaid } from "@/lib/orderFulfillment";
 
 export async function POST(req: NextRequest) {
   const body = (await req.json()) as { paypalOrderId?: string };
@@ -8,7 +9,8 @@ export async function POST(req: NextRequest) {
 
   const { status, customId } = await capturePaypalOrder(body.paypalOrderId);
   if (status === "COMPLETED" && customId) {
-    await markOrderPaid(customId);
+    const justPaid = await markOrderPaid(customId);
+    if (justPaid) await handleOrderPaid(customId);
   }
 
   return NextResponse.json({ status });
