@@ -9,7 +9,7 @@ export default function OrderCanceledPage() {
       <p style={{ color: "#9A8A70", maxWidth: 480, marginBottom: 32, lineHeight: 1.6 }}>
         Your cart is still saved. Head back whenever you&apos;re ready.
       </p>
-      <a href="/design-d" style={{ background: "#D4920A", color: "#0A0A08", padding: "14px 32px", textDecoration: "none", fontWeight: 700, letterSpacing: "0.08em" }}>
+      <a href="/" style={{ background: "#D4920A", color: "#0A0A08", padding: "14px 32px", textDecoration: "none", fontWeight: 700, letterSpacing: "0.08em" }}>
         Back to ELYXIER
       </a>
     </div>
