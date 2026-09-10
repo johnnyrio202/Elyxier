@@ -24,7 +24,11 @@ export async function getCatalog(): Promise<CatalogProduct[]> {
   return content
     .map((c) => {
       const p = commerceBySlug.get(c.slug);
-      if (!p || !p.active) return null;
+      // Photos are required by the Sanity schema's own validation, but that
+      // only blocks publishing in Studio — it doesn't guarantee the published
+      // document actually has any, so guard here too rather than let a
+      // photo-less product reach the storefront and crash the photo carousel.
+      if (!p || !p.active || !c.photos || c.photos.length === 0) return null;
       return {
         slug: c.slug,
         name: c.name,
