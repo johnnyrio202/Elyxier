@@ -4,6 +4,7 @@ import { listCommerceProducts, type CommerceProduct } from "@/db/products";
 import { logoutAdmin } from "./actions";
 import ProductCard from "./ProductCard";
 import NewProductForm from "./NewProductForm";
+import AdminNav from "../AdminNav";
 
 const AMBER = "#D4920A";
 const BG = "#0A0A08";
@@ -45,6 +46,8 @@ export default async function AdminProductsPage() {
             </button>
           </form>
         </div>
+
+        <AdminNav active="products" />
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <NewProductForm />

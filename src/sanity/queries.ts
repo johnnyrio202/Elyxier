@@ -4,6 +4,7 @@ import { previewClient } from "./client";
 
 export const DESIGN_E_TAG = "design-e";
 export const PRODUCTS_TAG = "products";
+export const SITE_CONTENT_TAG = "site-content";
 
 const headlineLineProjection = groq`{ text, emphasis }`;
 const linkProjection = groq`{ label, href }`;
@@ -141,6 +142,68 @@ export async function getProductsContent(): Promise<SanityProductContent[]> {
     throw new Error(`Sanity query failed: ${res.status} ${await res.text()}`);
   }
   const json = (await res.json()) as { result: SanityProductContent[] };
+  return json.result;
+}
+
+// Same shape as designEQuery minus products (Design D fetches products
+// separately, joined with commerce data — see src/lib/catalog.ts). This is
+// the live site's read of the shared editorial sections: hero, testimonials,
+// brand story, community sign-up, live-selling CTA, marquee, and site settings.
+export const siteContentQuery = groq`{
+  "siteSettings": *[_type == "siteSettings"][0]{
+    navLinks[]${linkProjection},
+    logo,
+    footerTagline,
+    footerNote,
+    copyrightText,
+    socialLinks[]{ platform, href },
+  },
+  "hero": *[_type == "hero"][0]{
+    eyebrow,
+    headlineLines[]${headlineLineProjection},
+    subhead,
+    backgroundImage,
+    ctaButtons[]${linkProjection},
+  },
+  "marquee": *[_type == "marquee"][0]{ phrases },
+  "story": *[_type == "story"][0]{
+    eyebrow,
+    headlineLines[]${headlineLineProjection},
+    paragraphs,
+    pullQuote,
+    ctaLabel,
+    ctaHref,
+  },
+  "liveSelling": *[_type == "liveSelling"][0]{
+    eyebrow,
+    headlineLines[]${headlineLineProjection},
+    body,
+    channels[]${linkProjection},
+    footerLine,
+  },
+  "community": *[_type == "community"][0]{
+    badge,
+    headline,
+    body,
+    benefits[]{ title, body },
+    disclaimer,
+  },
+  "testimonials": *[_type == "testimonial"] | order(orderRank asc){
+    _id,
+    quote,
+    name,
+  },
+}`;
+
+export type SiteContent = Omit<DesignEContent, "products">;
+
+export async function getSiteContent(): Promise<SiteContent> {
+  const url = `https://${projectId}.apicdn.sanity.io/v${apiVersion}/data/query/${dataset}?query=${encodeURIComponent(siteContentQuery)}`;
+  const res = await fetch(url, { next: { tags: [SITE_CONTENT_TAG] } });
+  if (!res.ok) {
+    throw new Error(`Sanity query failed: ${res.status} ${await res.text()}`);
+  }
+  const json = (await res.json()) as { result: SiteContent };
   return json.result;
 }
 

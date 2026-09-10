@@ -21,6 +21,11 @@ async function requireAdmin(): Promise<void> {
 function refreshCatalog(): void {
   revalidateTag(PRODUCTS_TAG, { expire: 0 });
   revalidatePath("/admin/products");
+  // The homepage is ISR'd (`export const revalidate = 60` in page.tsx), which
+  // caches the full rendered route independently of any fetch tag — tag
+  // revalidation alone won't refresh it. Only revalidatePath or the 60s timer
+  // clears that cache, and an admin save should feel instant, not eventual.
+  revalidatePath("/", "page");
 }
 
 async function uploadPhotos(files: File[]): Promise<{ _type: "image"; _key: string; asset: { _type: "reference"; _ref: string } }[]> {
