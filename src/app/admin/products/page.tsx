@@ -21,6 +21,10 @@ async function getFreshProductsContent(): Promise<SanityProductContent[]> {
 export default async function AdminProductsPage() {
   const [content, commerce] = await Promise.all([getFreshProductsContent(), listCommerceProducts()]);
   const commerceBySlug = new Map<string, CommerceProduct>(commerce.map((p) => [p.slug, p]));
+  const nameBySlug = new Map(content.map((c) => [c.slug, c.name]));
+  const allProducts = commerce
+    .filter((p) => !p.isBundle)
+    .map((p) => ({ slug: p.slug, name: nameBySlug.get(p.slug) ?? p.slug }));
 
   return (
     <div style={{ minHeight: "100vh", background: BG, color: "#FAF7F0", fontFamily: "system-ui, sans-serif", padding: "48px 24px" }}>
@@ -50,13 +54,14 @@ export default async function AdminProductsPage() {
         <AdminNav active="products" />
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <NewProductForm />
+          <NewProductForm allProducts={allProducts} />
 
           {content.map((c) => {
             const p = commerceBySlug.get(c.slug);
             return (
               <ProductCard
                 key={c._id}
+                allProducts={allProducts}
                 product={{
                   _id: c._id,
                   name: c.name,
@@ -64,7 +69,17 @@ export default async function AdminProductsPage() {
                   shortDesc: c.shortDesc,
                   blurb: c.blurb,
                   photos: (c.photos ?? []) as { _key: string; asset?: unknown }[],
-                  commerce: p ? { priceCents: p.priceCents, inventoryCount: p.inventoryCount, active: p.active } : null,
+                  commerce: p
+                    ? {
+                        priceCents: p.priceCents,
+                        originalPriceCents: p.originalPriceCents,
+                        inventoryCount: p.inventoryCount,
+                        active: p.active,
+                        isBundle: p.isBundle,
+                        discount: p.discount,
+                        bundleItems: p.bundleItems,
+                      }
+                    : null,
                 }}
               />
             );

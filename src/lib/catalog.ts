@@ -8,9 +8,11 @@ export type CatalogProduct = {
   shortDesc: string;
   blurb: string;
   photos: unknown[];
-  priceCents: number;
+  priceCents: number; // effective price — discount already applied if active
+  originalPriceCents: number | null; // present only while a discount is active, for strikethrough display
   inventoryCount: number;
   inStock: boolean;
+  isBundle: boolean;
 };
 
 // Joins Sanity's editorial content (name/description/photos) with the
@@ -36,8 +38,10 @@ export async function getCatalog(): Promise<CatalogProduct[]> {
         blurb: c.blurb,
         photos: c.photos,
         priceCents: p.priceCents,
+        originalPriceCents: p.originalPriceCents,
         inventoryCount: p.inventoryCount,
         inStock: p.inventoryCount > 0,
+        isBundle: p.isBundle,
       };
     })
     .filter((p): p is CatalogProduct => p !== null);

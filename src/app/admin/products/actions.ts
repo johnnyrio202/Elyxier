@@ -5,10 +5,12 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { randomUUID } from "crypto";
 import { ADMIN_COOKIE, isValidAdminToken } from "@/lib/adminAuth";
-import { upsertProduct } from "@/db/products";
+import { upsertProduct, setBundleItems, type Discount, type BundleItem } from "@/db/products";
 import { PRODUCTS_TAG } from "@/sanity/queries";
 import { getWriteClient } from "@/sanity/writeClient";
 import { slugify } from "@/lib/slugify";
+
+const MAX_BUNDLE_COMPONENTS = 8;
 
 async function requireAdmin(): Promise<void> {
   const jar = await cookies();
@@ -53,6 +55,41 @@ async function nextOrderRank(): Promise<string> {
   return last ? `${last}zzzz` : "zzzz";
 }
 
+// A blank discount type means "no discount" — every other combination
+// requires a positive value. Dates come from <input type="datetime-local">,
+// which is timezone-naive; new Date(...) interprets it in the server's local
+// time, same as the browser displaying it back — consistent, if not UTC-exact.
+function readDiscount(formData: FormData): Discount | null {
+  const type = String(formData.get("discountType") ?? "");
+  if (type !== "percent" && type !== "fixed") return null;
+
+  const rawValue = String(formData.get("discountValue") ?? "").trim();
+  const value = type === "percent" ? Number(rawValue) : Math.round(Number(rawValue) * 100);
+  if (!Number.isFinite(value) || value <= 0) throw new Error("Discount value must be a positive number");
+  if (type === "percent" && value > 100) throw new Error("Percent discount can't exceed 100");
+
+  const startsAtRaw = String(formData.get("discountStartsAt") ?? "").trim();
+  const endsAtRaw = String(formData.get("discountEndsAt") ?? "").trim();
+
+  return {
+    type,
+    value,
+    startsAt: startsAtRaw ? new Date(startsAtRaw).toISOString() : null,
+    endsAt: endsAtRaw ? new Date(endsAtRaw).toISOString() : null,
+  };
+}
+
+function readBundleItems(formData: FormData): BundleItem[] {
+  const items: BundleItem[] = [];
+  for (let i = 0; i < MAX_BUNDLE_COMPONENTS; i++) {
+    const slug = String(formData.get(`component${i}Slug`) ?? "").trim();
+    const quantity = Number(formData.get(`component${i}Qty`) ?? "");
+    if (!slug || !Number.isFinite(quantity) || quantity <= 0) continue;
+    items.push({ slug, quantity: Math.round(quantity) });
+  }
+  return items;
+}
+
 export async function saveCommerceProduct(formData: FormData): Promise<void> {
   await requireAdmin();
 
@@ -60,6 +97,8 @@ export async function saveCommerceProduct(formData: FormData): Promise<void> {
   const priceDollars = Number(formData.get("price"));
   const inventoryCount = Number(formData.get("inventory"));
   const active = formData.get("active") === "on";
+  const isBundle = formData.get("isBundle") === "on";
+  const discount = readDiscount(formData);
 
   if (!slug) throw new Error("Missing slug");
   if (!Number.isFinite(priceDollars) || priceDollars < 0) throw new Error("Invalid price");
@@ -68,9 +107,17 @@ export async function saveCommerceProduct(formData: FormData): Promise<void> {
   await upsertProduct({
     slug,
     priceCents: Math.round(priceDollars * 100),
+    // Bundles compute their own inventory from components — this value is
+    // ignored for them (upsertProduct still writes it, harmlessly unused).
     inventoryCount: Math.round(inventoryCount),
     active,
+    isBundle,
+    discount,
   });
+
+  if (isBundle) {
+    await setBundleItems(slug, readBundleItems(formData));
+  }
 
   refreshCatalog();
 }
@@ -84,11 +131,16 @@ export async function createProduct(formData: FormData): Promise<void> {
   const priceDollars = Number(formData.get("price"));
   const inventoryCount = Number(formData.get("inventory"));
   const active = formData.get("active") === "on";
+  const isBundle = formData.get("isBundle") === "on";
+  const discount = readDiscount(formData);
   const photoFiles = formData.getAll("photos").filter((f): f is File => f instanceof File && f.size > 0);
 
   if (!name) throw new Error("Missing product name");
   if (!Number.isFinite(priceDollars) || priceDollars < 0) throw new Error("Invalid price");
   if (!Number.isFinite(inventoryCount) || inventoryCount < 0) throw new Error("Invalid inventory");
+
+  const bundleItems = isBundle ? readBundleItems(formData) : [];
+  if (isBundle && bundleItems.length === 0) throw new Error("A bundle needs at least one component product");
 
   const client = getWriteClient();
 
@@ -121,7 +173,13 @@ export async function createProduct(formData: FormData): Promise<void> {
     priceCents: Math.round(priceDollars * 100),
     inventoryCount: Math.round(inventoryCount),
     active,
+    isBundle,
+    discount,
   });
+
+  if (isBundle) {
+    await setBundleItems(slug, bundleItems);
+  }
 
   refreshCatalog();
 }

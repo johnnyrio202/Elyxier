@@ -17,8 +17,11 @@ const INPUT_STYLE: React.CSSProperties = {
 };
 const LABEL_STYLE: React.CSSProperties = { display: "block", fontSize: 11, color: "#9A8A70", marginBottom: 4 };
 
-export default function NewProductForm() {
+const MAX_BUNDLE_COMPONENTS = 8;
+
+export default function NewProductForm({ allProducts }: { allProducts: { slug: string; name: string }[] }) {
   const [open, setOpen] = useState(false);
+  const [isBundle, setIsBundle] = useState(false);
 
   return (
     <div style={{ border: `1px dashed ${AMBER}55`, borderRadius: 8, background: "#141410", overflow: "hidden" }}>
@@ -71,14 +74,66 @@ export default function NewProductForm() {
               <input type="number" name="price" step="0.01" min="0" required style={{ ...INPUT_STYLE, width: 90 }} />
             </label>
             <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
-              Inventory
-              <input type="number" name="inventory" min="0" step="1" defaultValue={0} required style={{ ...INPUT_STYLE, width: 90 }} />
+              {isBundle ? "Inventory (computed)" : "Inventory"}
+              <input type="number" name="inventory" min="0" step="1" defaultValue={0} disabled={isBundle} required style={{ ...INPUT_STYLE, width: 90, opacity: isBundle ? 0.5 : 1 }} />
             </label>
             <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "#9A8A70", paddingBottom: 10 }}>
               <input type="checkbox" name="active" defaultChecked />
               For sale
             </label>
+            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "#9A8A70", paddingBottom: 10 }}>
+              <input type="checkbox" name="isBundle" checked={isBundle} onChange={(e) => setIsBundle(e.target.checked)} />
+              This is a bundle
+            </label>
           </div>
+
+          {isBundle && (
+            <div>
+              <label style={LABEL_STYLE}>Bundle Components (pick existing products + how many of each)</label>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {Array.from({ length: MAX_BUNDLE_COMPONENTS }, (_, i) => (
+                  <div key={i} style={{ display: "flex", gap: 8 }}>
+                    <select name={`component${i}Slug`} defaultValue="" style={{ ...INPUT_STYLE, flex: 1 }}>
+                      <option value="">—</option>
+                      {allProducts.map((p) => (
+                        <option key={p.slug} value={p.slug}>
+                          {p.name}
+                        </option>
+                      ))}
+                    </select>
+                    <input type="number" name={`component${i}Qty`} min="1" step="1" placeholder="Qty" style={{ ...INPUT_STYLE, width: 70 }} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div>
+            <label style={LABEL_STYLE}>Discount (optional)</label>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "flex-end" }}>
+              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+                Type
+                <select name="discountType" defaultValue="" style={{ ...INPUT_STYLE, width: 140 }}>
+                  <option value="">No discount</option>
+                  <option value="percent">Percent off</option>
+                  <option value="fixed">Dollar amount off</option>
+                </select>
+              </label>
+              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+                Value
+                <input type="number" name="discountValue" step="0.01" min="0" style={{ ...INPUT_STYLE, width: 90 }} />
+              </label>
+              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+                Starts
+                <input type="datetime-local" name="discountStartsAt" style={{ ...INPUT_STYLE, width: 190 }} />
+              </label>
+              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+                Ends (blank = runs until stopped)
+                <input type="datetime-local" name="discountEndsAt" style={{ ...INPUT_STYLE, width: 190 }} />
+              </label>
+            </div>
+          </div>
+
           <button
             type="submit"
             style={{

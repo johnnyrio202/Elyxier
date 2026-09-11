@@ -447,6 +447,7 @@ export default function ElevatedGlam({ products, siteContent }: { products: Cata
             {products.map((p) => {
               const photoUrls = p.photos.map((photo) => resolveImage(photo, 600));
               const priceLabel = `$${(p.priceCents / 100).toFixed(2)}`;
+              const originalPriceLabel = p.originalPriceCents ? `$${(p.originalPriceCents / 100).toFixed(2)}` : null;
               return (
               <div
                 key={p.slug}
@@ -474,6 +475,12 @@ export default function ElevatedGlam({ products, siteContent }: { products: Cata
                       {!p.inStock && (
                         <span style={{ position: "absolute", top: 10, left: 10, background: "#0A0A08", color: "#FAF7F0", fontSize: 10, letterSpacing: "0.15em", padding: "4px 10px", fontFamily: DM, fontWeight: 700 }}>SOLD OUT</span>
                       )}
+                      {p.inStock && originalPriceLabel && (
+                        <span style={{ position: "absolute", top: 10, left: 10, background: t.AMBER, color: "#0A0A08", fontSize: 10, letterSpacing: "0.15em", padding: "4px 10px", fontFamily: DM, fontWeight: 700 }}>SALE</span>
+                      )}
+                      {p.isBundle && (
+                        <span style={{ position: "absolute", top: 10, right: 10, background: "#0A0A08", color: t.AMBER, fontSize: 10, letterSpacing: "0.15em", padding: "4px 10px", fontFamily: DM, fontWeight: 700, border: `1px solid ${t.AMBER}` }}>BUNDLE</span>
+                      )}
                       {photoUrls.length > 1 && (
                         <div style={{ position: "absolute", bottom: 8, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 6, zIndex: 2 }}>
                           {photoUrls.map((_, idx) => (
@@ -488,7 +495,12 @@ export default function ElevatedGlam({ products, siteContent }: { products: Cata
                     <div style={{ padding: "16px 20px 12px" }}>
                       <h3 style={{ fontFamily: BEBAS, fontSize: 22, letterSpacing: "0.06em", color: t.TEXT, marginBottom: 6 }}>{p.name}</h3>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <span style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 20, letterSpacing: "0.05em" }}>{priceLabel}</span>
+                        <span>
+                          {originalPriceLabel && (
+                            <span style={{ color: t.MUTED, fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.05em", textDecoration: "line-through", marginRight: 8 }}>{originalPriceLabel}</span>
+                          )}
+                          <span style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 20, letterSpacing: "0.05em" }}>{priceLabel}</span>
+                        </span>
                         <span style={{ color: t.MUTED, fontSize: 10, letterSpacing: "0.15em" }}>✦ DISCOVER</span>
                       </div>
                     </div>
@@ -507,7 +519,12 @@ export default function ElevatedGlam({ products, siteContent }: { products: Cata
                     <p style={{ color: t.AMBER, fontSize: 10, letterSpacing: "0.35em", textTransform: "uppercase" as const, marginBottom: 10, fontFamily: DM }}>{productCardBackLabel}</p>
                     <h3 style={{ fontFamily: BEBAS, fontSize: 22, letterSpacing: "0.06em", color: t.TEXT, marginBottom: 14 }}>{p.name}</h3>
                     <p style={{ color: t.MUTED, fontSize: 13, lineHeight: 1.75, flex: 1, marginBottom: 20, fontFamily: DM }}>{p.blurb}</p>
-                    <span style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 20, letterSpacing: "0.05em", display: "block", marginBottom: 16 }}>{priceLabel}</span>
+                    <div style={{ marginBottom: 16 }}>
+                      {originalPriceLabel && (
+                        <span style={{ color: t.MUTED, fontFamily: BEBAS, fontSize: 15, letterSpacing: "0.05em", textDecoration: "line-through", marginRight: 8 }}>{originalPriceLabel}</span>
+                      )}
+                      <span style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 20, letterSpacing: "0.05em" }}>{priceLabel}</span>
+                    </div>
                     <button
                       disabled={!p.inStock}
                       onClick={e => { e.stopPropagation(); addToCart(p.slug); }}

@@ -22,6 +22,29 @@ CREATE TABLE IF NOT EXISTS products (
 );
 ALTER TABLE products ADD COLUMN IF NOT EXISTS weight_oz INTEGER NOT NULL DEFAULT 6;
 
+-- Discount: optional, applies to price_cents at read time (see
+-- computeEffectivePrice in src/db/products.ts) rather than mutating
+-- price_cents itself, so the original price is never lost.
+-- discount_ends_at NULL means the discount runs until stopped or deleted.
+ALTER TABLE products ADD COLUMN IF NOT EXISTS discount_type TEXT CHECK (discount_type IN ('percent', 'fixed'));
+ALTER TABLE products ADD COLUMN IF NOT EXISTS discount_value INTEGER CHECK (discount_value > 0);
+ALTER TABLE products ADD COLUMN IF NOT EXISTS discount_starts_at TIMESTAMPTZ;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS discount_ends_at TIMESTAMPTZ;
+
+-- A bundle is a row in `products` like any other (its own slug, price,
+-- Sanity content) with is_bundle = true. Its inventory_count is not read
+-- directly — availability is derived from its components' stock (see
+-- listCommerceProducts), and a bundle sale decrements each component
+-- instead of the bundle's own row (see decrementInventory).
+ALTER TABLE products ADD COLUMN IF NOT EXISTS is_bundle BOOLEAN NOT NULL DEFAULT false;
+
+CREATE TABLE IF NOT EXISTS bundle_items (
+  bundle_slug TEXT NOT NULL REFERENCES products(slug) ON DELETE CASCADE,
+  component_slug TEXT NOT NULL REFERENCES products(slug),
+  quantity INTEGER NOT NULL DEFAULT 1 CHECK (quantity > 0),
+  PRIMARY KEY (bundle_slug, component_slug)
+);
+
 -- Accounts are optional — guest checkout never creates a row here. A row is
 -- lazily created the first time a signed-in Clerk user places an order.
 CREATE TABLE IF NOT EXISTS customers (
