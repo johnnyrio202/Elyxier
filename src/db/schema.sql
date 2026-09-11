@@ -105,6 +105,16 @@ CREATE TABLE IF NOT EXISTS shipping_settings (
 );
 INSERT INTO shipping_settings (id) VALUES (true) ON CONFLICT (id) DO NOTHING;
 
+-- Manually toggled by the client right when she actually goes live — this is
+-- not a real stream integration, just an on/off flag that shows a pulsing
+-- "LIVE NOW" badge linking out to the platform. See src/app/LiveBadges.tsx.
+CREATE TABLE IF NOT EXISTS live_status (
+  id BOOLEAN PRIMARY KEY DEFAULT true CHECK (id),
+  instagram_live BOOLEAN NOT NULL DEFAULT false,
+  tiktok_live BOOLEAN NOT NULL DEFAULT false
+);
+INSERT INTO live_status (id) VALUES (true) ON CONFLICT (id) DO NOTHING;
+
 CREATE INDEX IF NOT EXISTS orders_provider_reference_idx ON orders (provider_reference);
 CREATE INDEX IF NOT EXISTS orders_shippo_order_id_idx ON orders (shippo_order_id);
 CREATE INDEX IF NOT EXISTS orders_customer_id_idx ON orders (customer_id);

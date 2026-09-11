@@ -6,6 +6,7 @@ import { randomUUID } from "crypto";
 import { ADMIN_COOKIE, isValidAdminToken } from "@/lib/adminAuth";
 import { getWriteClient } from "@/sanity/writeClient";
 import { SITE_CONTENT_TAG } from "@/sanity/queries";
+import { updateLiveStatus } from "@/db/liveStatus";
 
 async function requireAdmin(): Promise<void> {
   const jar = await cookies();
@@ -79,6 +80,19 @@ function readTitleBodyList(formData: FormData, prefix: string, max: number): { _
     items.push({ _key: randomUUID().slice(0, 12), title, body });
   }
   return items;
+}
+
+export async function saveLiveStatus(formData: FormData): Promise<void> {
+  await requireAdmin();
+
+  await updateLiveStatus({
+    instagramLive: formData.get("instagramLive") === "on",
+    tiktokLive: formData.get("tiktokLive") === "on",
+  });
+
+  // Only the homepage badge needs to update — no Sanity content changed,
+  // so this skips the SITE_CONTENT_TAG/admin-content revalidation refresh() does.
+  revalidatePath("/", "page");
 }
 
 export async function saveHero(formData: FormData): Promise<void> {

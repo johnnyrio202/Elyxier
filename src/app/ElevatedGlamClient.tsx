@@ -18,6 +18,8 @@ const SOCIAL_LINKS: Record<string, string> = {
   Instagram: "https://www.instagram.com/ELYXIER_702",
 };
 
+const CONTACT_EMAIL = "elyxier702@gmail.com";
+
 // Fallbacks below mirror the content already seeded in Sanity, so the site
 // keeps rendering sensibly even if a singleton document is ever emptied out.
 const DEFAULT_HERO = {
@@ -92,7 +94,7 @@ const DEFAULT_NAV_LINKS = [
   { label: "Shop", href: "#" },
   { label: "About", href: "#about" },
   { label: "Live", href: "#" },
-  { label: "Contact", href: "#" },
+  { label: "Contact", href: "#contact" },
 ];
 
 const DEFAULT_SOCIAL_ROW = ["TikTok", "Instagram", "Facebook", "Whatnot", "Amazon"].map((platform) => ({
@@ -131,7 +133,17 @@ function HeadlineLines({ lines, amberColor, textColor }: { lines: { text: string
   );
 }
 
-export default function ElevatedGlam({ products, siteContent, shipping }: { products: CatalogProduct[]; siteContent: SiteContent; shipping: ShippingSettings }) {
+export default function ElevatedGlam({
+  products,
+  siteContent,
+  shipping,
+  liveStatus,
+}: {
+  products: CatalogProduct[];
+  siteContent: SiteContent;
+  shipping: ShippingSettings;
+  liveStatus: { instagramLive: boolean; tiktokLive: boolean };
+}) {
   const { isSignedIn, isLoaded } = useUser();
   const [dark, setDark] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
@@ -142,6 +154,8 @@ export default function ElevatedGlam({ products, siteContent, shipping }: { prod
   const [checkoutState, setCheckoutState] = useState<"idle" | "loading" | "error">("idle");
   const [lead, setLead] = useState({ name: "", email: "", phone: "" });
   const [leadState, setLeadState] = useState<"idle" | "loading" | "done" | "error">("idle");
+  const [contact, setContact] = useState({ name: "", email: "", message: "" });
+  const [contactState, setContactState] = useState<"idle" | "loading" | "done" | "error">("idle");
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -224,6 +238,22 @@ export default function ElevatedGlam({ products, siteContent, shipping }: { prod
       setLeadState("done");
     } catch {
       setLeadState("error");
+    }
+  }
+
+  async function submitContact() {
+    if (!contact.name || !contact.email || !contact.message) return;
+    setContactState("loading");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(contact),
+      });
+      if (!res.ok) throw new Error();
+      setContactState("done");
+    } catch {
+      setContactState("error");
     }
   }
 
@@ -324,7 +354,41 @@ export default function ElevatedGlam({ products, siteContent, shipping }: { prod
           to { transform: translateX(-50%); }
         }
         @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+        @keyframes livePulse {
+          0% { box-shadow: 0 0 0 0 rgba(224, 40, 40, 0.55); }
+          70% { box-shadow: 0 0 0 14px rgba(224, 40, 40, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(224, 40, 40, 0); }
+        }
       `}</style>
+
+      {/* Live Now badges — manually toggled in the admin console, not a real
+          stream embed; just a pulsing link out to wherever she's actually live. */}
+      {(liveStatus.instagramLive || liveStatus.tiktokLive) && (
+        <div style={{ position: "fixed", left: 16, bottom: 16, zIndex: 100, display: "flex", flexDirection: "column", gap: 8 }}>
+          {liveStatus.instagramLive && (
+            <a
+              href={SOCIAL_LINKS.Instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: "flex", alignItems: "center", gap: 8, background: "#0A0A08", color: "#FAF7F0", padding: "10px 16px", borderRadius: 999, textDecoration: "none", fontFamily: DM, fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", boxShadow: "0 2px 12px rgba(0,0,0,0.4)" }}
+            >
+              <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#E02828", animation: "livePulse 1.8s infinite" }} />
+              LIVE ON INSTAGRAM
+            </a>
+          )}
+          {liveStatus.tiktokLive && (
+            <a
+              href={SOCIAL_LINKS.TikTok}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: "flex", alignItems: "center", gap: 8, background: "#0A0A08", color: "#FAF7F0", padding: "10px 16px", borderRadius: 999, textDecoration: "none", fontFamily: DM, fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", boxShadow: "0 2px 12px rgba(0,0,0,0.4)" }}
+            >
+              <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#E02828", animation: "livePulse 1.8s infinite" }} />
+              LIVE ON TIKTOK
+            </a>
+          )}
+        </div>
+      )}
 
       {/* Dark/Light Toggle */}
       <button
@@ -664,6 +728,31 @@ export default function ElevatedGlam({ products, siteContent, shipping }: { prod
         </div>
       </section>
 
+      {/* Contact */}
+      <section id="contact" style={{ background: t.SECTION, padding: isMobile ? "64px 16px" : "100px 32px" }}>
+        <div style={{ maxWidth: 560, margin: "0 auto", textAlign: "center" }}>
+          <p style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 13, letterSpacing: "0.4em", marginBottom: 16, textTransform: "uppercase" }}>Get In Touch</p>
+          <h2 style={{ fontFamily: BEBAS, fontSize: "clamp(36px, 5vw, 56px)", color: t.TEXT, letterSpacing: "0.05em", marginBottom: 16, textTransform: "uppercase" }}>Contact Us</h2>
+          <p style={{ color: t.MUTED, fontSize: 15, lineHeight: 1.8, marginBottom: 8, fontFamily: DM }}>
+            Questions about an order, a product, or a collab? Send a message, or email us directly at{" "}
+            <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: t.AMBER, textDecoration: "underline" }}>{CONTACT_EMAIL}</a>.
+          </p>
+          {contactState === "done" ? (
+            <p style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 20, letterSpacing: "0.08em", marginTop: 32, textTransform: "uppercase" }}>Message Sent ✦ We&apos;ll Be In Touch</p>
+          ) : (
+            <div style={{ maxWidth: 480, margin: "32px auto 0", display: "flex", flexDirection: "column" as const, gap: 12, textAlign: "left" as const }}>
+              <input type="text" placeholder="Full Name" value={contact.name} onChange={e => setContact(c => ({ ...c, name: e.target.value }))} style={{ background: t.INPUT_BG, color: t.INPUT_TEXT, border: `2px solid ${t.AMBER}44`, padding: "14px 18px", fontSize: 15, outline: "none", fontFamily: DM, borderRadius: 2 }} />
+              <input type="email" placeholder="Email Address" value={contact.email} onChange={e => setContact(c => ({ ...c, email: e.target.value }))} style={{ background: t.INPUT_BG, color: t.INPUT_TEXT, border: `2px solid ${t.AMBER}44`, padding: "14px 18px", fontSize: 15, outline: "none", fontFamily: DM, borderRadius: 2 }} />
+              <textarea placeholder="Message" rows={4} value={contact.message} onChange={e => setContact(c => ({ ...c, message: e.target.value }))} style={{ background: t.INPUT_BG, color: t.INPUT_TEXT, border: `2px solid ${t.AMBER}44`, padding: "14px 18px", fontSize: 15, outline: "none", fontFamily: DM, borderRadius: 2, resize: "vertical" as const }} />
+              <button onClick={submitContact} disabled={!contact.name || !contact.email || !contact.message || contactState === "loading"} style={{ background: `linear-gradient(135deg, ${t.AMBER}, ${dark ? "#E8A820" : "#D4920A"})`, color: "#0A0A08", border: "none", padding: "16px 0", fontFamily: BEBAS, fontSize: 18, letterSpacing: "0.15em", cursor: !contact.email ? "not-allowed" : "pointer", boxShadow: `0 4px 24px ${t.AMBER}40`, marginTop: 4, opacity: contactState === "loading" ? 0.6 : 1, textTransform: "uppercase" }}>
+                {contactState === "loading" ? "Sending..." : "Send Message"}
+              </button>
+              {contactState === "error" && <p style={{ color: "#D45A5A", fontSize: 12, fontFamily: DM }}>Something went wrong — try again, or email us directly.</p>}
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Footer */}
       <footer style={{ background: t.FOOTER_BG, padding: isMobile ? "40px 16px" : "56px 32px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
@@ -672,6 +761,9 @@ export default function ElevatedGlam({ products, siteContent, shipping }: { prod
             <p style={{ color: "#6B6050", fontSize: 13, marginTop: 8, letterSpacing: "0.1em", fontFamily: DM }}>
               {footerTagline}
             </p>
+            <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: "#6B6050", fontSize: 12, marginTop: 4, display: "inline-block", textDecoration: "none", fontFamily: DM }}>
+              {CONTACT_EMAIL}
+            </a>
           </div>
           <div style={{ display: "flex", justifyContent: "center", gap: isMobile ? 16 : 28, flexWrap: "wrap", marginBottom: 32 }}>
             {socialRow.map((s) => (

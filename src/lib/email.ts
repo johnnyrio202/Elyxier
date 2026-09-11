@@ -54,9 +54,20 @@ export async function sendBusinessOrderNotification(order: Order, items: OrderIt
     <ul>${itemsListHtml(items)}</ul>
     <h3>Ship to</h3>
     ${addressHtml(order)}
-    <p>Log into Shippo to buy the label — tracking will sync back automatically once you do.</p>
+    <p>Buy the shipping label via Pirate Ship as usual.</p>
   `;
   await send(businessEmail, `New ELYXIER order — $${(order.totalCents / 100).toFixed(2)}`, html);
+}
+
+export async function sendContactFormEmail(input: { name: string; email: string; message: string }): Promise<void> {
+  const businessEmail = process.env.BUSINESS_NOTIFICATION_EMAIL;
+  if (!businessEmail) throw new Error("BUSINESS_NOTIFICATION_EMAIL is not set");
+  const html = `
+    <h2>New message from the website contact form</h2>
+    <p><strong>From:</strong> ${input.name} &lt;${input.email}&gt;</p>
+    <p>${input.message.replace(/\n/g, "<br>")}</p>
+  `;
+  await send(businessEmail, `Website contact form: ${input.name}`, html);
 }
 
 export async function sendShippingConfirmationEmail(

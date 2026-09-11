@@ -4,8 +4,9 @@ import type { SanityImageSource } from "@sanity/image-url";
 import { logoutAdmin } from "../products/actions";
 import AdminNav from "../AdminNav";
 import TestimonialsEditor from "./TestimonialsEditor";
-import { saveHero, saveStory, saveCommunity, saveLiveSelling, saveMarquee, saveSiteSettings } from "./actions";
+import { saveHero, saveStory, saveCommunity, saveLiveSelling, saveMarquee, saveSiteSettings, saveLiveStatus } from "./actions";
 import { AMBER, CARD, INPUT_STYLE, LABEL_STYLE, BTN_STYLE, HeadlineLinesFields, LabelHrefListFields, TextListFields, TitleBodyListFields } from "./FormFields";
+import { getLiveStatus } from "@/db/liveStatus";
 
 const BG = "#0A0A08";
 
@@ -46,7 +47,7 @@ function SectionCard({ title, description, children }: { title: string; descript
 
 export default async function AdminContentPage() {
   const client = getWriteClient();
-  const [hero, story, community, liveSelling, marquee, siteSettings, testimonials] = await Promise.all([
+  const [hero, story, community, liveSelling, marquee, siteSettings, testimonials, liveStatus] = await Promise.all([
     client.fetch<HeroDoc | null>(`*[_type == "hero"][0]{eyebrow, subhead, headlineLines, ctaButtons, backgroundImage}`),
     client.fetch<StoryDoc | null>(`*[_type == "story"][0]{eyebrow, headlineLines, paragraphs, pullQuote, ctaLabel, ctaHref}`),
     client.fetch<CommunityDoc | null>(`*[_type == "community"][0]{badge, headline, body, benefits, disclaimer}`),
@@ -54,6 +55,7 @@ export default async function AdminContentPage() {
     client.fetch<MarqueeDoc | null>(`*[_type == "marquee"][0]{phrases}`),
     client.fetch<SiteSettingsDoc | null>(`*[_type == "siteSettings"][0]{navLinks, footerTagline, footerNote, copyrightText, socialLinks, logo, productsEyebrow, productsHeading, productCardBackLabel, testimonialsEyebrow, testimonialsHeading}`),
     client.fetch<TestimonialDoc[]>(`*[_type == "testimonial"] | order(orderRank asc){_id, quote, name}`),
+    getLiveStatus(),
   ]);
 
   const heroLines = hero?.headlineLines ?? [];
@@ -79,6 +81,22 @@ export default async function AdminContentPage() {
         </div>
 
         <AdminNav active="content" />
+
+        <SectionCard title="Live Now" description="Flip these on right when you go live — shows a pulsing badge on the site linking to your stream.">
+          <form action={saveLiveStatus} style={{ display: "flex", gap: 24, alignItems: "center" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#FAF7F0" }}>
+              <input type="checkbox" name="instagramLive" defaultChecked={liveStatus.instagramLive} />
+              Live on Instagram
+            </label>
+            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#FAF7F0" }}>
+              <input type="checkbox" name="tiktokLive" defaultChecked={liveStatus.tiktokLive} />
+              Live on TikTok
+            </label>
+            <button type="submit" style={BTN_STYLE}>
+              Save
+            </button>
+          </form>
+        </SectionCard>
 
         <SectionCard title="Homepage Hero" description={'The banner customers see first. Headline lines render in order, all caps; check "emphasize" on one to highlight it in amber.'}>
           <form action={saveHero} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
