@@ -781,6 +781,13 @@ export default function ElevatedGlam({
             <p style={{ color: "#9A8A70", fontSize: 13, fontFamily: DM }}>{copyrightText}</p>
             <p style={{ color: "#9A8A70", fontSize: 13, fontFamily: DM }}>{footerNote}</p>
           </div>
+          <div style={{ textAlign: "center", marginTop: 20 }}>
+            <a href="https://globalist.pro" target="_blank" rel="noopener noreferrer" style={{ color: "#9A8A70", fontSize: 12, letterSpacing: "0.05em", textDecoration: "none", fontFamily: DM }}
+              onMouseEnter={e => (e.currentTarget.style.color = t.AMBER)}
+              onMouseLeave={e => (e.currentTarget.style.color = "#9A8A70")}>
+              Designed by Globalist Pro
+            </a>
+          </div>
         </div>
       </footer>
 
