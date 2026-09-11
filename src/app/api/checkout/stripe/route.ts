@@ -19,14 +19,36 @@ export async function POST(req: NextRequest) {
     const customer = await getCustomerById(order.customerId);
     if (customer) {
       stripeCustomerId = customer.stripeCustomerId ?? undefined;
+      const address = customer.shippingAddress;
+      // Prefills Stripe Checkout's shipping section from the address saved
+      // on the account profile — kept in sync on every checkout in case
+      // it was edited there since the Stripe customer was first created.
+      const shipping = address
+        ? {
+            name: address.name,
+            phone: address.phone ?? undefined,
+            address: {
+              line1: address.line1,
+              line2: address.line2 ?? undefined,
+              city: address.city,
+              state: address.state,
+              postal_code: address.postalCode,
+              country: address.country,
+            },
+          }
+        : undefined;
+
       if (!stripeCustomerId) {
         const created = await getStripe().customers.create({
           email: customer.email ?? undefined,
           name: customer.name ?? undefined,
+          shipping,
           metadata: { customerId: customer.id },
         });
         stripeCustomerId = created.id;
         await attachStripeCustomerId(customer.id, stripeCustomerId);
+      } else if (shipping) {
+        await getStripe().customers.update(stripeCustomerId, { shipping });
       }
     }
   }

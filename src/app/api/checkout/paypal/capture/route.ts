@@ -7,9 +7,9 @@ export async function POST(req: NextRequest) {
   const body = (await req.json()) as { paypalOrderId?: string };
   if (!body.paypalOrderId) return NextResponse.json({ error: "paypalOrderId is required" }, { status: 400 });
 
-  const { status, customId } = await capturePaypalOrder(body.paypalOrderId);
+  const { status, customId, shippingAddress } = await capturePaypalOrder(body.paypalOrderId);
   if (status === "COMPLETED" && customId) {
-    const justPaid = await markOrderPaid(customId);
+    const justPaid = await markOrderPaid(customId, { shippingAddress: shippingAddress ?? undefined });
     if (justPaid) await handleOrderPaid(customId);
   }
 
