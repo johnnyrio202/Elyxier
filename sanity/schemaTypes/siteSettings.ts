@@ -25,6 +25,11 @@ export default defineType({
     defineField({ name: "footerTagline", title: "Footer Tagline", type: "string" }),
     defineField({ name: "footerNote", title: "Footer Note", type: "string" }),
     defineField({ name: "copyrightText", title: "Copyright Text", type: "string" }),
+    defineField({ name: "productsEyebrow", title: "Products Section Eyebrow", type: "string" }),
+    defineField({ name: "productsHeading", title: "Products Section Heading", type: "string" }),
+    defineField({ name: "productCardBackLabel", title: "Product Card Back Label", description: 'Small label on the back of each flipped product card, e.g. "The Blend".', type: "string" }),
+    defineField({ name: "testimonialsEyebrow", title: "Testimonials Section Eyebrow", type: "string" }),
+    defineField({ name: "testimonialsHeading", title: "Testimonials Section Heading", type: "string" }),
     defineField({
       name: "socialLinks",
       title: "Social Links",

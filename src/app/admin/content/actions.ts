@@ -215,8 +215,24 @@ export async function saveSiteSettings(formData: FormData): Promise<void> {
     href,
   }));
   const logoFile = formData.get("logo");
+  const productsEyebrow = String(formData.get("productsEyebrow") ?? "").trim();
+  const productsHeading = String(formData.get("productsHeading") ?? "").trim();
+  const productCardBackLabel = String(formData.get("productCardBackLabel") ?? "").trim();
+  const testimonialsEyebrow = String(formData.get("testimonialsEyebrow") ?? "").trim();
+  const testimonialsHeading = String(formData.get("testimonialsHeading") ?? "").trim();
 
-  const patch: Record<string, unknown> = { navLinks, footerTagline, footerNote, copyrightText, socialLinks };
+  const patch: Record<string, unknown> = {
+    navLinks,
+    footerTagline,
+    footerNote,
+    copyrightText,
+    socialLinks,
+    productsEyebrow,
+    productsHeading,
+    productCardBackLabel,
+    testimonialsEyebrow,
+    testimonialsHeading,
+  };
   if (logoFile instanceof File && logoFile.size > 0) {
     patch.logo = await uploadImage(logoFile);
   }

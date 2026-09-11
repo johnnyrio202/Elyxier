@@ -17,7 +17,19 @@ type StoryDoc = { eyebrow: string; headlineLines: Line[]; paragraphs: string[]; 
 type CommunityDoc = { badge: string; headline: string; body: string; benefits: { title: string; body: string }[]; disclaimer: string };
 type LiveSellingDoc = { eyebrow: string; headlineLines: Line[]; body: string; channels: LabelHref[]; footerLine: string };
 type MarqueeDoc = { phrases: string[] };
-type SiteSettingsDoc = { navLinks: LabelHref[]; footerTagline: string; footerNote: string; copyrightText: string; socialLinks: { _key: string; platform: string; href: string }[]; logo?: unknown };
+type SiteSettingsDoc = {
+  navLinks: LabelHref[];
+  footerTagline: string;
+  footerNote: string;
+  copyrightText: string;
+  socialLinks: { _key: string; platform: string; href: string }[];
+  logo?: unknown;
+  productsEyebrow?: string;
+  productsHeading?: string;
+  productCardBackLabel?: string;
+  testimonialsEyebrow?: string;
+  testimonialsHeading?: string;
+};
 type TestimonialDoc = { _id: string; quote: string; name: string };
 
 export const dynamic = "force-dynamic";
@@ -40,7 +52,7 @@ export default async function AdminContentPage() {
     client.fetch<CommunityDoc | null>(`*[_type == "community"][0]{badge, headline, body, benefits, disclaimer}`),
     client.fetch<LiveSellingDoc | null>(`*[_type == "liveSelling"][0]{eyebrow, headlineLines, body, channels, footerLine}`),
     client.fetch<MarqueeDoc | null>(`*[_type == "marquee"][0]{phrases}`),
-    client.fetch<SiteSettingsDoc | null>(`*[_type == "siteSettings"][0]{navLinks, footerTagline, footerNote, copyrightText, socialLinks, logo}`),
+    client.fetch<SiteSettingsDoc | null>(`*[_type == "siteSettings"][0]{navLinks, footerTagline, footerNote, copyrightText, socialLinks, logo, productsEyebrow, productsHeading, productCardBackLabel, testimonialsEyebrow, testimonialsHeading}`),
     client.fetch<TestimonialDoc[]>(`*[_type == "testimonial"] | order(orderRank asc){_id, quote, name}`),
   ]);
 
@@ -209,6 +221,30 @@ export default async function AdminContentPage() {
               labelPlaceholder="Platform name"
               hrefPlaceholder="Link"
             />
+            <div style={{ display: "flex", gap: 8 }}>
+              <div style={{ flex: 1 }}>
+                <label style={LABEL_STYLE}>Products Section Eyebrow</label>
+                <input type="text" name="productsEyebrow" defaultValue={siteSettings?.productsEyebrow ?? ""} style={INPUT_STYLE} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label style={LABEL_STYLE}>Products Section Heading</label>
+                <input type="text" name="productsHeading" defaultValue={siteSettings?.productsHeading ?? ""} style={INPUT_STYLE} />
+              </div>
+            </div>
+            <div>
+              <label style={LABEL_STYLE}>Product Card Back Label (e.g. &quot;The Blend&quot;)</label>
+              <input type="text" name="productCardBackLabel" defaultValue={siteSettings?.productCardBackLabel ?? ""} style={INPUT_STYLE} />
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <div style={{ flex: 1 }}>
+                <label style={LABEL_STYLE}>Testimonials Section Eyebrow</label>
+                <input type="text" name="testimonialsEyebrow" defaultValue={siteSettings?.testimonialsEyebrow ?? ""} style={INPUT_STYLE} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label style={LABEL_STYLE}>Testimonials Section Heading</label>
+                <input type="text" name="testimonialsHeading" defaultValue={siteSettings?.testimonialsHeading ?? ""} style={INPUT_STYLE} />
+              </div>
+            </div>
             <button type="submit" style={{ ...BTN_STYLE, alignSelf: "flex-start" }}>
               Save Site Settings
             </button>

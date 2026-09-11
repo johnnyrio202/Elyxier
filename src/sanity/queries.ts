@@ -72,6 +72,11 @@ export type DesignEContent = {
     footerNote: string;
     copyrightText: string;
     socialLinks: { platform: string; href: string }[];
+    productsEyebrow: string;
+    productsHeading: string;
+    productCardBackLabel: string;
+    testimonialsEyebrow: string;
+    testimonialsHeading: string;
   } | null;
   hero: {
     eyebrow: string;
@@ -157,6 +162,11 @@ export const siteContentQuery = groq`{
     footerNote,
     copyrightText,
     socialLinks[]{ platform, href },
+    productsEyebrow,
+    productsHeading,
+    productCardBackLabel,
+    testimonialsEyebrow,
+    testimonialsHeading,
   },
   "hero": *[_type == "hero"][0]{
     eyebrow,

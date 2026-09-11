@@ -102,6 +102,11 @@ const DEFAULT_FOOTER_TAGLINE = "Luxury Body Butters & Oils · Handcrafted in Las
 const DEFAULT_FOOTER_NOTE = "Temperature-sensitive products. Ships with care.";
 const DEFAULT_COPYRIGHT = "© 2026 ELYXIER. All rights reserved.";
 const DEFAULT_LOGO = "/elyxier-logo.png";
+const DEFAULT_PRODUCTS_EYEBROW = "Our Products";
+const DEFAULT_PRODUCTS_HEADING = "The Collection";
+const DEFAULT_PRODUCT_CARD_BACK_LABEL = "The Blend";
+const DEFAULT_TESTIMONIALS_EYEBROW = "Real Reviews";
+const DEFAULT_TESTIMONIALS_HEADING = "What They're Saying";
 
 function resolveImage(image: unknown, width: number): string {
   try {
@@ -299,6 +304,11 @@ export default function ElevatedGlam({ products, siteContent }: { products: Cata
   const copyrightText = siteSettings?.copyrightText || DEFAULT_COPYRIGHT;
   const socialRow = siteSettings?.socialLinks?.length ? siteSettings.socialLinks : DEFAULT_SOCIAL_ROW;
   const logoUrl = siteSettings?.logo ? resolveImage(siteSettings.logo, 400) || DEFAULT_LOGO : DEFAULT_LOGO;
+  const productsEyebrow = siteSettings?.productsEyebrow || DEFAULT_PRODUCTS_EYEBROW;
+  const productsHeading = siteSettings?.productsHeading || DEFAULT_PRODUCTS_HEADING;
+  const productCardBackLabel = siteSettings?.productCardBackLabel || DEFAULT_PRODUCT_CARD_BACK_LABEL;
+  const testimonialsEyebrow = siteSettings?.testimonialsEyebrow || DEFAULT_TESTIMONIALS_EYEBROW;
+  const testimonialsHeading = siteSettings?.testimonialsHeading || DEFAULT_TESTIMONIALS_HEADING;
 
   return (
     <div style={{ background: t.BG, color: t.TEXT, fontFamily: DM, minHeight: "100vh" }}>
@@ -430,8 +440,8 @@ export default function ElevatedGlam({ products, siteContent }: { products: Cata
       <section style={{ padding: isMobile ? "64px 16px" : "120px 32px", background: t.BG }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 72 }}>
-            <p style={{ color: t.AMBER, fontSize: 11, letterSpacing: "0.45em", textTransform: "uppercase", marginBottom: 16, fontFamily: DM, fontWeight: 600 }}>Our Products</p>
-            <h2 style={{ fontFamily: BEBAS, fontSize: "clamp(48px, 6vw, 80px)", letterSpacing: "0.06em", color: t.TEXT }}>THE COLLECTION</h2>
+            <p style={{ color: t.AMBER, fontSize: 11, letterSpacing: "0.45em", textTransform: "uppercase", marginBottom: 16, fontFamily: DM, fontWeight: 600 }}>{productsEyebrow}</p>
+            <h2 style={{ fontFamily: BEBAS, fontSize: "clamp(48px, 6vw, 80px)", letterSpacing: "0.06em", color: t.TEXT, textTransform: "uppercase" }}>{productsHeading}</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 24 }}>
             {products.map((p) => {
@@ -494,7 +504,7 @@ export default function ElevatedGlam({ products, siteContent }: { products: Cata
                     padding: "28px 24px",
                     border: `1px solid ${t.AMBER}20`,
                   }}>
-                    <p style={{ color: t.AMBER, fontSize: 10, letterSpacing: "0.35em", textTransform: "uppercase" as const, marginBottom: 10, fontFamily: DM }}>The Blend</p>
+                    <p style={{ color: t.AMBER, fontSize: 10, letterSpacing: "0.35em", textTransform: "uppercase" as const, marginBottom: 10, fontFamily: DM }}>{productCardBackLabel}</p>
                     <h3 style={{ fontFamily: BEBAS, fontSize: 22, letterSpacing: "0.06em", color: t.TEXT, marginBottom: 14 }}>{p.name}</h3>
                     <p style={{ color: t.MUTED, fontSize: 13, lineHeight: 1.75, flex: 1, marginBottom: 20, fontFamily: DM }}>{p.blurb}</p>
                     <span style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 20, letterSpacing: "0.05em", display: "block", marginBottom: 16 }}>{priceLabel}</span>
@@ -584,8 +594,8 @@ export default function ElevatedGlam({ products, siteContent }: { products: Cata
       <section style={{ background: t.SECTION, padding: isMobile ? "64px 16px" : "100px 32px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
-            <p style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 13, letterSpacing: "0.4em", marginBottom: 16, textTransform: "uppercase" }}>Real Reviews</p>
-            <h2 style={{ fontFamily: BEBAS, fontSize: "clamp(40px, 5vw, 64px)", color: t.TEXT, letterSpacing: "0.05em", textTransform: "uppercase" }}>What They&apos;re Saying</h2>
+            <p style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 13, letterSpacing: "0.4em", marginBottom: 16, textTransform: "uppercase" }}>{testimonialsEyebrow}</p>
+            <h2 style={{ fontFamily: BEBAS, fontSize: "clamp(40px, 5vw, 64px)", color: t.TEXT, letterSpacing: "0.05em", textTransform: "uppercase" }}>{testimonialsHeading}</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 28 }}>
             {testimonialsList.map((r) => (
