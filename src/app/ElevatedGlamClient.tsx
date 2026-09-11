@@ -769,8 +769,10 @@ export default function ElevatedGlam({
             </a>
           </div>
           <div style={{ display: "flex", justifyContent: "center", gap: isMobile ? 16 : 28, flexWrap: "wrap", marginBottom: 32 }}>
-            {socialRow.map((s) => (
-              <a key={s.platform} href={s.href || "#"} target={s.href && s.href !== "#" ? "_blank" : undefined} rel={s.href && s.href !== "#" ? "noopener noreferrer" : undefined} style={{ color: "#C9BCA0", fontSize: 13, textDecoration: "none", letterSpacing: "0.1em", fontFamily: DM, textTransform: "uppercase" }}
+            {/* Facebook/Whatnot/Amazon stay in socialRow's underlying data but
+                are hidden here until they have real, confirmed links. */}
+            {socialRow.filter((s) => SOCIAL_LINKS[s.platform]).map((s) => (
+              <a key={s.platform} href={SOCIAL_LINKS[s.platform]} target="_blank" rel="noopener noreferrer" style={{ color: "#C9BCA0", fontSize: 13, textDecoration: "none", letterSpacing: "0.1em", fontFamily: DM, textTransform: "uppercase" }}
                 onMouseEnter={e => (e.currentTarget.style.color = t.AMBER)}
                 onMouseLeave={e => (e.currentTarget.style.color = "#C9BCA0")}>
                 {s.platform}
