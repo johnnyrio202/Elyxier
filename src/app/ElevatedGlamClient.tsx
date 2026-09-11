@@ -511,7 +511,11 @@ export default function ElevatedGlam({
             <p style={{ color: t.AMBER, fontSize: 11, letterSpacing: "0.45em", textTransform: "uppercase", marginBottom: 16, fontFamily: DM, fontWeight: 600 }}>{productsEyebrow}</p>
             <h2 style={{ fontFamily: BEBAS, fontSize: "clamp(48px, 6vw, 80px)", letterSpacing: "0.06em", color: t.TEXT, textTransform: "uppercase" }}>{productsHeading}</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 24 }}>
+          {/* auto-fit (not auto-fill) so existing cards stretch to fill the
+              row when there are fewer than 3 for-sale products, instead of
+              leaving empty grid tracks — the layout re-balances on its own
+              every time a product is toggled for sale, no manual tuning needed */}
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(320px, 1fr))", gap: 24 }}>
             {products.map((p) => {
               const photoUrls = p.photos.map((photo) => resolveImage(photo, 600));
               const priceLabel = `$${(p.priceCents / 100).toFixed(2)}`;
