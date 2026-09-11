@@ -91,7 +91,7 @@ const DEFAULT_TESTIMONIALS = [
 ];
 
 const DEFAULT_NAV_LINKS = [
-  { label: "Shop", href: "#" },
+  { label: "Shop", href: "/" },
   { label: "About", href: "#about" },
   { label: "Live", href: "#" },
   { label: "Contact", href: "#contact" },
