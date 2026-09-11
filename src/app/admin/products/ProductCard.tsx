@@ -10,6 +10,7 @@ import {
   removeProductPhoto,
   moveProductPhoto,
   saveCommerceProduct,
+  toggleProductActive,
 } from "./actions";
 
 const AMBER = "#D4920A";
@@ -92,9 +93,11 @@ export default function ProductCard({ product, allProducts }: { product: Product
 
   return (
     <div style={{ border: `1px solid ${AMBER}33`, borderRadius: 8, background: CARD, overflow: "hidden" }}>
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         onClick={() => setOpen((v) => !v)}
+        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && setOpen((v) => !v)}
         style={{
           width: "100%",
           display: "flex",
@@ -144,8 +147,27 @@ export default function ProductCard({ product, allProducts }: { product: Product
             )}
           </div>
         </div>
-        <span style={{ color: "#9A8A70", fontSize: 18 }}>{open ? "−" : "+"}</span>
-      </button>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <form
+            action={toggleProductActive}
+            onClick={(e) => e.stopPropagation()}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <input type="hidden" name="slug" value={product.slug} />
+            <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#9A8A70", cursor: "pointer" }}>
+              <input
+                type="checkbox"
+                name="active"
+                defaultChecked={product.commerce?.active ?? false}
+                disabled={!product.commerce}
+                onChange={(e) => e.currentTarget.form?.requestSubmit()}
+              />
+              For sale
+            </label>
+          </form>
+          <span style={{ color: "#9A8A70", fontSize: 18 }}>{open ? "−" : "+"}</span>
+        </div>
+      </div>
 
       {open && (
         <div style={{ padding: "0 20px 20px", display: "flex", flexDirection: "column", gap: 24 }}>

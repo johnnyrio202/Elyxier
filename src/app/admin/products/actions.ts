@@ -5,7 +5,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { randomUUID } from "crypto";
 import { ADMIN_COOKIE, isValidAdminToken } from "@/lib/adminAuth";
-import { upsertProduct, setBundleItems, type Discount, type BundleItem } from "@/db/products";
+import { upsertProduct, setProductActive, setBundleItems, type Discount, type BundleItem } from "@/db/products";
 import { updateShippingSettings } from "@/db/shipping";
 import { PRODUCTS_TAG } from "@/sanity/queries";
 import { getWriteClient } from "@/sanity/writeClient";
@@ -89,6 +89,18 @@ function readBundleItems(formData: FormData): BundleItem[] {
     items.push({ slug, quantity: Math.round(quantity) });
   }
   return items;
+}
+
+export async function toggleProductActive(formData: FormData): Promise<void> {
+  await requireAdmin();
+
+  const slug = String(formData.get("slug") ?? "").trim();
+  if (!slug) throw new Error("Missing slug");
+  const active = formData.get("active") === "on";
+
+  await setProductActive(slug, active);
+
+  refreshCatalog();
 }
 
 export async function saveShippingSettings(formData: FormData): Promise<void> {

@@ -223,3 +223,12 @@ export async function decrementInventory(slug: string, quantity: number): Promis
     WHERE slug = ${slug}
   `;
 }
+
+// A quick on/off switch for the collapsed admin row — unlike
+// saveCommerceProduct/upsertProduct, this touches only `active` so a fast
+// toggle can't accidentally clobber price, inventory, or discount fields
+// that aren't present in its (deliberately tiny) form submission.
+export async function setProductActive(slug: string, active: boolean): Promise<void> {
+  const sql = getSql();
+  await sql`UPDATE products SET active = ${active}, updated_at = now() WHERE slug = ${slug}`;
+}
