@@ -397,7 +397,7 @@ export default function ElevatedGlam({
           background: dark ? "#FAF7F0" : "#0A0A08",
           color: dark ? "#0A0A08" : "#FAF7F0",
           border: "none", borderRadius: 50, padding: "8px 16px",
-          fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
+          fontSize: 12, fontWeight: 700, letterSpacing: "0.1em",
           cursor: "pointer", boxShadow: "0 2px 12px rgba(0,0,0,0.4)",
           fontFamily: DM,
         }}
@@ -414,7 +414,7 @@ export default function ElevatedGlam({
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
             {!isMobile && navLinks.map((item) => (
-              <a key={item.label} href={item.href} style={{ color: t.MUTED, fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", fontFamily: DM, fontWeight: 500 }}
+              <a key={item.label} href={item.href} style={{ color: t.MUTED, fontSize: 13, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", fontFamily: DM, fontWeight: 500 }}
                 onMouseEnter={e => (e.currentTarget.style.color = t.AMBER)}
                 onMouseLeave={e => (e.currentTarget.style.color = t.MUTED)}>
                 {item.label}
@@ -433,7 +433,7 @@ export default function ElevatedGlam({
                 <UserButton />
               </a>
             ) : (
-              <a href="/sign-in" style={{ color: t.MUTED, fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", fontFamily: DM, fontWeight: 500 }}
+              <a href="/sign-in" style={{ color: t.MUTED, fontSize: 13, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", fontFamily: DM, fontWeight: 500 }}
                 onMouseEnter={e => (e.currentTarget.style.color = t.AMBER)}
                 onMouseLeave={e => (e.currentTarget.style.color = t.MUTED)}>
                 Sign In
@@ -448,6 +448,17 @@ export default function ElevatedGlam({
         <a href="/"><img src={logoUrl} alt="ELYXIER" style={{ height: isMobile ? "72px" : "130px", width: "auto", display: "block" }} /></a>
       </div>
 
+      {/* Marquee Ticker */}
+      <div style={{ background: t.AMBER, overflow: "hidden", padding: "12px 0", borderTop: `2px solid ${t.AMBER_GLOW}`, borderBottom: `2px solid ${t.AMBER_GLOW}` }}>
+        <div style={{ display: "flex", width: "200%", animation: "marquee 22s linear infinite" }}>
+          {[0, 1].map((i) => (
+            <span key={i} style={{ whiteSpace: "nowrap", flex: "0 0 50%", fontFamily: BEBAS, fontSize: 16, letterSpacing: "0.25em", color: "#0A0A08", paddingRight: 0, textTransform: "uppercase" }}>
+              {marqueeLine}
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* Hero */}
       <section style={{ position: "relative", minHeight: isMobile ? "80vh" : "100vh", display: "flex", alignItems: "center", overflow: "hidden" }}>
         <img
@@ -460,7 +471,7 @@ export default function ElevatedGlam({
         <div style={{ position: "absolute", right: "5%", top: "20%", width: isMobile ? 150 : 300, height: isMobile ? 150 : 300, background: `radial-gradient(circle, ${t.AMBER}12 0%, transparent 70%)`, borderRadius: "50%", zIndex: 2 }} />
 
         <div style={{ position: "relative", zIndex: 3, maxWidth: 760, margin: "0 auto", padding: isMobile ? "80px 24px" : "120px 32px", width: "100%" }}>
-          <p style={{ color: t.AMBER, fontSize: 11, letterSpacing: "0.45em", textTransform: "uppercase", marginBottom: 24, fontFamily: DM, fontWeight: 600 }}>
+          <p style={{ color: t.AMBER, fontSize: 12, letterSpacing: "0.45em", textTransform: "uppercase", marginBottom: 24, fontFamily: DM, fontWeight: 600 }}>
             {heroEyebrow}
           </p>
           <h1 style={{ fontFamily: BEBAS, fontSize: "clamp(64px, 9vw, 130px)", lineHeight: 0.95, marginBottom: 32, color: t.TEXT, letterSpacing: "0.04em", textTransform: "uppercase" }}>
@@ -492,22 +503,11 @@ export default function ElevatedGlam({
         </div>
       </section>
 
-      {/* Marquee Ticker */}
-      <div style={{ background: t.AMBER, overflow: "hidden", padding: "12px 0", borderTop: `2px solid ${t.AMBER_GLOW}`, borderBottom: `2px solid ${t.AMBER_GLOW}` }}>
-        <div style={{ display: "flex", width: "200%", animation: "marquee 22s linear infinite" }}>
-          {[0, 1].map((i) => (
-            <span key={i} style={{ whiteSpace: "nowrap", flex: "0 0 50%", fontFamily: BEBAS, fontSize: 16, letterSpacing: "0.25em", color: "#0A0A08", paddingRight: 0, textTransform: "uppercase" }}>
-              {marqueeLine}
-            </span>
-          ))}
-        </div>
-      </div>
-
       {/* Products */}
       <section id="shop" style={{ padding: isMobile ? "64px 16px" : "120px 32px", background: t.BG }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 72 }}>
-            <p style={{ color: t.AMBER, fontSize: 11, letterSpacing: "0.45em", textTransform: "uppercase", marginBottom: 16, fontFamily: DM, fontWeight: 600 }}>{productsEyebrow}</p>
+            <p style={{ color: t.AMBER, fontSize: 12, letterSpacing: "0.45em", textTransform: "uppercase", marginBottom: 16, fontFamily: DM, fontWeight: 600 }}>{productsEyebrow}</p>
             <h2 style={{ fontFamily: BEBAS, fontSize: "clamp(48px, 6vw, 80px)", letterSpacing: "0.06em", color: t.TEXT, textTransform: "uppercase" }}>{productsHeading}</h2>
           </div>
           {/* auto-fit (not auto-fill) so existing cards stretch to fill the
@@ -544,13 +544,13 @@ export default function ElevatedGlam({
                     <div style={{ height: "72%", overflow: "hidden", position: "relative" }}>
                       <img key={photoUrls[activePhotoIdx[p.slug] ?? 0]} src={photoUrls[activePhotoIdx[p.slug] ?? 0]} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", animation: "fadeIn 1.4s ease-in-out" }} />
                       {!p.inStock && (
-                        <span style={{ position: "absolute", top: 10, left: 10, background: "#0A0A08", color: "#FAF7F0", fontSize: 10, letterSpacing: "0.15em", padding: "4px 10px", fontFamily: DM, fontWeight: 700 }}>SOLD OUT</span>
+                        <span style={{ position: "absolute", top: 10, left: 10, background: "#0A0A08", color: "#FAF7F0", fontSize: 11, letterSpacing: "0.15em", padding: "4px 10px", fontFamily: DM, fontWeight: 700 }}>SOLD OUT</span>
                       )}
                       {p.inStock && originalPriceLabel && (
-                        <span style={{ position: "absolute", top: 10, left: 10, background: t.AMBER, color: "#0A0A08", fontSize: 10, letterSpacing: "0.15em", padding: "4px 10px", fontFamily: DM, fontWeight: 700 }}>SALE</span>
+                        <span style={{ position: "absolute", top: 10, left: 10, background: t.AMBER, color: "#0A0A08", fontSize: 11, letterSpacing: "0.15em", padding: "4px 10px", fontFamily: DM, fontWeight: 700 }}>SALE</span>
                       )}
                       {p.isBundle && (
-                        <span style={{ position: "absolute", top: 10, right: 10, background: "#0A0A08", color: t.AMBER, fontSize: 10, letterSpacing: "0.15em", padding: "4px 10px", fontFamily: DM, fontWeight: 700, border: `1px solid ${t.AMBER}` }}>BUNDLE</span>
+                        <span style={{ position: "absolute", top: 10, right: 10, background: "#0A0A08", color: t.AMBER, fontSize: 11, letterSpacing: "0.15em", padding: "4px 10px", fontFamily: DM, fontWeight: 700, border: `1px solid ${t.AMBER}` }}>BUNDLE</span>
                       )}
                       {photoUrls.length > 1 && (
                         <div style={{ position: "absolute", bottom: 8, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 6, zIndex: 2 }}>
@@ -572,7 +572,7 @@ export default function ElevatedGlam({
                           )}
                           <span style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 20, letterSpacing: "0.05em" }}>{priceLabel}</span>
                         </span>
-                        <span style={{ color: t.MUTED, fontSize: 10, letterSpacing: "0.15em" }}>✦ DISCOVER</span>
+                        <span style={{ color: t.MUTED, fontSize: 11, letterSpacing: "0.15em" }}>✦ DISCOVER</span>
                       </div>
                     </div>
                   </div>
@@ -587,9 +587,9 @@ export default function ElevatedGlam({
                     padding: "28px 24px",
                     border: `1px solid ${t.AMBER}20`,
                   }}>
-                    <p style={{ color: t.AMBER, fontSize: 10, letterSpacing: "0.35em", textTransform: "uppercase" as const, marginBottom: 10, fontFamily: DM }}>{productCardBackLabel}</p>
+                    <p style={{ color: t.AMBER, fontSize: 11, letterSpacing: "0.35em", textTransform: "uppercase" as const, marginBottom: 10, fontFamily: DM }}>{productCardBackLabel}</p>
                     <h3 style={{ fontFamily: BEBAS, fontSize: 22, letterSpacing: "0.06em", color: t.TEXT, marginBottom: 14 }}>{p.name}</h3>
-                    <p style={{ color: t.MUTED, fontSize: 13, lineHeight: 1.75, flex: 1, marginBottom: 20, fontFamily: DM }}>{p.blurb}</p>
+                    <p style={{ color: t.MUTED, fontSize: 14, lineHeight: 1.75, flex: 1, marginBottom: 20, fontFamily: DM }}>{p.blurb}</p>
                     <div style={{ marginBottom: 16 }}>
                       {originalPriceLabel && (
                         <span style={{ color: t.MUTED, fontFamily: BEBAS, fontSize: 15, letterSpacing: "0.05em", textDecoration: "line-through", marginRight: 8 }}>{originalPriceLabel}</span>
@@ -635,7 +635,7 @@ export default function ElevatedGlam({
             </div>
           )}
           <div>
-            <p style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 13, letterSpacing: "0.35em", marginBottom: 20, textTransform: "uppercase" }}>{storyEyebrow}</p>
+            <p style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.35em", marginBottom: 20, textTransform: "uppercase" }}>{storyEyebrow}</p>
             <h2 style={{ fontFamily: BEBAS, fontSize: "clamp(36px, 4.5vw, 60px)", color: t.STORY_TEXT, lineHeight: 1.05, letterSpacing: "0.04em", marginBottom: 28, textTransform: "uppercase" }}>
               <HeadlineLines lines={storyLines} amberColor={t.AMBER} textColor={t.STORY_TEXT} />
             </h2>
@@ -660,7 +660,7 @@ export default function ElevatedGlam({
           <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at center, ${t.AMBER}10 0%, transparent 65%)` }} />
         )}
         <div style={{ position: "relative", maxWidth: 900, margin: "0 auto" }}>
-          <p style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 13, letterSpacing: "0.4em", marginBottom: 20, textTransform: "uppercase" }}>{lsEyebrow}</p>
+          <p style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.4em", marginBottom: 20, textTransform: "uppercase" }}>{lsEyebrow}</p>
           <h2 style={{ fontFamily: BEBAS, fontSize: "clamp(56px, 8vw, 110px)", color: t.TEXT, lineHeight: 0.95, letterSpacing: "0.04em", marginBottom: 28, textTransform: "uppercase" }}>
             <HeadlineLines lines={lsLines} amberColor={t.AMBER} textColor={t.TEXT} />
           </h2>
@@ -682,7 +682,7 @@ export default function ElevatedGlam({
       <section style={{ background: t.SECTION, padding: isMobile ? "64px 16px" : "100px 32px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
-            <p style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 13, letterSpacing: "0.4em", marginBottom: 16, textTransform: "uppercase" }}>{testimonialsEyebrow}</p>
+            <p style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.4em", marginBottom: 16, textTransform: "uppercase" }}>{testimonialsEyebrow}</p>
             <h2 style={{ fontFamily: BEBAS, fontSize: "clamp(40px, 5vw, 64px)", color: t.TEXT, letterSpacing: "0.05em", textTransform: "uppercase" }}>{testimonialsHeading}</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 28 }}>
@@ -701,7 +701,7 @@ export default function ElevatedGlam({
       {/* Community */}
       <section style={{ background: dark ? "#0A0A08" : "#FFF8ED", padding: isMobile ? "64px 16px" : "100px 32px" }}>
         <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
-          <span style={{ display: "inline-block", background: `${t.AMBER}22`, border: `1px solid ${t.AMBER}55`, color: t.AMBER, fontSize: 10, letterSpacing: "0.4em", textTransform: "uppercase" as const, padding: "6px 18px", marginBottom: 24, fontFamily: BEBAS }}>{communityBadge}</span>
+          <span style={{ display: "inline-block", background: `${t.AMBER}22`, border: `1px solid ${t.AMBER}55`, color: t.AMBER, fontSize: 11, letterSpacing: "0.4em", textTransform: "uppercase" as const, padding: "6px 18px", marginBottom: 24, fontFamily: BEBAS }}>{communityBadge}</span>
           <h2 style={{ fontFamily: BEBAS, fontSize: "clamp(36px, 5vw, 72px)", letterSpacing: "0.04em", color: t.TEXT, marginBottom: 16, textTransform: "uppercase" }}>{communityHeadline}</h2>
           <p style={{ color: t.MUTED, fontSize: 16, lineHeight: 1.8, maxWidth: 580, margin: "0 auto 48px", fontFamily: DM }}>
             {communityBody}
@@ -710,7 +710,7 @@ export default function ElevatedGlam({
             {communityBenefits.map((b) => (
               <div key={b.title} style={{ background: dark ? "#141410" : "#FFFFFF", border: `1px solid ${t.AMBER}22`, padding: "24px 20px", textAlign: "left" }}>
                 <p style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.08em", marginBottom: 10, textTransform: "uppercase" }}>{b.title}</p>
-                <p style={{ color: t.MUTED, fontSize: 13, lineHeight: 1.7, fontFamily: DM }}>{b.body}</p>
+                <p style={{ color: t.MUTED, fontSize: 14, lineHeight: 1.7, fontFamily: DM }}>{b.body}</p>
               </div>
             ))}
           </div>
@@ -724,8 +724,8 @@ export default function ElevatedGlam({
               <button onClick={joinCircle} disabled={!lead.email || leadState === "loading"} style={{ background: `linear-gradient(135deg, ${t.AMBER}, ${dark ? "#E8A820" : "#D4920A"})`, color: "#0A0A08", border: "none", padding: "16px 0", fontFamily: BEBAS, fontSize: 20, letterSpacing: "0.2em", cursor: !lead.email ? "not-allowed" : "pointer", boxShadow: `0 4px 24px ${t.AMBER}40`, marginTop: 4, opacity: leadState === "loading" ? 0.6 : 1, textTransform: "uppercase" }}>
                 {leadState === "loading" ? "Joining..." : "Join the Circle"}
               </button>
-              {leadState === "error" && <p style={{ color: "#D45A5A", fontSize: 12, fontFamily: DM }}>Something went wrong — try again.</p>}
-              <p style={{ color: `${t.MUTED}88`, fontSize: 12, marginTop: 4, fontFamily: DM }}>{communityDisclaimer}</p>
+              {leadState === "error" && <p style={{ color: "#D45A5A", fontSize: 13, fontFamily: DM }}>Something went wrong — try again.</p>}
+              <p style={{ color: t.MUTED, fontSize: 13, marginTop: 4, fontFamily: DM }}>{communityDisclaimer}</p>
             </div>
           )}
         </div>
@@ -734,7 +734,7 @@ export default function ElevatedGlam({
       {/* Contact */}
       <section id="contact" style={{ background: t.SECTION, padding: isMobile ? "64px 16px" : "100px 32px" }}>
         <div style={{ maxWidth: 560, margin: "0 auto", textAlign: "center" }}>
-          <p style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 13, letterSpacing: "0.4em", marginBottom: 16, textTransform: "uppercase" }}>Get In Touch</p>
+          <p style={{ color: t.AMBER, fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.4em", marginBottom: 16, textTransform: "uppercase" }}>Get In Touch</p>
           <h2 style={{ fontFamily: BEBAS, fontSize: "clamp(36px, 5vw, 56px)", color: t.TEXT, letterSpacing: "0.05em", marginBottom: 16, textTransform: "uppercase" }}>Contact Us</h2>
           <p style={{ color: t.MUTED, fontSize: 15, lineHeight: 1.8, marginBottom: 8, fontFamily: DM }}>
             Questions about an order, a product, or a collab? Send a message, or email us directly at{" "}
@@ -761,25 +761,25 @@ export default function ElevatedGlam({
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 32 }}>
             <img src={logoUrl} alt="ELYXIER" style={{ height: "56px", width: "auto", objectFit: "contain", borderRadius: "8px" }} />
-            <p style={{ color: "#6B6050", fontSize: 13, marginTop: 8, letterSpacing: "0.1em", fontFamily: DM }}>
+            <p style={{ color: "#C9BCA0", fontSize: 15, marginTop: 8, letterSpacing: "0.1em", fontFamily: DM }}>
               {footerTagline}
             </p>
-            <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: "#6B6050", fontSize: 12, marginTop: 4, display: "inline-block", textDecoration: "none", fontFamily: DM }}>
+            <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: "#C9BCA0", fontSize: 14, marginTop: 4, display: "inline-block", textDecoration: "none", fontFamily: DM }}>
               {CONTACT_EMAIL}
             </a>
           </div>
           <div style={{ display: "flex", justifyContent: "center", gap: isMobile ? 16 : 28, flexWrap: "wrap", marginBottom: 32 }}>
             {socialRow.map((s) => (
-              <a key={s.platform} href={s.href || "#"} target={s.href && s.href !== "#" ? "_blank" : undefined} rel={s.href && s.href !== "#" ? "noopener noreferrer" : undefined} style={{ color: "#6B6050", fontSize: 12, textDecoration: "none", letterSpacing: "0.1em", fontFamily: DM, textTransform: "uppercase" }}
+              <a key={s.platform} href={s.href || "#"} target={s.href && s.href !== "#" ? "_blank" : undefined} rel={s.href && s.href !== "#" ? "noopener noreferrer" : undefined} style={{ color: "#C9BCA0", fontSize: 13, textDecoration: "none", letterSpacing: "0.1em", fontFamily: DM, textTransform: "uppercase" }}
                 onMouseEnter={e => (e.currentTarget.style.color = t.AMBER)}
-                onMouseLeave={e => (e.currentTarget.style.color = "#6B6050")}>
+                onMouseLeave={e => (e.currentTarget.style.color = "#C9BCA0")}>
                 {s.platform}
               </a>
             ))}
           </div>
           <div style={{ borderTop: "1px solid #1A1A14", paddingTop: 24, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
-            <p style={{ color: "#444440", fontSize: 11, fontFamily: DM }}>{copyrightText}</p>
-            <p style={{ color: "#444440", fontSize: 11, fontFamily: DM }}>{footerNote}</p>
+            <p style={{ color: "#9A8A70", fontSize: 13, fontFamily: DM }}>{copyrightText}</p>
+            <p style={{ color: "#9A8A70", fontSize: 13, fontFamily: DM }}>{footerNote}</p>
           </div>
         </div>
       </footer>
@@ -848,7 +848,7 @@ export default function ElevatedGlam({
                     />
                   </div>
                 )}
-                <p style={{ color: `${t.MUTED}88`, fontSize: 11, marginTop: 12, fontFamily: DM }}>Test mode — no real charge will be made.</p>
+                <p style={{ color: t.MUTED, fontSize: 12, marginTop: 12, fontFamily: DM }}>Test mode — no real charge will be made.</p>
               </>
             )}
           </div>
