@@ -1,5 +1,8 @@
 import "server-only";
 import { getSql } from "./client";
+import type { ShippingAddress } from "./orders";
+
+const CUSTOMER_COLUMNS = "id, clerk_user_id, email, name, phone, stripe_customer_id, shipping_address";
 
 export type Customer = {
   id: string;
@@ -8,6 +11,7 @@ export type Customer = {
   name: string | null;
   phone: string | null;
   stripeCustomerId: string | null;
+  shippingAddress: ShippingAddress | null;
 };
 
 function mapRow(row: Record<string, unknown>): Customer {
@@ -18,6 +22,7 @@ function mapRow(row: Record<string, unknown>): Customer {
     name: (row.name as string | null) ?? null,
     phone: (row.phone as string | null) ?? null,
     stripeCustomerId: (row.stripe_customer_id as string | null) ?? null,
+    shippingAddress: (row.shipping_address as ShippingAddress | null) ?? null,
   };
 }
 
@@ -35,25 +40,47 @@ export async function getOrCreateCustomerByClerkId(
       email = COALESCE(EXCLUDED.email, customers.email),
       name = COALESCE(EXCLUDED.name, customers.name),
       updated_at = now()
-    RETURNING id, clerk_user_id, email, name, phone, stripe_customer_id
+    RETURNING id, clerk_user_id, email, name, phone, stripe_customer_id, shipping_address
   `) as Record<string, unknown>[];
   return mapRow(row);
 }
 
 export async function getCustomerByClerkId(clerkUserId: string): Promise<Customer | null> {
   const sql = getSql();
-  const [row] = (await sql`
-    SELECT id, clerk_user_id, email, name, phone, stripe_customer_id FROM customers WHERE clerk_user_id = ${clerkUserId}
-  `) as Record<string, unknown>[];
+  const [row] = (await sql.query(`SELECT ${CUSTOMER_COLUMNS} FROM customers WHERE clerk_user_id = $1`, [
+    clerkUserId,
+  ])) as Record<string, unknown>[];
   return row ? mapRow(row) : null;
 }
 
 export async function getCustomerById(id: string): Promise<Customer | null> {
   const sql = getSql();
-  const [row] = (await sql`
-    SELECT id, clerk_user_id, email, name, phone, stripe_customer_id FROM customers WHERE id = ${id}
-  `) as Record<string, unknown>[];
+  const [row] = (await sql.query(`SELECT ${CUSTOMER_COLUMNS} FROM customers WHERE id = $1`, [id])) as Record<
+    string,
+    unknown
+  >[];
   return row ? mapRow(row) : null;
+}
+
+// Self-service save from the account page — separate from
+// getOrCreateCustomerByClerkId's checkout-time upsert so a customer can set
+// up their profile (including a default shipping address) before ever
+// placing an order.
+export async function updateCustomerProfile(
+  clerkUserId: string,
+  info: { email: string | null; name: string | null; phone: string | null; shippingAddress: ShippingAddress | null }
+): Promise<void> {
+  const sql = getSql();
+  await sql`
+    INSERT INTO customers (clerk_user_id, email, name, phone, shipping_address)
+    VALUES (${clerkUserId}, ${info.email}, ${info.name}, ${info.phone}, ${info.shippingAddress ? JSON.stringify(info.shippingAddress) : null}::jsonb)
+    ON CONFLICT (clerk_user_id) DO UPDATE SET
+      email = COALESCE(EXCLUDED.email, customers.email),
+      name = EXCLUDED.name,
+      phone = EXCLUDED.phone,
+      shipping_address = EXCLUDED.shipping_address,
+      updated_at = now()
+  `;
 }
 
 export async function attachStripeCustomerId(customerId: string, stripeCustomerId: string): Promise<void> {
@@ -70,12 +97,13 @@ export type CustomerOrderSummary = {
   createdAt: string;
   items: { productName: string; quantity: number; unitPriceCents: number }[];
   tracking: { carrier: string | null; trackingNumber: string | null; trackingUrl: string | null; status: string } | null;
+  shippingAddress: ShippingAddress | null;
 };
 
 export async function getCustomerOrders(customerId: string): Promise<CustomerOrderSummary[]> {
   const sql = getSql();
   const orderRows = (await sql`
-    SELECT id, payment_status, fulfillment_status, total_cents, currency, created_at
+    SELECT id, payment_status, fulfillment_status, total_cents, currency, created_at, shipping_address
     FROM orders WHERE customer_id = ${customerId} ORDER BY created_at DESC
   `) as Record<string, unknown>[];
 
@@ -109,6 +137,7 @@ export async function getCustomerOrders(customerId: string): Promise<CustomerOrd
             status: fulfillmentRow.status as string,
           }
         : null,
+      shippingAddress: (row.shipping_address as ShippingAddress | null) ?? null,
     });
   }
   return orders;

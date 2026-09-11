@@ -95,6 +95,10 @@ ALTER TABLE orders ADD COLUMN IF NOT EXISTS shipping_address JSONB;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS shippo_order_id TEXT;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS customer_id UUID REFERENCES customers(id);
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS shipping_cents INTEGER NOT NULL DEFAULT 0;
+-- A default address the customer can view/edit from their account page —
+-- separate from any per-order shipping_address, which is a snapshot of
+-- wherever that specific order actually shipped.
+ALTER TABLE customers ADD COLUMN IF NOT EXISTS shipping_address JSONB;
 
 -- Single-row settings table (the boolean PK + CHECK enforces exactly one row).
 -- free_shipping_threshold_cents NULL means no free-shipping threshold applies.
