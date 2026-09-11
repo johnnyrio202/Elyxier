@@ -1,19 +1,19 @@
-export const AMBER = "#D4920A";
-export const CARD = "#141410";
+export const AMBER = "var(--admin-accent)";
+export const CARD = "var(--admin-card)";
 export const INPUT_STYLE: React.CSSProperties = {
   width: "100%",
   background: "transparent",
-  border: `1px solid ${AMBER}55`,
+  border: "1px solid var(--admin-border-strong)",
   borderRadius: 4,
-  color: "#FAF7F0",
+  color: "var(--admin-ink)",
   padding: "8px 10px",
   fontSize: 14,
   fontFamily: "inherit",
 };
-export const LABEL_STYLE: React.CSSProperties = { display: "block", fontSize: 11, color: "#9A8A70", marginBottom: 4 };
+export const LABEL_STYLE: React.CSSProperties = { display: "block", fontSize: 11, color: "var(--admin-muted)", marginBottom: 4 };
 export const BTN_STYLE: React.CSSProperties = {
-  background: AMBER,
-  color: "#0A0A08",
+  background: "var(--admin-accent)",
+  color: "var(--admin-accent-ink)",
   border: "none",
   borderRadius: 4,
   padding: "10px 20px",
@@ -32,7 +32,7 @@ export function HeadlineLinesFields({ lines, max = 4 }: { lines: { text: string;
         {Array.from({ length: max }, (_, i) => (
           <div key={i} style={{ display: "flex", gap: 8, alignItems: "center" }}>
             <input type="text" name={`line${i}Text`} defaultValue={lines[i]?.text ?? ""} placeholder={`Line ${i + 1}`} style={{ ...INPUT_STYLE, flex: 1 }} />
-            <label style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 11, color: "#9A8A70", whiteSpace: "nowrap" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 11, color: "var(--admin-muted)", whiteSpace: "nowrap" }}>
               <input type="checkbox" name={`line${i}Emphasis`} defaultChecked={lines[i]?.emphasis ?? false} />
               Emphasize
             </label>
@@ -102,7 +102,7 @@ export function TitleBodyListFields({ items, prefix, max, label }: { items: { ti
       <label style={LABEL_STYLE}>{label}</label>
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {Array.from({ length: max }, (_, i) => (
-          <div key={i} style={{ display: "flex", flexDirection: "column", gap: 4, border: `1px solid ${AMBER}22`, borderRadius: 4, padding: 8 }}>
+          <div key={i} style={{ display: "flex", flexDirection: "column", gap: 4, border: "1px solid var(--admin-border-soft)", borderRadius: 4, padding: 8 }}>
             <input type="text" name={`${prefix}${i}Title`} defaultValue={items[i]?.title ?? ""} placeholder={`Title ${i + 1}`} style={INPUT_STYLE} />
             <textarea name={`${prefix}${i}Body`} defaultValue={items[i]?.body ?? ""} placeholder="Body" rows={2} style={{ ...INPUT_STYLE, resize: "vertical" as const }} />
           </div>

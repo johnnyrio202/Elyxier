@@ -4,18 +4,18 @@ import { useState } from "react";
 import PhotoDropzone from "./PhotoDropzone";
 import { createProduct } from "./actions";
 
-const AMBER = "#D4920A";
+const AMBER = "var(--admin-accent)";
 const INPUT_STYLE: React.CSSProperties = {
   width: "100%",
   background: "transparent",
-  border: `1px solid ${AMBER}55`,
+  border: "1px solid var(--admin-border-strong)",
   borderRadius: 4,
-  color: "#FAF7F0",
+  color: "var(--admin-ink)",
   padding: "8px 10px",
   fontSize: 14,
   fontFamily: "inherit",
 };
-const LABEL_STYLE: React.CSSProperties = { display: "block", fontSize: 11, color: "#9A8A70", marginBottom: 4 };
+const LABEL_STYLE: React.CSSProperties = { display: "block", fontSize: 11, color: "var(--admin-muted)", marginBottom: 4 };
 
 const MAX_BUNDLE_COMPONENTS = 8;
 
@@ -24,7 +24,7 @@ export default function NewProductForm({ allProducts }: { allProducts: { slug: s
   const [isBundle, setIsBundle] = useState(false);
 
   return (
-    <div style={{ border: `1px dashed ${AMBER}55`, borderRadius: 8, background: "#141410", overflow: "hidden" }}>
+    <div style={{ border: "1px dashed var(--admin-border-strong)", borderRadius: 8, background: "var(--admin-card)", overflow: "hidden" }}>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
@@ -43,7 +43,7 @@ export default function NewProductForm({ allProducts }: { allProducts: { slug: s
         }}
       >
         <span>+ Add New Product</span>
-        <span style={{ color: "#9A8A70", fontSize: 18 }}>{open ? "−" : "+"}</span>
+        <span style={{ color: "var(--admin-muted)", fontSize: 18 }}>{open ? "−" : "+"}</span>
       </button>
 
       {open && (
@@ -69,19 +69,19 @@ export default function NewProductForm({ allProducts }: { allProducts: { slug: s
             <PhotoDropzone />
           </div>
           <div style={{ display: "flex", gap: 16, alignItems: "flex-end", flexWrap: "wrap" }}>
-            <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+            <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "var(--admin-muted)" }}>
               Price (USD)
               <input type="number" name="price" step="0.01" min="0" required style={{ ...INPUT_STYLE, width: 90 }} />
             </label>
-            <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+            <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "var(--admin-muted)" }}>
               {isBundle ? "Inventory (computed)" : "Inventory"}
               <input type="number" name="inventory" min="0" step="1" defaultValue={0} disabled={isBundle} required style={{ ...INPUT_STYLE, width: 90, opacity: isBundle ? 0.5 : 1 }} />
             </label>
-            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "#9A8A70", paddingBottom: 10 }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "var(--admin-muted)", paddingBottom: 10 }}>
               <input type="checkbox" name="active" defaultChecked />
               For sale
             </label>
-            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "#9A8A70", paddingBottom: 10 }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "var(--admin-muted)", paddingBottom: 10 }}>
               <input type="checkbox" name="isBundle" checked={isBundle} onChange={(e) => setIsBundle(e.target.checked)} />
               This is a bundle
             </label>
@@ -111,7 +111,7 @@ export default function NewProductForm({ allProducts }: { allProducts: { slug: s
           <div>
             <label style={LABEL_STYLE}>Discount (optional)</label>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "flex-end" }}>
-              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "var(--admin-muted)" }}>
                 Type
                 <select name="discountType" defaultValue="" style={{ ...INPUT_STYLE, width: 140 }}>
                   <option value="">No discount</option>
@@ -119,15 +119,15 @@ export default function NewProductForm({ allProducts }: { allProducts: { slug: s
                   <option value="fixed">Dollar amount off</option>
                 </select>
               </label>
-              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "var(--admin-muted)" }}>
                 Value
                 <input type="number" name="discountValue" step="0.01" min="0" style={{ ...INPUT_STYLE, width: 90 }} />
               </label>
-              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "var(--admin-muted)" }}>
                 Starts
                 <input type="datetime-local" name="discountStartsAt" style={{ ...INPUT_STYLE, width: 190 }} />
               </label>
-              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "var(--admin-muted)" }}>
                 Ends (blank = runs until stopped)
                 <input type="datetime-local" name="discountEndsAt" style={{ ...INPUT_STYLE, width: 190 }} />
               </label>
@@ -138,8 +138,8 @@ export default function NewProductForm({ allProducts }: { allProducts: { slug: s
             type="submit"
             style={{
               alignSelf: "flex-start",
-              background: AMBER,
-              color: "#0A0A08",
+              background: "var(--admin-accent)",
+              color: "var(--admin-accent-ink)",
               border: "none",
               borderRadius: 4,
               padding: "10px 20px",

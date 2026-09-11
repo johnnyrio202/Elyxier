@@ -13,22 +13,22 @@ import {
   toggleProductActive,
 } from "./actions";
 
-const AMBER = "#D4920A";
-const CARD = "#141410";
+const AMBER = "var(--admin-accent)";
+const CARD = "var(--admin-card)";
 const INPUT_STYLE: React.CSSProperties = {
   width: "100%",
   background: "transparent",
-  border: `1px solid ${AMBER}55`,
+  border: "1px solid var(--admin-border-strong)",
   borderRadius: 4,
-  color: "#FAF7F0",
+  color: "var(--admin-ink)",
   padding: "8px 10px",
   fontSize: 14,
   fontFamily: "inherit",
 };
-const LABEL_STYLE: React.CSSProperties = { display: "block", fontSize: 11, color: "#9A8A70", marginBottom: 4 };
+const LABEL_STYLE: React.CSSProperties = { display: "block", fontSize: 11, color: "var(--admin-muted)", marginBottom: 4 };
 const BTN_STYLE: React.CSSProperties = {
-  background: AMBER,
-  color: "#0A0A08",
+  background: "var(--admin-accent)",
+  color: "var(--admin-accent-ink)",
   border: "none",
   borderRadius: 4,
   padding: "8px 16px",
@@ -40,8 +40,8 @@ const BTN_STYLE: React.CSSProperties = {
 };
 const GHOST_BTN_STYLE: React.CSSProperties = {
   background: "transparent",
-  border: `1px solid ${AMBER}55`,
-  color: "#9A8A70",
+  border: "1px solid var(--admin-border-strong)",
+  color: "var(--admin-muted)",
   borderRadius: 4,
   padding: "4px 8px",
   fontSize: 10,
@@ -92,7 +92,7 @@ export default function ProductCard({ product, allProducts }: { product: Product
   const bundleItems = product.commerce?.bundleItems ?? [];
 
   return (
-    <div style={{ border: `1px solid ${AMBER}33`, borderRadius: 8, background: CARD, overflow: "hidden" }}>
+    <div style={{ border: "1px solid var(--admin-border)", borderRadius: 8, background: CARD, overflow: "hidden" }}>
       <div
         role="button"
         tabIndex={0}
@@ -106,14 +106,14 @@ export default function ProductCard({ product, allProducts }: { product: Product
           padding: 20,
           background: "transparent",
           border: "none",
-          color: "#FAF7F0",
+          color: "var(--admin-ink)",
           cursor: "pointer",
           textAlign: "left",
         }}
       >
         <div>
           <p style={{ margin: 0, fontWeight: 600 }}>{product.name}</p>
-          <p style={{ margin: "2px 0 0", color: "#9A8A70", fontSize: 12 }}>/{product.slug}</p>
+          <p style={{ margin: "2px 0 0", color: "var(--admin-muted)", fontSize: 12 }}>/{product.slug}</p>
           <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
             <span
               style={{
@@ -123,8 +123,8 @@ export default function ProductCard({ product, allProducts }: { product: Product
                 textTransform: "uppercase",
                 padding: "2px 8px",
                 borderRadius: 999,
-                background: isLive ? `${AMBER}22` : "#5A1F1F",
-                color: isLive ? AMBER : "#E09090",
+                background: isLive ? "var(--admin-border-soft)" : "var(--admin-danger-bg)",
+                color: isLive ? AMBER : "var(--admin-danger)",
               }}
             >
               {isLive
@@ -136,12 +136,12 @@ export default function ProductCard({ product, allProducts }: { product: Product
                     : "Not sellable yet"}
             </span>
             {product.commerce?.isBundle && (
-              <span style={{ display: "inline-block", fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", padding: "2px 8px", borderRadius: 999, background: "transparent", border: `1px solid ${AMBER}55`, color: AMBER }}>
+              <span style={{ display: "inline-block", fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", padding: "2px 8px", borderRadius: 999, background: "transparent", border: "1px solid var(--admin-border-strong)", color: AMBER }}>
                 Bundle
               </span>
             )}
             {product.commerce?.originalPriceCents && (
-              <span style={{ display: "inline-block", fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", padding: "2px 8px", borderRadius: 999, background: `${AMBER}22`, color: AMBER }}>
+              <span style={{ display: "inline-block", fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", padding: "2px 8px", borderRadius: 999, background: "var(--admin-border-soft)", color: AMBER }}>
                 On Sale
               </span>
             )}
@@ -154,7 +154,7 @@ export default function ProductCard({ product, allProducts }: { product: Product
             style={{ display: "flex", alignItems: "center" }}
           >
             <input type="hidden" name="slug" value={product.slug} />
-            <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#9A8A70", cursor: "pointer" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--admin-muted)", cursor: "pointer" }}>
               <input
                 type="checkbox"
                 name="active"
@@ -165,7 +165,7 @@ export default function ProductCard({ product, allProducts }: { product: Product
               For sale
             </label>
           </form>
-          <span style={{ color: "#9A8A70", fontSize: 18 }}>{open ? "−" : "+"}</span>
+          <span style={{ color: "var(--admin-muted)", fontSize: 18 }}>{open ? "−" : "+"}</span>
         </div>
       </div>
 
@@ -201,7 +201,7 @@ export default function ProductCard({ product, allProducts }: { product: Product
                   <img
                     src={urlFor(photo as SanityImageSource).width(96).height(96).url()}
                     alt=""
-                    style={{ width: 80, height: 80, objectFit: "cover", borderRadius: 4, border: `1px solid ${AMBER}33`, display: "block" }}
+                    style={{ width: 80, height: 80, objectFit: "cover", borderRadius: 4, border: "1px solid var(--admin-border)", display: "block" }}
                   />
                   <div style={{ display: "flex", gap: 2, marginTop: 4 }}>
                     <form action={moveProductPhoto}>
@@ -227,7 +227,7 @@ export default function ProductCard({ product, allProducts }: { product: Product
                     <form action={removeProductPhoto}>
                       <input type="hidden" name="id" value={product._id} />
                       <input type="hidden" name="photoKey" value={photo._key} />
-                      <button type="submit" style={{ ...GHOST_BTN_STYLE, color: "#E09090" }}>
+                      <button type="submit" style={{ ...GHOST_BTN_STYLE, color: "var(--admin-danger)" }}>
                         ✕
                       </button>
                     </form>
@@ -249,7 +249,7 @@ export default function ProductCard({ product, allProducts }: { product: Product
             <input type="hidden" name="slug" value={product.slug} />
 
             <div style={{ display: "flex", gap: 16, alignItems: "flex-end", flexWrap: "wrap" }}>
-              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "var(--admin-muted)" }}>
                 Price (USD)
                 <input
                   type="number"
@@ -261,7 +261,7 @@ export default function ProductCard({ product, allProducts }: { product: Product
                   style={{ ...INPUT_STYLE, width: 90 }}
                 />
               </label>
-              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+              <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "var(--admin-muted)" }}>
                 {isBundle ? "Inventory (computed from components)" : "Inventory"}
                 <input
                   type="number"
@@ -274,11 +274,11 @@ export default function ProductCard({ product, allProducts }: { product: Product
                   style={{ ...INPUT_STYLE, width: 90, opacity: isBundle ? 0.5 : 1 }}
                 />
               </label>
-              <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "#9A8A70", paddingBottom: 10 }}>
+              <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "var(--admin-muted)", paddingBottom: 10 }}>
                 <input type="checkbox" name="active" defaultChecked={product.commerce?.active ?? true} />
                 For sale
               </label>
-              <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "#9A8A70", paddingBottom: 10 }}>
+              <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "var(--admin-muted)", paddingBottom: 10 }}>
                 <input type="checkbox" name="isBundle" checked={isBundle} onChange={(e) => setIsBundle(e.target.checked)} />
                 This is a bundle
               </label>
@@ -310,7 +310,7 @@ export default function ProductCard({ product, allProducts }: { product: Product
             <div>
               <label style={LABEL_STYLE}>Discount</label>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "flex-end" }}>
-                <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+                <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "var(--admin-muted)" }}>
                   Type
                   <select name="discountType" defaultValue={discount?.type ?? ""} style={{ ...INPUT_STYLE, width: 140 }}>
                     <option value="">No discount</option>
@@ -318,7 +318,7 @@ export default function ProductCard({ product, allProducts }: { product: Product
                     <option value="fixed">Dollar amount off</option>
                   </select>
                 </label>
-                <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+                <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "var(--admin-muted)" }}>
                   Value
                   <input
                     type="number"
@@ -330,11 +330,11 @@ export default function ProductCard({ product, allProducts }: { product: Product
                     style={{ ...INPUT_STYLE, width: 90 }}
                   />
                 </label>
-                <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+                <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "var(--admin-muted)" }}>
                   Starts
                   <input type="datetime-local" name="discountStartsAt" defaultValue={toDatetimeLocalValue(discount?.startsAt)} style={{ ...INPUT_STYLE, width: 190 }} />
                 </label>
-                <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+                <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "var(--admin-muted)" }}>
                   Ends (blank = runs until stopped)
                   <input type="datetime-local" name="discountEndsAt" defaultValue={toDatetimeLocalValue(discount?.endsAt)} style={{ ...INPUT_STYLE, width: 190 }} />
                 </label>

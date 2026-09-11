@@ -105,18 +105,14 @@ export default function GuideContent() {
     <div className="pg-root">
       <style>{`
         .pg-root {
-          --pg-bg: #0A0A08; --pg-surface: #141410; --pg-ink: #FAF7F0; --pg-muted: #9A8A70;
-          --pg-line: #D4920A33; --pg-accent: #D4920A; --pg-accent-strong: #E3A530; --pg-accent-tint: #2A2010;
-          --pg-good-fg: #7FCBA0; --pg-good-bg: #16301F; --pg-warn-fg: #B7A9F2; --pg-warn-bg: #241F38;
+          /* Aliases onto the shared admin theme tokens (src/app/globals.css)
+             so this page follows the same light/dark toggle — and the same
+             print override — as the rest of the console, not its own copy. */
+          --pg-bg: var(--admin-bg); --pg-surface: var(--admin-card); --pg-ink: var(--admin-ink); --pg-muted: var(--admin-muted);
+          --pg-line: var(--admin-border); --pg-accent: var(--admin-accent); --pg-accent-strong: var(--admin-accent); --pg-accent-tint: var(--admin-border-faint);
+          --pg-good-fg: var(--admin-good-fg); --pg-good-bg: var(--admin-good-bg); --pg-warn-fg: var(--admin-warn-fg); --pg-warn-bg: var(--admin-warn-bg);
           max-width: 1180px; margin: 40px auto 0; padding: 0 24px 80px;
           font-family: ${DM}, system-ui, sans-serif; color: var(--pg-ink);
-        }
-        @media print {
-          .pg-root {
-            --pg-bg: #ffffff; --pg-surface: #ffffff; --pg-ink: #17140D; --pg-muted: #555044;
-            --pg-line: #D8D2C2; --pg-accent: #8C5D07; --pg-accent-strong: #6E4A06; --pg-accent-tint: #F1E4C9;
-            --pg-good-fg: #2F6B4C; --pg-good-bg: #E3F0E6; --pg-warn-fg: #5C4FA0; --pg-warn-bg: #EBE7F7;
-          }
         }
         .pg-mobiletoc{ display:none; }
         .pg-shell{ display:flex; gap:44px; align-items:flex-start; }

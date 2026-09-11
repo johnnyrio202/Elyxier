@@ -2,8 +2,6 @@
 
 import { useRef, useState } from "react";
 
-const AMBER = "#D4920A";
-
 export default function PhotoDropzone({ label = "Drop photos here, or click to browse" }: { label?: string }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [fileNames, setFileNames] = useState<string[]>([]);
@@ -32,13 +30,13 @@ export default function PhotoDropzone({ label = "Drop photos here, or click to b
           updateFromFileList(e.dataTransfer.files);
         }}
         style={{
-          border: `1.5px dashed ${dragOver ? AMBER : `${AMBER}55`}`,
+          border: `1.5px dashed ${dragOver ? "var(--admin-accent)" : "var(--admin-border-strong)"}`,
           borderRadius: 6,
           padding: "18px 14px",
           textAlign: "center",
           cursor: "pointer",
-          background: dragOver ? `${AMBER}11` : "transparent",
-          color: "#9A8A70",
+          background: dragOver ? "var(--admin-border-faint)" : "transparent",
+          color: "var(--admin-muted)",
           fontSize: 12,
         }}
       >

@@ -8,8 +8,6 @@ import { saveHero, saveStory, saveCommunity, saveLiveSelling, saveMarquee, saveS
 import { AMBER, CARD, INPUT_STYLE, LABEL_STYLE, BTN_STYLE, HeadlineLinesFields, LabelHrefListFields, TextListFields, TitleBodyListFields } from "./FormFields";
 import { getLiveStatus } from "@/db/liveStatus";
 
-const BG = "#0A0A08";
-
 type Line = { text: string; emphasis: boolean };
 type LabelHref = { _key: string; label: string; href: string };
 
@@ -37,9 +35,9 @@ export const dynamic = "force-dynamic";
 
 function SectionCard({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
   return (
-    <section style={{ border: `1px solid ${AMBER}33`, borderRadius: 8, background: CARD, padding: 24, marginBottom: 32 }}>
+    <section style={{ border: "1px solid var(--admin-border)", borderRadius: 8, background: CARD, padding: 24, marginBottom: 32 }}>
       <h2 style={{ margin: "0 0 4px", fontSize: 18 }}>{title}</h2>
-      <p style={{ color: "#9A8A70", fontSize: 12, marginBottom: 20 }}>{description}</p>
+      <p style={{ color: "var(--admin-muted)", fontSize: 12, marginBottom: 20 }}>{description}</p>
       {children}
     </section>
   );
@@ -64,7 +62,7 @@ export default async function AdminContentPage() {
   const logoUrl = siteSettings?.logo ? urlFor(siteSettings.logo as SanityImageSource).width(200).url() : null;
 
   return (
-    <div style={{ minHeight: "100vh", background: BG, color: "#FAF7F0", fontFamily: "system-ui, sans-serif", padding: "48px 24px" }}>
+    <div style={{ minHeight: "100vh", background: "var(--admin-bg)", color: "var(--admin-ink)", fontFamily: "system-ui, sans-serif", padding: "48px 24px" }}>
       <div style={{ maxWidth: 860, margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
           <div>
@@ -73,8 +71,8 @@ export default async function AdminContentPage() {
             </p>
             <h1 style={{ fontSize: 28, margin: 0 }}>Site Content</h1>
           </div>
-          <form action={logoutAdmin}>
-            <button type="submit" style={{ background: "transparent", border: `1px solid ${AMBER}55`, color: "#9A8A70", borderRadius: 4, padding: "8px 16px", fontSize: 12, cursor: "pointer" }}>
+          <form action={logoutAdmin} className="print:hidden">
+            <button type="submit" style={{ background: "transparent", border: "1px solid var(--admin-border-strong)", color: "var(--admin-muted)", borderRadius: 4, padding: "8px 16px", fontSize: 12, cursor: "pointer" }}>
               Log Out
             </button>
           </form>
@@ -84,11 +82,11 @@ export default async function AdminContentPage() {
 
         <SectionCard title="Live Now" description="Flip these on right when you go live — shows a pulsing badge on the site linking to your stream.">
           <form action={saveLiveStatus} style={{ display: "flex", gap: 24, alignItems: "center" }}>
-            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#FAF7F0" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--admin-ink)" }}>
               <input type="checkbox" name="instagramLive" defaultChecked={liveStatus.instagramLive} />
               Live on Instagram
             </label>
-            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#FAF7F0" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--admin-ink)" }}>
               <input type="checkbox" name="tiktokLive" defaultChecked={liveStatus.tiktokLive} />
               Live on TikTok
             </label>
@@ -113,9 +111,9 @@ export default async function AdminContentPage() {
               <label style={LABEL_STYLE}>Background Image {heroBgUrl && "(current shown below — upload a new one to replace it)"}</label>
               {heroBgUrl && (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={heroBgUrl} alt="" style={{ width: 160, height: 90, objectFit: "cover", borderRadius: 4, border: `1px solid ${AMBER}33`, marginBottom: 8, display: "block" }} />
+                <img src={heroBgUrl} alt="" style={{ width: 160, height: 90, objectFit: "cover", borderRadius: 4, border: "1px solid var(--admin-border)", marginBottom: 8, display: "block" }} />
               )}
-              <input type="file" name="backgroundImage" accept="image/*" style={{ fontSize: 12, color: "#9A8A70" }} />
+              <input type="file" name="backgroundImage" accept="image/*" style={{ fontSize: 12, color: "var(--admin-muted)" }} />
             </div>
             <LabelHrefListFields items={heroCtas} prefix="cta" max={3} label="CTA Buttons (up to 3 — first renders filled, rest outlined)" hrefPlaceholder="Link (e.g. #shop)" />
             <button type="submit" style={{ ...BTN_STYLE, alignSelf: "flex-start" }}>
@@ -215,9 +213,9 @@ export default async function AdminContentPage() {
               <label style={LABEL_STYLE}>Logo {logoUrl && "(current shown below — upload a new one to replace it)"}</label>
               {logoUrl && (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={logoUrl} alt="" style={{ width: 100, height: 100, objectFit: "contain", borderRadius: 4, border: `1px solid ${AMBER}33`, marginBottom: 8, display: "block", background: "#000" }} />
+                <img src={logoUrl} alt="" style={{ width: 100, height: 100, objectFit: "contain", borderRadius: 4, border: "1px solid var(--admin-border)", marginBottom: 8, display: "block", background: "#000" }} />
               )}
-              <input type="file" name="logo" accept="image/*" style={{ fontSize: 12, color: "#9A8A70" }} />
+              <input type="file" name="logo" accept="image/*" style={{ fontSize: 12, color: "var(--admin-muted)" }} />
             </div>
             <div>
               <label style={LABEL_STYLE}>Footer Tagline</label>

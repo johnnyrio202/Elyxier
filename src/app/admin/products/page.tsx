@@ -7,22 +7,21 @@ import ProductCard from "./ProductCard";
 import NewProductForm from "./NewProductForm";
 import AdminNav from "../AdminNav";
 
-const AMBER = "#D4920A";
-const BG = "#0A0A08";
-const CARD = "#141410";
+const AMBER = "var(--admin-accent)";
+const CARD = "var(--admin-card)";
 const INPUT_STYLE: React.CSSProperties = {
   background: "transparent",
-  border: `1px solid ${AMBER}55`,
+  border: "1px solid var(--admin-border-strong)",
   borderRadius: 4,
-  color: "#FAF7F0",
+  color: "var(--admin-ink)",
   padding: "8px 10px",
   fontSize: 14,
   fontFamily: "inherit",
 };
-const LABEL_STYLE: React.CSSProperties = { display: "block", fontSize: 11, color: "#9A8A70", marginBottom: 4 };
+const LABEL_STYLE: React.CSSProperties = { display: "block", fontSize: 11, color: "var(--admin-muted)", marginBottom: 4 };
 const BTN_STYLE: React.CSSProperties = {
-  background: AMBER,
-  color: "#0A0A08",
+  background: "var(--admin-accent)",
+  color: "var(--admin-accent-ink)",
   border: "none",
   borderRadius: 4,
   padding: "10px 20px",
@@ -51,7 +50,7 @@ export default async function AdminProductsPage() {
     .map((p) => ({ slug: p.slug, name: nameBySlug.get(p.slug) ?? p.slug }));
 
   return (
-    <div style={{ minHeight: "100vh", background: BG, color: "#FAF7F0", fontFamily: "system-ui, sans-serif", padding: "48px 24px" }}>
+    <div style={{ minHeight: "100vh", background: "var(--admin-bg)", color: "var(--admin-ink)", fontFamily: "system-ui, sans-serif", padding: "48px 24px" }}>
       <div style={{ maxWidth: 860, margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 40 }}>
           <div>
@@ -59,16 +58,16 @@ export default async function AdminProductsPage() {
               Elyxier Admin
             </p>
             <h1 style={{ fontSize: 28, margin: 0 }}>Products</h1>
-            <p style={{ color: "#9A8A70", fontSize: 13, marginTop: 8, maxWidth: 560 }}>
+            <p style={{ color: "var(--admin-muted)", fontSize: 13, marginTop: 8, maxWidth: 560 }}>
               Create products, edit their name, description, and photos, and set price, inventory, and
               whether they&apos;re for sale — all from here. A product only appears on the live site once
               it has a photo and is marked for sale.
             </p>
           </div>
-          <form action={logoutAdmin}>
+          <form action={logoutAdmin} className="print:hidden">
             <button
               type="submit"
-              style={{ background: "transparent", border: `1px solid ${AMBER}55`, color: "#9A8A70", borderRadius: 4, padding: "8px 16px", fontSize: 12, cursor: "pointer" }}
+              style={{ background: "transparent", border: "1px solid var(--admin-border-strong)", color: "var(--admin-muted)", borderRadius: 4, padding: "8px 16px", fontSize: 12, cursor: "pointer" }}
             >
               Log Out
             </button>
@@ -77,17 +76,17 @@ export default async function AdminProductsPage() {
 
         <AdminNav active="products" />
 
-        <section style={{ border: `1px solid ${AMBER}33`, borderRadius: 8, background: CARD, padding: 24, marginBottom: 16 }}>
+        <section style={{ border: "1px solid var(--admin-border)", borderRadius: 8, background: CARD, padding: 24, marginBottom: 16 }}>
           <h2 style={{ margin: "0 0 4px", fontSize: 18 }}>Shipping</h2>
-          <p style={{ color: "#9A8A70", fontSize: 12, marginBottom: 16 }}>
+          <p style={{ color: "var(--admin-muted)", fontSize: 12, marginBottom: 16 }}>
             A flat fee added to every order at checkout. Optionally waive it above a subtotal threshold.
           </p>
           <form action={saveShippingSettings} style={{ display: "flex", gap: 16, alignItems: "flex-end", flexWrap: "wrap" }}>
-            <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+            <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "var(--admin-muted)" }}>
               Flat Rate (USD)
               <input type="number" name="flatRate" step="0.01" min="0" defaultValue={(shipping.flatRateCents / 100).toFixed(2)} required style={{ ...INPUT_STYLE, width: 100 }} />
             </label>
-            <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+            <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "var(--admin-muted)" }}>
               Free Shipping Over (USD, blank = never free)
               <input
                 type="number"

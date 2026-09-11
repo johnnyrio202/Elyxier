@@ -24,3 +24,67 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Admin console theme tokens — toggled via data-admin-theme on the
+   #admin-theme-root wrapper in src/app/admin/layout.tsx. Dark matches the
+   values every admin page originally shipped with; light is a new option. */
+[data-admin-theme="dark"] {
+  --admin-bg: #0A0A08;
+  --admin-card: #141410;
+  --admin-ink: #FAF7F0;
+  --admin-muted: #9A8A70;
+  --admin-accent: #D4920A;
+  --admin-accent-ink: #0A0A08;
+  --admin-border-faint: #D4920A11;
+  --admin-border-soft: #D4920A22;
+  --admin-border: #D4920A33;
+  --admin-border-strong: #D4920A55;
+  --admin-danger: #E09090;
+  --admin-danger-bg: #5A1F1F;
+  --admin-good-fg: #7FCBA0;
+  --admin-good-bg: #16301F;
+  --admin-warn-fg: #B7A9F2;
+  --admin-warn-bg: #241F38;
+}
+[data-admin-theme="light"] {
+  --admin-bg: #FAF8F4;
+  --admin-card: #FFFFFF;
+  --admin-ink: #1D1A15;
+  --admin-muted: #6B6357;
+  --admin-accent: #B5790A;
+  --admin-accent-ink: #0A0A08;
+  --admin-border-faint: #B5790A11;
+  --admin-border-soft: #B5790A22;
+  --admin-border: #B5790A33;
+  --admin-border-strong: #B5790A55;
+  --admin-danger: #B33A3A;
+  --admin-danger-bg: #F7DEDE;
+  --admin-good-fg: #2F6B4C;
+  --admin-good-bg: #E3F0E6;
+  --admin-warn-fg: #5C4FA0;
+  --admin-warn-bg: #EBE7F7;
+}
+
+/* Printing a dark admin page wastes ink and, worse, leaves near-invisible
+   light text on unprinted white paper — force the light palette for print
+   regardless of which theme is active on screen. */
+@media print {
+  [data-admin-theme] {
+    --admin-bg: #ffffff;
+    --admin-card: #ffffff;
+    --admin-ink: #17140D;
+    --admin-muted: #555044;
+    --admin-accent: #8C5D07;
+    --admin-accent-ink: #17140D;
+    --admin-border-faint: #D8D2C211;
+    --admin-border-soft: #D8D2C2;
+    --admin-border: #D8D2C2;
+    --admin-border-strong: #C7BFA8;
+    --admin-danger: #B33A3A;
+    --admin-danger-bg: #F7DEDE;
+    --admin-good-fg: #2F6B4C;
+    --admin-good-bg: #E3F0E6;
+    --admin-warn-fg: #5C4FA0;
+    --admin-warn-bg: #EBE7F7;
+  }
+}
