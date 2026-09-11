@@ -108,10 +108,9 @@ async function run() {
     _id: "siteSettings",
     _type: "siteSettings",
     navLinks: [
-      key({ label: "Shop", href: "#" }),
+      key({ label: "Shop", href: "#shop" }),
       key({ label: "About", href: "#about" }),
-      key({ label: "Live", href: "#" }),
-      key({ label: "Contact", href: "#" }),
+      key({ label: "Contact", href: "#contact" }),
     ],
     logo: imageField(logoAsset._id),
     footerTagline: "Luxury Body Butters & Oils · Handcrafted in Las Vegas",

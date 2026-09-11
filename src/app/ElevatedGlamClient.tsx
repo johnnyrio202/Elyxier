@@ -91,9 +91,8 @@ const DEFAULT_TESTIMONIALS = [
 ];
 
 const DEFAULT_NAV_LINKS = [
-  { label: "Shop", href: "/" },
+  { label: "Shop", href: "#shop" },
   { label: "About", href: "#about" },
-  { label: "Live", href: "#" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -505,7 +504,7 @@ export default function ElevatedGlam({
       </div>
 
       {/* Products */}
-      <section style={{ padding: isMobile ? "64px 16px" : "120px 32px", background: t.BG }}>
+      <section id="shop" style={{ padding: isMobile ? "64px 16px" : "120px 32px", background: t.BG }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 72 }}>
             <p style={{ color: t.AMBER, fontSize: 11, letterSpacing: "0.45em", textTransform: "uppercase", marginBottom: 16, fontFamily: DM, fontWeight: 600 }}>{productsEyebrow}</p>
