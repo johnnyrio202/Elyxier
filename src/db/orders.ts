@@ -1,6 +1,7 @@
 import "server-only";
 import { getSql } from "./client";
 import { decrementInventory } from "./products";
+import { getShippingSettings, computeShippingCents } from "./shipping";
 
 export type OrderItemInput = { slug: string; name: string; unitPriceCents: number; quantity: number };
 
@@ -25,6 +26,7 @@ export type Order = {
   customerPhone: string | null;
   shippingAddress: ShippingAddress | null;
   subtotalCents: number;
+  shippingCents: number;
   totalCents: number;
   currency: string;
   paymentProvider: "stripe" | "paypal" | null;
@@ -36,7 +38,7 @@ export type OrderItem = { productSlug: string; productName: string; unitPriceCen
 
 const ORDER_COLUMNS = `
   id, payment_status, fulfillment_status, customer_id, customer_name, customer_email, customer_phone,
-  shipping_address, subtotal_cents, total_cents, currency, payment_provider, provider_reference, shippo_order_id
+  shipping_address, subtotal_cents, shipping_cents, total_cents, currency, payment_provider, provider_reference, shippo_order_id
 `;
 
 export async function createOrder(input: {
@@ -47,10 +49,13 @@ export async function createOrder(input: {
 }): Promise<Order> {
   const sql = getSql();
   const subtotalCents = input.items.reduce((sum, i) => sum + i.unitPriceCents * i.quantity, 0);
+  const shippingSettings = await getShippingSettings();
+  const shippingCents = computeShippingCents(subtotalCents, shippingSettings);
+  const totalCents = subtotalCents + shippingCents;
 
   const [orderRow] = (await sql.query(
-    `INSERT INTO orders (customer_id, customer_name, customer_email, customer_phone, subtotal_cents, total_cents, source)
-     VALUES ($1, $2, $3, $4, $5, $6, $7)
+    `INSERT INTO orders (customer_id, customer_name, customer_email, customer_phone, subtotal_cents, shipping_cents, total_cents, source)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
      RETURNING ${ORDER_COLUMNS}`,
     [
       input.customerId ?? null,
@@ -58,7 +63,8 @@ export async function createOrder(input: {
       input.customer?.email ?? null,
       input.customer?.phone ?? null,
       subtotalCents,
-      subtotalCents,
+      shippingCents,
+      totalCents,
       input.source ?? null,
     ]
   )) as Record<string, unknown>[];
@@ -176,6 +182,7 @@ function mapOrder(row: Record<string, unknown>): Order {
     customerPhone: (row.customer_phone as string | null) ?? null,
     shippingAddress: (row.shipping_address as ShippingAddress | null) ?? null,
     subtotalCents: Number(row.subtotal_cents),
+    shippingCents: Number(row.shipping_cents),
     totalCents: Number(row.total_cents),
     currency: row.currency as string,
     paymentProvider: (row.payment_provider as Order["paymentProvider"]) ?? null,

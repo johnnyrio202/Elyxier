@@ -51,6 +51,18 @@ export async function POST(req: NextRequest) {
     // read back in the webhook once payment completes.
     shipping_address_collection: { allowed_countries: ["US"] },
     phone_number_collection: { enabled: true },
+    // A fixed rate shown as its own line on Stripe's page — order.shippingCents
+    // was already computed once at order-creation time (src/db/orders.ts), so
+    // this always matches what's on the order rather than being recalculated.
+    shipping_options: [
+      {
+        shipping_rate_data: {
+          type: "fixed_amount",
+          fixed_amount: { amount: order.shippingCents, currency: order.currency },
+          display_name: order.shippingCents === 0 ? "Free shipping" : "Shipping",
+        },
+      },
+    ],
     success_url: body.successUrl ?? `${origin}/order/success?orderId=${order.id}`,
     cancel_url: body.cancelUrl ?? `${origin}/order/canceled?orderId=${order.id}`,
   });

@@ -1,13 +1,37 @@
 import { productsQuery, type SanityProductContent } from "@/sanity/queries";
 import { getWriteClient } from "@/sanity/writeClient";
 import { listCommerceProducts, type CommerceProduct } from "@/db/products";
-import { logoutAdmin } from "./actions";
+import { getShippingSettings } from "@/db/shipping";
+import { logoutAdmin, saveShippingSettings } from "./actions";
 import ProductCard from "./ProductCard";
 import NewProductForm from "./NewProductForm";
 import AdminNav from "../AdminNav";
 
 const AMBER = "#D4920A";
 const BG = "#0A0A08";
+const CARD = "#141410";
+const INPUT_STYLE: React.CSSProperties = {
+  background: "transparent",
+  border: `1px solid ${AMBER}55`,
+  borderRadius: 4,
+  color: "#FAF7F0",
+  padding: "8px 10px",
+  fontSize: 14,
+  fontFamily: "inherit",
+};
+const LABEL_STYLE: React.CSSProperties = { display: "block", fontSize: 11, color: "#9A8A70", marginBottom: 4 };
+const BTN_STYLE: React.CSSProperties = {
+  background: AMBER,
+  color: "#0A0A08",
+  border: "none",
+  borderRadius: 4,
+  padding: "10px 20px",
+  fontSize: 12,
+  fontWeight: 700,
+  letterSpacing: "0.06em",
+  textTransform: "uppercase",
+  cursor: "pointer",
+};
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +43,7 @@ async function getFreshProductsContent(): Promise<SanityProductContent[]> {
 }
 
 export default async function AdminProductsPage() {
-  const [content, commerce] = await Promise.all([getFreshProductsContent(), listCommerceProducts()]);
+  const [content, commerce, shipping] = await Promise.all([getFreshProductsContent(), listCommerceProducts(), getShippingSettings()]);
   const commerceBySlug = new Map<string, CommerceProduct>(commerce.map((p) => [p.slug, p]));
   const nameBySlug = new Map(content.map((c) => [c.slug, c.name]));
   const allProducts = commerce
@@ -52,6 +76,33 @@ export default async function AdminProductsPage() {
         </div>
 
         <AdminNav active="products" />
+
+        <section style={{ border: `1px solid ${AMBER}33`, borderRadius: 8, background: CARD, padding: 24, marginBottom: 16 }}>
+          <h2 style={{ margin: "0 0 4px", fontSize: 18 }}>Shipping</h2>
+          <p style={{ color: "#9A8A70", fontSize: 12, marginBottom: 16 }}>
+            A flat fee added to every order at checkout. Optionally waive it above a subtotal threshold.
+          </p>
+          <form action={saveShippingSettings} style={{ display: "flex", gap: 16, alignItems: "flex-end", flexWrap: "wrap" }}>
+            <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+              Flat Rate (USD)
+              <input type="number" name="flatRate" step="0.01" min="0" defaultValue={(shipping.flatRateCents / 100).toFixed(2)} required style={{ ...INPUT_STYLE, width: 100 }} />
+            </label>
+            <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#9A8A70" }}>
+              Free Shipping Over (USD, blank = never free)
+              <input
+                type="number"
+                name="freeShippingThreshold"
+                step="0.01"
+                min="0"
+                defaultValue={shipping.freeShippingThresholdCents != null ? (shipping.freeShippingThresholdCents / 100).toFixed(2) : ""}
+                style={{ ...INPUT_STYLE, width: 160 }}
+              />
+            </label>
+            <button type="submit" style={BTN_STYLE}>
+              Save Shipping
+            </button>
+          </form>
+        </section>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <NewProductForm allProducts={allProducts} />

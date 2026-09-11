@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { randomUUID } from "crypto";
 import { ADMIN_COOKIE, isValidAdminToken } from "@/lib/adminAuth";
 import { upsertProduct, setBundleItems, type Discount, type BundleItem } from "@/db/products";
+import { updateShippingSettings } from "@/db/shipping";
 import { PRODUCTS_TAG } from "@/sanity/queries";
 import { getWriteClient } from "@/sanity/writeClient";
 import { slugify } from "@/lib/slugify";
@@ -88,6 +89,26 @@ function readBundleItems(formData: FormData): BundleItem[] {
     items.push({ slug, quantity: Math.round(quantity) });
   }
   return items;
+}
+
+export async function saveShippingSettings(formData: FormData): Promise<void> {
+  await requireAdmin();
+
+  const flatRateDollars = Number(formData.get("flatRate"));
+  if (!Number.isFinite(flatRateDollars) || flatRateDollars < 0) throw new Error("Invalid flat rate");
+
+  const thresholdRaw = String(formData.get("freeShippingThreshold") ?? "").trim();
+  const freeShippingThresholdCents = thresholdRaw ? Math.round(Number(thresholdRaw) * 100) : null;
+  if (thresholdRaw && (!Number.isFinite(freeShippingThresholdCents) || (freeShippingThresholdCents ?? 0) <= 0)) {
+    throw new Error("Invalid free shipping threshold");
+  }
+
+  await updateShippingSettings({
+    flatRateCents: Math.round(flatRateDollars * 100),
+    freeShippingThresholdCents,
+  });
+
+  refreshCatalog();
 }
 
 export async function saveCommerceProduct(formData: FormData): Promise<void> {

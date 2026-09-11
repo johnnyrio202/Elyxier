@@ -73,6 +73,7 @@ CREATE TABLE IF NOT EXISTS orders (
   customer_phone TEXT,
   shipping_address JSONB,
   subtotal_cents INTEGER NOT NULL,
+  shipping_cents INTEGER NOT NULL DEFAULT 0,
   total_cents INTEGER NOT NULL,
   currency TEXT NOT NULL DEFAULT 'usd',
   payment_provider TEXT CHECK (payment_provider IN ('stripe', 'paypal')),
@@ -93,6 +94,16 @@ ALTER TABLE orders ADD COLUMN IF NOT EXISTS fulfillment_status TEXT NOT NULL DEF
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS shipping_address JSONB;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS shippo_order_id TEXT;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS customer_id UUID REFERENCES customers(id);
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS shipping_cents INTEGER NOT NULL DEFAULT 0;
+
+-- Single-row settings table (the boolean PK + CHECK enforces exactly one row).
+-- free_shipping_threshold_cents NULL means no free-shipping threshold applies.
+CREATE TABLE IF NOT EXISTS shipping_settings (
+  id BOOLEAN PRIMARY KEY DEFAULT true CHECK (id),
+  flat_rate_cents INTEGER NOT NULL DEFAULT 500 CHECK (flat_rate_cents >= 0),
+  free_shipping_threshold_cents INTEGER CHECK (free_shipping_threshold_cents > 0)
+);
+INSERT INTO shipping_settings (id) VALUES (true) ON CONFLICT (id) DO NOTHING;
 
 CREATE INDEX IF NOT EXISTS orders_provider_reference_idx ON orders (provider_reference);
 CREATE INDEX IF NOT EXISTS orders_shippo_order_id_idx ON orders (shippo_order_id);

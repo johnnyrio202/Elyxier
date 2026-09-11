@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import type { CatalogProduct } from "@/lib/catalog";
 import type { SiteContent } from "@/sanity/queries";
+import { computeShippingCents, type ShippingSettings } from "@/lib/shippingCalc";
+import PayPalCheckoutButton from "./PayPalCheckoutButton";
 import { urlFor } from "@/sanity/image";
 import type { SanityImageSource } from "@sanity/image-url";
 import { UserButton, useUser } from "@clerk/nextjs";
@@ -129,7 +131,7 @@ function HeadlineLines({ lines, amberColor, textColor }: { lines: { text: string
   );
 }
 
-export default function ElevatedGlam({ products, siteContent }: { products: CatalogProduct[]; siteContent: SiteContent }) {
+export default function ElevatedGlam({ products, siteContent, shipping }: { products: CatalogProduct[]; siteContent: SiteContent; shipping: ShippingSettings }) {
   const { isSignedIn, isLoaded } = useUser();
   const [dark, setDark] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
@@ -178,6 +180,8 @@ export default function ElevatedGlam({ products, siteContent }: { products: Cata
     .filter((i): i is { product: CatalogProduct; quantity: number } => !!i.product);
   const cartCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
   const cartTotalCents = cartItems.reduce((sum, i) => sum + i.product.priceCents * i.quantity, 0);
+  const shippingCents = computeShippingCents(cartTotalCents, shipping);
+  const orderTotalCents = cartTotalCents + shippingCents;
 
   async function checkout() {
     setCheckoutState("loading");
@@ -713,9 +717,19 @@ export default function ElevatedGlam({ products, siteContent }: { products: Cata
                     </div>
                   ))}
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
-                  <span style={{ fontFamily: BEBAS, fontSize: 18, color: t.TEXT }}>TOTAL</span>
-                  <span style={{ fontFamily: BEBAS, fontSize: 18, color: t.AMBER }}>${(cartTotalCents / 100).toFixed(2)}</span>
+                <div style={{ display: "flex", flexDirection: "column" as const, gap: 6, marginBottom: 16 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <span style={{ fontFamily: DM, fontSize: 13, color: t.MUTED }}>Subtotal</span>
+                    <span style={{ fontFamily: DM, fontSize: 13, color: t.TEXT }}>${(cartTotalCents / 100).toFixed(2)}</span>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <span style={{ fontFamily: DM, fontSize: 13, color: t.MUTED }}>Shipping</span>
+                    <span style={{ fontFamily: DM, fontSize: 13, color: t.TEXT }}>{shippingCents === 0 ? "FREE" : `$${(shippingCents / 100).toFixed(2)}`}</span>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4 }}>
+                    <span style={{ fontFamily: BEBAS, fontSize: 18, color: t.TEXT }}>TOTAL</span>
+                    <span style={{ fontFamily: BEBAS, fontSize: 18, color: t.AMBER }}>${(orderTotalCents / 100).toFixed(2)}</span>
+                  </div>
                 </div>
                 <button
                   onClick={checkout}
@@ -729,6 +743,16 @@ export default function ElevatedGlam({ products, siteContent }: { products: Cata
                   {checkoutState === "loading" ? "REDIRECTING..." : "CHECKOUT WITH STRIPE"}
                 </button>
                 {checkoutState === "error" && <p style={{ color: "#D45A5A", fontSize: 12, fontFamily: DM, marginTop: 8 }}>Checkout failed — please try again.</p>}
+                {process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID && (
+                  <div style={{ marginTop: 12 }}>
+                    <PayPalCheckoutButton
+                      clientId={process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}
+                      source="design-d"
+                      getOrderItems={() => cartItems.map((i) => ({ slug: i.product.slug, quantity: i.quantity }))}
+                      onError={() => setCheckoutState("error")}
+                    />
+                  </div>
+                )}
                 <p style={{ color: `${t.MUTED}88`, fontSize: 11, marginTop: 12, fontFamily: DM }}>Test mode — no real charge will be made.</p>
               </>
             )}
