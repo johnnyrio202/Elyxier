@@ -1,6 +1,6 @@
 const AMBER = "#D4920A";
 
-export default function AdminNav({ active }: { active: "products" | "content" }) {
+export default function AdminNav({ active }: { active: "products" | "content" | "guide" }) {
   const linkStyle = (isActive: boolean): React.CSSProperties => ({
     color: isActive ? AMBER : "#9A8A70",
     textDecoration: "none",
@@ -12,12 +12,15 @@ export default function AdminNav({ active }: { active: "products" | "content" })
   });
 
   return (
-    <nav style={{ display: "flex", gap: 24, marginBottom: 32, borderBottom: `1px solid ${AMBER}22` }}>
+    <nav className="print:hidden" style={{ display: "flex", gap: 24, marginBottom: 32, borderBottom: `1px solid ${AMBER}22` }}>
       <a href="/admin/products" style={linkStyle(active === "products")}>
         Products
       </a>
       <a href="/admin/content" style={linkStyle(active === "content")}>
         Site Content
+      </a>
+      <a href="/admin/guide" style={linkStyle(active === "guide")}>
+        Platform Guide
       </a>
     </nav>
   );
