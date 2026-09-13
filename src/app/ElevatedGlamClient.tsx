@@ -150,7 +150,7 @@ export default function ElevatedGlam({
   const [activePhotoIdx, setActivePhotoIdx] = useState<{ [key: string]: number }>({});
   const [cart, setCart] = useState<{ [slug: string]: number }>({});
   const [cartOpen, setCartOpen] = useState(false);
-  const [checkoutState, setCheckoutState] = useState<"idle" | "loading" | "error">("idle");
+  const [checkoutState, setCheckoutState] = useState<"idle" | "error">("idle");
   const [lead, setLead] = useState({ name: "", email: "", phone: "" });
   const [leadState, setLeadState] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [contact, setContact] = useState({ name: "", email: "", message: "" });
@@ -195,34 +195,6 @@ export default function ElevatedGlam({
   const cartTotalCents = cartItems.reduce((sum, i) => sum + i.product.priceCents * i.quantity, 0);
   const shippingCents = computeShippingCents(cartTotalCents, shipping);
   const orderTotalCents = cartTotalCents + shippingCents;
-
-  async function checkout() {
-    setCheckoutState("loading");
-    try {
-      const orderRes = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          items: cartItems.map(i => ({ slug: i.product.slug, quantity: i.quantity })),
-          source: "design-d",
-        }),
-      });
-      const orderJson = await orderRes.json();
-      if (!orderRes.ok) throw new Error(orderJson.error ?? "Could not create order");
-
-      const checkoutRes = await fetch("/api/checkout/stripe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderId: orderJson.order.id }),
-      });
-      const checkoutJson = await checkoutRes.json();
-      if (!checkoutRes.ok) throw new Error(checkoutJson.error ?? "Could not start checkout");
-
-      window.location.href = checkoutJson.url;
-    } catch {
-      setCheckoutState("error");
-    }
-  }
 
   async function joinCircle() {
     if (!lead.email) return;
@@ -835,29 +807,16 @@ export default function ElevatedGlam({
                     <span style={{ fontFamily: BEBAS, fontSize: 18, color: t.AMBER }}>${(orderTotalCents / 100).toFixed(2)}</span>
                   </div>
                 </div>
-                <button
-                  onClick={checkout}
-                  disabled={checkoutState === "loading"}
-                  style={{
-                    background: `linear-gradient(135deg, ${t.AMBER}, ${dark ? "#E8A820" : "#D4920A"})`,
-                    color: "#0A0A08", border: "none", padding: "16px 0", fontFamily: BEBAS, fontSize: 18,
-                    letterSpacing: "0.15em", cursor: "pointer", opacity: checkoutState === "loading" ? 0.6 : 1,
-                  }}
-                >
-                  {checkoutState === "loading" ? "REDIRECTING..." : "CHECKOUT WITH STRIPE"}
-                </button>
-                {checkoutState === "error" && <p style={{ color: "#D45A5A", fontSize: 12, fontFamily: DM, marginTop: 8 }}>Checkout failed — please try again.</p>}
                 {process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID && (
-                  <div style={{ marginTop: 12 }}>
-                    <PayPalCheckoutButton
-                      clientId={process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}
-                      source="design-d"
-                      getOrderItems={() => cartItems.map((i) => ({ slug: i.product.slug, quantity: i.quantity }))}
-                      onError={() => setCheckoutState("error")}
-                    />
-                  </div>
+                  <PayPalCheckoutButton
+                    clientId={process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}
+                    source="design-d"
+                    getOrderItems={() => cartItems.map((i) => ({ slug: i.product.slug, quantity: i.quantity }))}
+                    onError={() => setCheckoutState("error")}
+                  />
                 )}
-                <p style={{ color: t.MUTED, fontSize: 12, marginTop: 12, fontFamily: DM }}>Test mode — no real charge will be made.</p>
+                {checkoutState === "error" && <p style={{ color: "#D45A5A", fontSize: 12, fontFamily: DM, marginTop: 8 }}>Checkout failed — please try again.</p>}
+                <p style={{ color: t.MUTED, fontSize: 12, marginTop: 12, fontFamily: DM }}>Secure checkout powered by PayPal.</p>
               </>
             )}
           </div>
