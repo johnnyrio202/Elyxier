@@ -19,6 +19,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "items is required" }, { status: 400 });
   }
 
+  // Guest checkout is intentionally disabled — every order needs an account.
+  // Enforced here, not just hidden client-side, since this is the actual
+  // order-creation boundary.
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: "Sign in required to check out" }, { status: 401 });
+  }
+
   // Prices and names always come from the catalog, never the client — a
   // request can only say which slugs and quantities it wants.
   const catalog = await getCatalog();
@@ -52,19 +60,12 @@ export async function POST(req: NextRequest) {
     discount = { code: found.code, cents: computeDiscountCents(subtotalCents, found) };
   }
 
-  // Signed-in customers get their order linked to their account; guest
-  // checkout (no session) is unaffected.
-  const { userId } = await auth();
-  let customerId: string | undefined;
-  if (userId) {
-    const user = await currentUser();
-    const customer = await getOrCreateCustomerByClerkId(userId, {
-      email: user?.primaryEmailAddress?.emailAddress ?? null,
-      name: user?.fullName ?? null,
-    });
-    customerId = customer.id;
-  }
+  const user = await currentUser();
+  const customer = await getOrCreateCustomerByClerkId(userId, {
+    email: user?.primaryEmailAddress?.emailAddress ?? null,
+    name: user?.fullName ?? null,
+  });
 
-  const order = await createOrder({ items: orderItems, customer: body.customer, customerId, source: body.source, discount });
+  const order = await createOrder({ items: orderItems, customer: body.customer, customerId: customer.id, source: body.source, discount });
   return NextResponse.json({ order });
 }

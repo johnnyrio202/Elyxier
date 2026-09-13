@@ -6,7 +6,7 @@ import { computeShippingCents, type ShippingSettings } from "@/lib/shippingCalc"
 import PayPalCheckoutButton from "./PayPalCheckoutButton";
 import { urlFor } from "@/sanity/image";
 import type { SanityImageSource } from "@sanity/image-url";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { UserButton, useUser, useClerk } from "@clerk/nextjs";
 
 const BEBAS = "var(--font-bebas), Impact, sans-serif";
 const DM = "var(--font-dm-sans), system-ui, sans-serif";
@@ -144,6 +144,7 @@ export default function ElevatedGlam({
   liveStatus: { instagramLive: boolean; tiktokLive: boolean };
 }) {
   const { isSignedIn, isLoaded } = useUser();
+  const clerk = useClerk();
   const [dark, setDark] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [flippedCard, setFlippedCard] = useState<string | null>(null);
@@ -871,17 +872,41 @@ export default function ElevatedGlam({
                     <span style={{ fontFamily: BEBAS, fontSize: 18, color: t.AMBER }}>${(orderTotalCents / 100).toFixed(2)}</span>
                   </div>
                 </div>
-                {process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID && (
-                  <PayPalCheckoutButton
-                    clientId={process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}
-                    source="design-d"
-                    getOrderItems={() => cartItems.map((i) => ({ slug: i.product.slug, quantity: i.quantity }))}
-                    discountCode={appliedDiscount?.code}
-                    onError={() => setCheckoutState("error")}
-                  />
+                {!isLoaded ? null : isSignedIn ? (
+                  <>
+                    {process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID && (
+                      <PayPalCheckoutButton
+                        clientId={process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}
+                        source="design-d"
+                        getOrderItems={() => cartItems.map((i) => ({ slug: i.product.slug, quantity: i.quantity }))}
+                        discountCode={appliedDiscount?.code}
+                        onError={() => setCheckoutState("error")}
+                      />
+                    )}
+                    {checkoutState === "error" && <p style={{ color: "#D45A5A", fontSize: 12, fontFamily: DM, marginTop: 8 }}>Checkout failed — please try again.</p>}
+                    <p style={{ color: t.MUTED, fontSize: 12, marginTop: 12, fontFamily: DM }}>Secure checkout powered by PayPal.</p>
+                  </>
+                ) : (
+                  <div style={{ textAlign: "center" as const, padding: "12px 0" }}>
+                    <p style={{ color: t.MUTED, fontSize: 13, fontFamily: DM, marginBottom: 14 }}>
+                      Create an account or sign in to check out.
+                    </p>
+                    <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" as const }}>
+                      <button
+                        onClick={() => clerk.openSignIn()}
+                        style={{ background: t.AMBER, color: "#0A0A08", border: "none", padding: "12px 28px", fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.1em", cursor: "pointer", textTransform: "uppercase" as const }}
+                      >
+                        Sign In
+                      </button>
+                      <button
+                        onClick={() => clerk.openSignUp()}
+                        style={{ background: "transparent", color: t.AMBER, border: `2px solid ${t.AMBER}`, padding: "12px 28px", fontFamily: BEBAS, fontSize: 14, letterSpacing: "0.1em", cursor: "pointer", textTransform: "uppercase" as const }}
+                      >
+                        Create Account
+                      </button>
+                    </div>
+                  </div>
                 )}
-                {checkoutState === "error" && <p style={{ color: "#D45A5A", fontSize: 12, fontFamily: DM, marginTop: 8 }}>Checkout failed — please try again.</p>}
-                <p style={{ color: t.MUTED, fontSize: 12, marginTop: 12, fontFamily: DM }}>Secure checkout powered by PayPal.</p>
               </>
             )}
           </div>
