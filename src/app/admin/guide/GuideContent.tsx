@@ -9,10 +9,15 @@ const MONO = "var(--font-geist-mono)";
 // Bump these whenever this guide's content changes materially, and add a
 // row to CHANGELOG below — this is the only record of what the guide said
 // at a given point, since it isn't tracked anywhere a client would see.
-export const GUIDE_VERSION = "1.1";
+export const GUIDE_VERSION = "1.2";
 export const GUIDE_UPDATED = "September 12, 2026";
 
 const CHANGELOG: { version: string; date: string; summary: string }[] = [
+  {
+    version: "1.2",
+    date: "September 12, 2026",
+    summary: "Added Sales Reports to the Admin Console section — revenue, top products, and an order-level CSV export.",
+  },
   {
     version: "1.1",
     date: "September 12, 2026",
@@ -292,10 +297,11 @@ export default function GuideContent() {
           <section id="admin" className="pg-section">
             <Eyebrow>03 — Day to Day</Eyebrow>
             <h2>The Admin Console</h2>
-            <p className="pg-lede">Everything below lives in the Products and Site Content tabs above. No coding, no waiting on a developer for routine updates.</p>
+            <p className="pg-lede">Everything below lives in the tabs above — Products, Sales Reports, Site Content, Leads, and Discounts. No coding, no waiting on a developer for routine updates.</p>
 
             <div className="pg-cards">
               <Card icon="$" title="Products, pricing &amp; stock">Add a new scent, update a price, adjust inventory, or flip the &quot;For sale&quot; switch to pull something off the shelf without deleting it.</Card>
+              <Card icon="↗" title="Sales reports">Revenue and order counts (all-time and last 30 days), your best-selling products, and every order with a CSV export — pulled from your own database, alongside whatever PayPal reports separately.</Card>
               <Card icon="%" title="Sale pricing">Percentage or dollar-off a single product, with an optional start and end date. Leave the end date blank and it runs until you turn it off.</Card>
               <Card icon="#" title="Discount codes">Cart-wide codes customers type in at checkout — percent or dollar-off, with an optional expiration date or a cap on total uses. No codes have been issued yet; create one anytime under the Discounts tab.</Card>
               <Card icon="B" title="Bundles">Package two or more products as a single set with its own price. Stock is calculated automatically from whatever&apos;s inside it.</Card>

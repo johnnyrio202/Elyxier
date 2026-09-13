@@ -1,4 +1,4 @@
-export default function AdminNav({ active }: { active: "products" | "content" | "leads" | "discounts" | "guide" }) {
+export default function AdminNav({ active }: { active: "products" | "content" | "leads" | "discounts" | "reports" | "guide" }) {
   const linkStyle = (isActive: boolean): React.CSSProperties => ({
     color: isActive ? "var(--admin-accent)" : "var(--admin-muted)",
     textDecoration: "none",
@@ -16,6 +16,9 @@ export default function AdminNav({ active }: { active: "products" | "content" | 
       </a>
       <a href="/admin/products" style={linkStyle(active === "products")}>
         Products
+      </a>
+      <a href="/admin/reports" style={linkStyle(active === "reports")}>
+        Sales Reports
       </a>
       <a href="/admin/content" style={linkStyle(active === "content")}>
         Site Content
