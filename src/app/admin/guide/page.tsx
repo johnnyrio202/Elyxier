@@ -1,6 +1,6 @@
 import { logoutAdmin } from "../products/actions";
 import AdminNav from "../AdminNav";
-import GuideContent from "./GuideContent";
+import GuideContent, { GUIDE_VERSION, GUIDE_UPDATED } from "./GuideContent";
 
 export default function AdminGuidePage() {
   return (
@@ -11,7 +11,21 @@ export default function AdminGuidePage() {
             <p style={{ color: "var(--admin-accent)", fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: 8 }}>
               Elyxier Admin
             </p>
-            <h1 style={{ fontSize: 28, margin: 0 }}>Platform Guide</h1>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+              <h1 style={{ fontSize: 28, margin: 0 }}>Platform Guide</h1>
+              <span
+                style={{
+                  fontFamily: "var(--font-geist-mono)",
+                  fontSize: 11,
+                  color: "var(--admin-muted)",
+                  border: "1px solid var(--admin-border-strong)",
+                  borderRadius: 100,
+                  padding: "3px 10px",
+                }}
+              >
+                v{GUIDE_VERSION} · Updated {GUIDE_UPDATED}
+              </span>
+            </div>
             <p style={{ color: "var(--admin-muted)", fontSize: 13, marginTop: 8, maxWidth: 560 }}>
               A plain-language map of how the site is built — where to log in, what each tool does, and
               what&apos;s left before the store can take real orders. Use your browser&apos;s Print

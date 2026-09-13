@@ -11,6 +11,9 @@ export default function AdminNav({ active }: { active: "products" | "content" | 
 
   return (
     <nav className="print:hidden" style={{ display: "flex", gap: 24, marginBottom: 32, borderBottom: "1px solid var(--admin-border-soft)" }}>
+      <a href="/admin/guide" style={linkStyle(active === "guide")}>
+        Platform Guide
+      </a>
       <a href="/admin/products" style={linkStyle(active === "products")}>
         Products
       </a>
@@ -22,9 +25,6 @@ export default function AdminNav({ active }: { active: "products" | "content" | 
       </a>
       <a href="/admin/discounts" style={linkStyle(active === "discounts")}>
         Discounts
-      </a>
-      <a href="/admin/guide" style={linkStyle(active === "guide")}>
-        Platform Guide
       </a>
     </nav>
   );

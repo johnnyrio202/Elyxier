@@ -6,6 +6,25 @@ const BEBAS = "var(--font-bebas)";
 const DM = "var(--font-dm-sans)";
 const MONO = "var(--font-geist-mono)";
 
+// Bump these whenever this guide's content changes materially, and add a
+// row to CHANGELOG below — this is the only record of what the guide said
+// at a given point, since it isn't tracked anywhere a client would see.
+export const GUIDE_VERSION = "1.1";
+export const GUIDE_UPDATED = "September 12, 2026";
+
+const CHANGELOG: { version: string; date: string; summary: string }[] = [
+  {
+    version: "1.1",
+    date: "September 12, 2026",
+    summary: "PayPal is live and processing real payments. Added Discount Codes and Leads to the Admin Console section.",
+  },
+  {
+    version: "1.0",
+    date: "September 2026",
+    summary: "Initial guide.",
+  },
+];
+
 const SECTIONS = [
   { id: "overview", label: "Overview" },
   { id: "access", label: "Access" },
@@ -277,10 +296,12 @@ export default function GuideContent() {
 
             <div className="pg-cards">
               <Card icon="$" title="Products, pricing &amp; stock">Add a new scent, update a price, adjust inventory, or flip the &quot;For sale&quot; switch to pull something off the shelf without deleting it.</Card>
-              <Card icon="%" title="Discounts">Percentage or dollar-off, with an optional start and end date. Leave the end date blank and it runs until you turn it off.</Card>
+              <Card icon="%" title="Sale pricing">Percentage or dollar-off a single product, with an optional start and end date. Leave the end date blank and it runs until you turn it off.</Card>
+              <Card icon="#" title="Discount codes">Cart-wide codes customers type in at checkout — percent or dollar-off, with an optional expiration date or a cap on total uses. No codes have been issued yet; create one anytime under the Discounts tab.</Card>
               <Card icon="B" title="Bundles">Package two or more products as a single set with its own price. Stock is calculated automatically from whatever&apos;s inside it.</Card>
               <Card icon="✎" title="Site copy">The homepage headline, story section, testimonials, footer, and section titles — all editable text, no developer required.</Card>
               <Card icon="→" title="Shipping settings">Your flat shipping rate and the order amount that qualifies for free shipping, both set in one place.</Card>
+              <Card icon="✉" title="Leads">Everyone who&apos;s submitted the &quot;Join the Circle&quot; email signup on the homepage, with a one-click CSV export for marketing.</Card>
               <Card icon="●" title="&quot;We're Live&quot; badges">A manual switch that puts a pulsing &quot;Live Now&quot; badge on the site linking to your Instagram or TikTok while you&apos;re streaming.</Card>
             </div>
           </section>
@@ -321,10 +342,10 @@ export default function GuideContent() {
             <h2>Payments &amp; email</h2>
             <p className="pg-lede">This is the section to read most carefully before telling customers the store is open.</p>
 
-            <Panel badge="PP" title="PayPal" pill={{ label: "Being Connected", tone: "warn" }}>
-              Checkout runs through PayPal. The button and order flow are built and ready — it&apos;s waiting on business
-              account credentials from you (a Client ID and Secret from a PayPal Developer account) before it can
-              process a genuine sale. That&apos;s the one step standing between &quot;built&quot; and &quot;live.&quot;
+            <Panel badge="PP" title="PayPal" pill={{ label: "Live", tone: "good" }}>
+              Checkout runs through PayPal, connected with live business credentials — it is processing real
+              payments. It&apos;s currently the only checkout option; a Stripe card-checkout button that was on the
+              site earlier has been removed rather than left half-configured.
             </Panel>
 
             <Panel badge="RS" title="Resend" pill={{ label: "Active", tone: "good" }}>
@@ -370,9 +391,13 @@ export default function GuideContent() {
                 <div className="mark">✓</div>
                 <div><strong>Order emails &amp; contact form</strong><span>Sending live, verified with a real delivery.</span></div>
               </div>
-              <div className="pg-check todo">
-                <div className="mark">!</div>
-                <div><strong>Add PayPal business credentials</strong><span>Required before any real payment can be accepted.</span></div>
+              <div className="pg-check done">
+                <div className="mark">✓</div>
+                <div><strong>PayPal connected &amp; live</strong><span>Real payments are being accepted.</span></div>
+              </div>
+              <div className="pg-check done">
+                <div className="mark">✓</div>
+                <div><strong>Discount codes &amp; Leads added to the Admin Console</strong><span>Ready whenever you want to issue a first code or pull the signup list.</span></div>
               </div>
               <div className="pg-check todo">
                 <div className="mark">!</div>
@@ -430,7 +455,21 @@ export default function GuideContent() {
           </section>
 
           <div className="pg-footer">
-            Prepared as a working reference for the Elyxier team — ping your developer if anything here stops matching what you see on screen.
+            <p style={{ margin: "0 0 14px" }}>
+              Prepared as a working reference for the Elyxier team — ping your developer if anything here stops matching what you see on screen.
+            </p>
+            <div style={{ fontFamily: MONO, fontSize: 11, color: "var(--pg-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>
+              Guide version history
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {CHANGELOG.map((entry) => (
+                <div key={entry.version} style={{ display: "flex", gap: 12, alignItems: "baseline" }}>
+                  <span style={{ fontFamily: MONO, fontSize: 12, color: "var(--pg-accent-strong)", flex: "0 0 auto" }}>v{entry.version}</span>
+                  <span style={{ fontSize: 12, color: "var(--pg-muted)", flex: "0 0 auto" }}>{entry.date}</span>
+                  <span style={{ fontSize: 13 }}>{entry.summary}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </main>
       </div>

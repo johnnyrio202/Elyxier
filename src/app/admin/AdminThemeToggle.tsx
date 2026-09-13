@@ -31,7 +31,7 @@ export default function AdminThemeToggle() {
       className="print:hidden"
       style={{
         position: "fixed",
-        bottom: 20,
+        top: 20,
         right: 20,
         zIndex: 50,
         background: "var(--admin-card)",
