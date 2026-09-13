@@ -150,6 +150,27 @@ CREATE TABLE IF NOT EXISTS fulfillments (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Cart-level promo codes (percent or fixed off the subtotal) — distinct from
+-- the per-product sale discounts above, which apply automatically rather
+-- than being entered at checkout. One code can be redeemed by many orders,
+-- optionally capped by max_uses; used_count only increments once an order
+-- actually pays (see markOrderPaid), not on creation, so abandoned carts
+-- don't burn a redemption.
+CREATE TABLE IF NOT EXISTS discount_codes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  code TEXT NOT NULL UNIQUE,
+  discount_type TEXT NOT NULL CHECK (discount_type IN ('percent', 'fixed')),
+  discount_value INTEGER NOT NULL CHECK (discount_value > 0),
+  active BOOLEAN NOT NULL DEFAULT true,
+  max_uses INTEGER CHECK (max_uses > 0), -- null = unlimited
+  used_count INTEGER NOT NULL DEFAULT 0,
+  expires_at TIMESTAMPTZ, -- null = never expires
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS discount_code TEXT;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS discount_cents INTEGER NOT NULL DEFAULT 0;
+
 CREATE TABLE IF NOT EXISTS leads (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT,

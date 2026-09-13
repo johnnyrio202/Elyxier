@@ -30,15 +30,25 @@ export default function PayPalCheckoutButton({
   clientId,
   getOrderItems,
   source,
+  discountCode,
   onError,
 }: {
   clientId: string;
   getOrderItems: () => { slug: string; quantity: number }[];
   source: string;
+  discountCode?: string | null;
   onError: () => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
+  // The button-render effect below only runs once (on [ready]), so it closes
+  // over whatever discountCode was current at that moment — a ref keeps
+  // createOrder reading the latest value even if a code is applied/removed
+  // after the button has already rendered.
+  const discountCodeRef = useRef(discountCode);
+  useEffect(() => {
+    discountCodeRef.current = discountCode;
+  }, [discountCode]);
 
   useEffect(() => {
     let cancelled = false;
@@ -65,7 +75,7 @@ export default function PayPalCheckoutButton({
         const orderRes = await fetch("/api/orders", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ items: getOrderItems(), source }),
+          body: JSON.stringify({ items: getOrderItems(), source, discountCode: discountCodeRef.current || undefined }),
         });
         const orderJson = await orderRes.json();
         if (!orderRes.ok) throw new Error(orderJson.error ?? "Could not create order");

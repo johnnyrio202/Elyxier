@@ -3,6 +3,7 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { getCatalog } from "@/lib/catalog";
 import { createOrder } from "@/db/orders";
 import { getOrCreateCustomerByClerkId } from "@/db/customers";
+import { getRedeemableDiscount, computeDiscountCents } from "@/db/discounts";
 
 type CartItem = { slug: string; quantity: number };
 
@@ -11,6 +12,7 @@ export async function POST(req: NextRequest) {
     items?: CartItem[];
     customer?: { name?: string; email?: string; phone?: string };
     source?: string;
+    discountCode?: string;
   };
 
   if (!body.items?.length) {
@@ -37,6 +39,19 @@ export async function POST(req: NextRequest) {
     orderItems.push({ slug: product.slug, name: product.name, unitPriceCents: product.priceCents, quantity: item.quantity });
   }
 
+  // Re-validate the code here rather than trusting the /api/discount-codes
+  // preview the cart called earlier — that response is just advisory by the
+  // time checkout actually happens.
+  let discount: { code: string; cents: number } | undefined;
+  if (body.discountCode) {
+    const found = await getRedeemableDiscount(body.discountCode);
+    if (!found) {
+      return NextResponse.json({ error: "Discount code is no longer valid" }, { status: 400 });
+    }
+    const subtotalCents = orderItems.reduce((sum, i) => sum + i.unitPriceCents * i.quantity, 0);
+    discount = { code: found.code, cents: computeDiscountCents(subtotalCents, found) };
+  }
+
   // Signed-in customers get their order linked to their account; guest
   // checkout (no session) is unaffected.
   const { userId } = await auth();
@@ -50,6 +65,6 @@ export async function POST(req: NextRequest) {
     customerId = customer.id;
   }
 
-  const order = await createOrder({ items: orderItems, customer: body.customer, customerId, source: body.source });
+  const order = await createOrder({ items: orderItems, customer: body.customer, customerId, source: body.source, discount });
   return NextResponse.json({ order });
 }

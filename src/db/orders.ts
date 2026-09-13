@@ -2,6 +2,7 @@ import "server-only";
 import { getSql } from "./client";
 import { decrementInventory } from "./products";
 import { getShippingSettings, computeShippingCents } from "./shipping";
+import { incrementDiscountUsage } from "./discounts";
 
 export type OrderItemInput = { slug: string; name: string; unitPriceCents: number; quantity: number };
 
@@ -27,6 +28,8 @@ export type Order = {
   shippingAddress: ShippingAddress | null;
   subtotalCents: number;
   shippingCents: number;
+  discountCode: string | null;
+  discountCents: number;
   totalCents: number;
   currency: string;
   paymentProvider: "stripe" | "paypal" | null;
@@ -38,7 +41,8 @@ export type OrderItem = { productSlug: string; productName: string; unitPriceCen
 
 const ORDER_COLUMNS = `
   id, payment_status, fulfillment_status, customer_id, customer_name, customer_email, customer_phone,
-  shipping_address, subtotal_cents, shipping_cents, total_cents, currency, payment_provider, provider_reference, shippo_order_id
+  shipping_address, subtotal_cents, shipping_cents, discount_code, discount_cents, total_cents, currency,
+  payment_provider, provider_reference, shippo_order_id
 `;
 
 export async function createOrder(input: {
@@ -46,16 +50,18 @@ export async function createOrder(input: {
   customer?: { name?: string; email?: string; phone?: string };
   customerId?: string;
   source?: string;
+  discount?: { code: string; cents: number };
 }): Promise<Order> {
   const sql = getSql();
   const subtotalCents = input.items.reduce((sum, i) => sum + i.unitPriceCents * i.quantity, 0);
   const shippingSettings = await getShippingSettings();
   const shippingCents = computeShippingCents(subtotalCents, shippingSettings);
-  const totalCents = subtotalCents + shippingCents;
+  const discountCents = input.discount?.cents ?? 0;
+  const totalCents = Math.max(0, subtotalCents + shippingCents - discountCents);
 
   const [orderRow] = (await sql.query(
-    `INSERT INTO orders (customer_id, customer_name, customer_email, customer_phone, subtotal_cents, shipping_cents, total_cents, source)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    `INSERT INTO orders (customer_id, customer_name, customer_email, customer_phone, subtotal_cents, shipping_cents, discount_code, discount_cents, total_cents, source)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
      RETURNING ${ORDER_COLUMNS}`,
     [
       input.customerId ?? null,
@@ -64,6 +70,8 @@ export async function createOrder(input: {
       input.customer?.phone ?? null,
       subtotalCents,
       shippingCents,
+      input.discount?.code ?? null,
+      discountCents,
       totalCents,
       input.source ?? null,
     ]
@@ -129,7 +137,7 @@ export async function markOrderPaid(
        customer_phone = COALESCE($4, customer_phone),
        shipping_address = COALESCE($5::jsonb, shipping_address)
      WHERE id = $1 AND payment_status != 'paid'
-     RETURNING id`,
+     RETURNING id, discount_code`,
     [
       orderId,
       details?.customer?.name ?? null,
@@ -145,6 +153,9 @@ export async function markOrderPaid(
   `) as Record<string, unknown>[];
   for (const item of itemRows) {
     await decrementInventory(item.product_slug as string, Number(item.quantity));
+  }
+  if (row.discount_code) {
+    await incrementDiscountUsage(row.discount_code as string);
   }
   return true;
 }
@@ -183,6 +194,8 @@ function mapOrder(row: Record<string, unknown>): Order {
     shippingAddress: (row.shipping_address as ShippingAddress | null) ?? null,
     subtotalCents: Number(row.subtotal_cents),
     shippingCents: Number(row.shipping_cents),
+    discountCode: (row.discount_code as string | null) ?? null,
+    discountCents: Number(row.discount_cents ?? 0),
     totalCents: Number(row.total_cents),
     currency: row.currency as string,
     paymentProvider: (row.payment_provider as Order["paymentProvider"]) ?? null,

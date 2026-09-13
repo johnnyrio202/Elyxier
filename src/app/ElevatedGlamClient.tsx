@@ -151,6 +151,9 @@ export default function ElevatedGlam({
   const [cart, setCart] = useState<{ [slug: string]: number }>({});
   const [cartOpen, setCartOpen] = useState(false);
   const [checkoutState, setCheckoutState] = useState<"idle" | "error">("idle");
+  const [discountInput, setDiscountInput] = useState("");
+  const [appliedDiscount, setAppliedDiscount] = useState<{ code: string; type: "percent" | "fixed"; value: number } | null>(null);
+  const [discountState, setDiscountState] = useState<"idle" | "loading" | "error">("idle");
   const [lead, setLead] = useState({ name: "", email: "", phone: "" });
   const [leadState, setLeadState] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [contact, setContact] = useState({ name: "", email: "", message: "" });
@@ -194,7 +197,35 @@ export default function ElevatedGlam({
   const cartCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
   const cartTotalCents = cartItems.reduce((sum, i) => sum + i.product.priceCents * i.quantity, 0);
   const shippingCents = computeShippingCents(cartTotalCents, shipping);
-  const orderTotalCents = cartTotalCents + shippingCents;
+  const discountCents = appliedDiscount
+    ? Math.min(cartTotalCents, Math.max(0, appliedDiscount.type === "percent" ? Math.round(cartTotalCents * (appliedDiscount.value / 100)) : appliedDiscount.value))
+    : 0;
+  const orderTotalCents = Math.max(0, cartTotalCents + shippingCents - discountCents);
+
+  async function applyDiscountCode() {
+    if (!discountInput.trim()) return;
+    setDiscountState("loading");
+    try {
+      const res = await fetch("/api/discount-codes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: discountInput }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.valid) throw new Error(json.error ?? "Invalid code");
+      setAppliedDiscount({ code: json.code, type: json.type, value: json.value });
+      setDiscountState("idle");
+    } catch {
+      setAppliedDiscount(null);
+      setDiscountState("error");
+    }
+  }
+
+  function removeDiscountCode() {
+    setAppliedDiscount(null);
+    setDiscountInput("");
+    setDiscountState("idle");
+  }
 
   async function joinCircle() {
     if (!lead.email) return;
@@ -793,11 +824,44 @@ export default function ElevatedGlam({
                     </div>
                   ))}
                 </div>
+                {appliedDiscount ? (
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12, background: `${t.AMBER}15`, border: `1px solid ${t.AMBER}44`, borderRadius: 2, padding: "8px 12px" }}>
+                    <span style={{ fontFamily: DM, fontSize: 12, color: t.AMBER, letterSpacing: "0.05em", textTransform: "uppercase" as const }}>{appliedDiscount.code} applied</span>
+                    <button onClick={removeDiscountCode} style={{ background: "none", border: "none", color: t.MUTED, fontSize: 11, cursor: "pointer", textDecoration: "underline", fontFamily: DM }}>Remove</button>
+                  </div>
+                ) : (
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ display: "flex", gap: 8 }}>
+                      <input
+                        type="text"
+                        placeholder="Discount code"
+                        value={discountInput}
+                        onChange={e => setDiscountInput(e.target.value)}
+                        onKeyDown={e => e.key === "Enter" && applyDiscountCode()}
+                        style={{ flex: 1, minWidth: 0, background: t.INPUT_BG, color: t.INPUT_TEXT, border: `2px solid ${t.AMBER}44`, padding: "10px 14px", fontSize: 13, outline: "none", fontFamily: DM, borderRadius: 2 }}
+                      />
+                      <button
+                        onClick={applyDiscountCode}
+                        disabled={!discountInput.trim() || discountState === "loading"}
+                        style={{ background: t.AMBER, border: "none", color: "#0A0A08", padding: "0 20px", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, cursor: !discountInput.trim() ? "not-allowed" : "pointer", fontFamily: DM, borderRadius: 2, opacity: discountState === "loading" ? 0.6 : 1 }}
+                      >
+                        {discountState === "loading" ? "…" : "Apply"}
+                      </button>
+                    </div>
+                    {discountState === "error" && <p style={{ color: "#D45A5A", fontSize: 12, fontFamily: DM, marginTop: 6 }}>Invalid or expired code.</p>}
+                  </div>
+                )}
                 <div style={{ display: "flex", flexDirection: "column" as const, gap: 6, marginBottom: 16 }}>
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <span style={{ fontFamily: DM, fontSize: 13, color: t.MUTED }}>Subtotal</span>
                     <span style={{ fontFamily: DM, fontSize: 13, color: t.TEXT }}>${(cartTotalCents / 100).toFixed(2)}</span>
                   </div>
+                  {appliedDiscount && (
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <span style={{ fontFamily: DM, fontSize: 13, color: t.MUTED }}>Discount ({appliedDiscount.code})</span>
+                      <span style={{ fontFamily: DM, fontSize: 13, color: t.AMBER }}>-${(discountCents / 100).toFixed(2)}</span>
+                    </div>
+                  )}
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <span style={{ fontFamily: DM, fontSize: 13, color: t.MUTED }}>Shipping</span>
                     <span style={{ fontFamily: DM, fontSize: 13, color: t.TEXT }}>{shippingCents === 0 ? "FREE" : `$${(shippingCents / 100).toFixed(2)}`}</span>
@@ -812,6 +876,7 @@ export default function ElevatedGlam({
                     clientId={process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}
                     source="design-d"
                     getOrderItems={() => cartItems.map((i) => ({ slug: i.product.slug, quantity: i.quantity }))}
+                    discountCode={appliedDiscount?.code}
                     onError={() => setCheckoutState("error")}
                   />
                 )}
