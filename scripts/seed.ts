@@ -137,7 +137,7 @@ async function run() {
     ],
     subhead: "Luxury body butters & oils made for women who invest in themselves.",
     backgroundImage: imageField(heroBgAsset._id),
-    ctaButtons: [key({ label: "Shop Now", href: "#" }), key({ label: "Watch Us Live", href: "#" })],
+    ctaButtons: [key({ label: "Shop Now", href: "#shop" }), key({ label: "Watch Us Live", href: "#" })],
   });
 
   console.log("Seeding marquee...");

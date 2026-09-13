@@ -32,7 +32,7 @@ const DEFAULT_HERO = {
   subhead: "Luxury body butters & oils made for women who invest in themselves.",
   backgroundImage: null as unknown,
   ctaButtons: [
-    { label: "Shop Now", href: "#" },
+    { label: "Shop Now", href: "#shop" },
     { label: "Watch Us Live", href: "#" },
   ],
 };
