@@ -100,6 +100,17 @@ ALTER TABLE orders ADD COLUMN IF NOT EXISTS shipping_cents INTEGER NOT NULL DEFA
 -- wherever that specific order actually shipped.
 ALTER TABLE customers ADD COLUMN IF NOT EXISTS shipping_address JSONB;
 
+-- Set once the customer completes the required post-signup onboarding form
+-- (name, phone, default shipping address) — see src/app/onboarding. Gates
+-- the middleware redirect in src/proxy.ts. NULL means "hasn't onboarded yet".
+ALTER TABLE customers ADD COLUMN IF NOT EXISTS onboarding_completed_at TIMESTAMPTZ;
+-- Backfill: anyone who already has a complete profile (e.g. filled in the
+-- optional account-page form before this requirement existed) shouldn't be
+-- forced through onboarding again.
+UPDATE customers SET onboarding_completed_at = now()
+  WHERE onboarding_completed_at IS NULL
+    AND name IS NOT NULL AND phone IS NOT NULL AND shipping_address IS NOT NULL;
+
 -- Single-row settings table (the boolean PK + CHECK enforces exactly one row).
 -- free_shipping_threshold_cents NULL means no free-shipping threshold applies.
 CREATE TABLE IF NOT EXISTS shipping_settings (

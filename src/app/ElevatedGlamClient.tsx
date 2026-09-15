@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import type { CatalogProduct } from "@/lib/catalog";
 import type { SiteContent } from "@/sanity/queries";
 import { computeShippingCents, type ShippingSettings } from "@/lib/shippingCalc";
@@ -145,6 +146,7 @@ export default function ElevatedGlam({
 }) {
   const { isSignedIn, isLoaded } = useUser();
   const clerk = useClerk();
+  const router = useRouter();
   const [dark, setDark] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [flippedCard, setFlippedCard] = useState<string | null>(null);
@@ -166,6 +168,20 @@ export default function ElevatedGlam({
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
+
+  // The in-page sign-in modal (opened from the cart, below) never does a
+  // page navigation, so it never hits the middleware's onboarding redirect —
+  // check explicitly once auth state flips and send incomplete profiles to
+  // finish onboarding before they can check out.
+  useEffect(() => {
+    if (!isLoaded || !isSignedIn) return;
+    fetch("/api/account/onboarding-status")
+      .then((res) => res.json())
+      .then((data: { onboarded: boolean }) => {
+        if (!data.onboarded) router.push("/onboarding");
+      })
+      .catch(() => {});
+  }, [isLoaded, isSignedIn, router]);
 
   useEffect(() => {
     const intervals = products
