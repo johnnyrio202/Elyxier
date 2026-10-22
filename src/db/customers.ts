@@ -2,7 +2,8 @@ import "server-only";
 import { getSql } from "./client";
 import type { ShippingAddress } from "./orders";
 
-const CUSTOMER_COLUMNS = "id, clerk_user_id, email, name, phone, stripe_customer_id, shipping_address";
+const CUSTOMER_COLUMNS =
+  "id, clerk_user_id, email, name, phone, stripe_customer_id, shipping_address, onboarding_completed_at";
 
 export type Customer = {
   id: string;
@@ -12,6 +13,7 @@ export type Customer = {
   phone: string | null;
   stripeCustomerId: string | null;
   shippingAddress: ShippingAddress | null;
+  onboardingCompletedAt: string | null;
 };
 
 function mapRow(row: Record<string, unknown>): Customer {
@@ -23,6 +25,7 @@ function mapRow(row: Record<string, unknown>): Customer {
     phone: (row.phone as string | null) ?? null,
     stripeCustomerId: (row.stripe_customer_id as string | null) ?? null,
     shippingAddress: (row.shipping_address as ShippingAddress | null) ?? null,
+    onboardingCompletedAt: row.onboarding_completed_at ? (row.onboarding_completed_at as Date).toString() : null,
   };
 }
 
@@ -40,7 +43,7 @@ export async function getOrCreateCustomerByClerkId(
       email = COALESCE(EXCLUDED.email, customers.email),
       name = COALESCE(EXCLUDED.name, customers.name),
       updated_at = now()
-    RETURNING id, clerk_user_id, email, name, phone, stripe_customer_id, shipping_address
+    RETURNING id, clerk_user_id, email, name, phone, stripe_customer_id, shipping_address, onboarding_completed_at
   `) as Record<string, unknown>[];
   return mapRow(row);
 }
@@ -79,6 +82,37 @@ export async function updateCustomerProfile(
       name = EXCLUDED.name,
       phone = EXCLUDED.phone,
       shipping_address = EXCLUDED.shipping_address,
+      updated_at = now()
+  `;
+}
+
+// Cheap boolean-only lookup for the middleware onboarding gate, which runs
+// on every page request for signed-in users — avoid pulling the full row.
+export async function isCustomerOnboarded(clerkUserId: string): Promise<boolean> {
+  const sql = getSql();
+  const [row] = (await sql`
+    SELECT 1 FROM customers WHERE clerk_user_id = ${clerkUserId} AND onboarding_completed_at IS NOT NULL
+  `) as Record<string, unknown>[];
+  return Boolean(row);
+}
+
+// Required post-signup onboarding save — unlike updateCustomerProfile
+// (optional, account-page self-service), this always stamps
+// onboarding_completed_at so the middleware gate stops redirecting here.
+export async function completeCustomerOnboarding(
+  clerkUserId: string,
+  info: { email: string | null; name: string; phone: string; shippingAddress: ShippingAddress }
+): Promise<void> {
+  const sql = getSql();
+  await sql`
+    INSERT INTO customers (clerk_user_id, email, name, phone, shipping_address, onboarding_completed_at)
+    VALUES (${clerkUserId}, ${info.email}, ${info.name}, ${info.phone}, ${JSON.stringify(info.shippingAddress)}::jsonb, now())
+    ON CONFLICT (clerk_user_id) DO UPDATE SET
+      email = COALESCE(EXCLUDED.email, customers.email),
+      name = EXCLUDED.name,
+      phone = EXCLUDED.phone,
+      shipping_address = EXCLUDED.shipping_address,
+      onboarding_completed_at = now(),
       updated_at = now()
   `;
 }
