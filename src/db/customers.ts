@@ -117,10 +117,6 @@ export async function completeCustomerOnboarding(
   `;
 }
 
-export async function attachStripeCustomerId(customerId: string, stripeCustomerId: string): Promise<void> {
-  const sql = getSql();
-  await sql`UPDATE customers SET stripe_customer_id = ${stripeCustomerId}, updated_at = now() WHERE id = ${customerId}`;
-}
 
 export type CustomerOrderSummary = {
   id: string;

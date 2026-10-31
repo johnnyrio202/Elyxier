@@ -5,7 +5,7 @@ import { isCustomerOnboarded } from "@/db/customers";
 
 // Only /account and /api/account require sign-in. Everything else — the
 // storefront, /api/checkout/*, /api/webhooks/* — stays open, since guest
-// checkout is supported and Stripe/PayPal/Shippo call the webhook routes
+// checkout is supported and PayPal/Shippo call the webhook routes
 // without a Clerk session.
 const isProtectedRoute = createRouteMatcher(["/account(.*)", "/api/account(.*)"]);
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
