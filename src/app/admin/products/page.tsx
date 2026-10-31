@@ -18,7 +18,6 @@ const INPUT_STYLE: React.CSSProperties = {
   fontSize: 14,
   fontFamily: "inherit",
 };
-const LABEL_STYLE: React.CSSProperties = { display: "block", fontSize: 11, color: "var(--admin-muted)", marginBottom: 4 };
 const BTN_STYLE: React.CSSProperties = {
   background: "var(--admin-accent)",
   color: "var(--admin-accent-ink)",

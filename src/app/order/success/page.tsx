@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function OrderSuccessPage() {
   return (
     <div style={{
@@ -9,9 +11,9 @@ export default function OrderSuccessPage() {
       <p style={{ color: "#9A8A70", maxWidth: 480, marginBottom: 32, lineHeight: 1.6 }}>
         Your order is on its way to being handcrafted. A confirmation was sent to your email.
       </p>
-      <a href="/" style={{ background: "#D4920A", color: "#0A0A08", padding: "14px 32px", textDecoration: "none", fontWeight: 700, letterSpacing: "0.08em" }}>
+      <Link href="/" style={{ background: "#D4920A", color: "#0A0A08", padding: "14px 32px", textDecoration: "none", fontWeight: 700, letterSpacing: "0.08em" }}>
         Back to ELYXIER
-      </a>
+      </Link>
     </div>
   );
 }

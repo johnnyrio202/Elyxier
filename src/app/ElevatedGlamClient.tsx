@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import type { CatalogProduct } from "@/lib/catalog";
 import type { SiteContent } from "@/sanity/queries";
 import { computeShippingCents, type ShippingSettings } from "@/lib/shippingCalc";
@@ -453,11 +454,11 @@ export default function ElevatedGlam({
                 <UserButton />
               </a>
             ) : (
-              <a href="/sign-in" style={{ color: t.MUTED, fontSize: 13, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", fontFamily: DM, fontWeight: 500 }}
+              <Link href="/sign-in" style={{ color: t.MUTED, fontSize: 13, letterSpacing: "0.06em", textTransform: "uppercase", textDecoration: "none", fontFamily: DM, fontWeight: 500 }}
                 onMouseEnter={e => (e.currentTarget.style.color = t.AMBER)}
                 onMouseLeave={e => (e.currentTarget.style.color = t.MUTED)}>
                 Sign In
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -465,7 +466,7 @@ export default function ElevatedGlam({
 
       {/* Logo Band */}
       <div style={{ background: "#000000", display: "flex", justifyContent: "center", alignItems: "center", padding: isMobile ? "10px 0" : "20px 0 16px", borderBottom: `1px solid ${t.AMBER}55` }}>
-        <a href="/"><img src={logoUrl} alt="ELYXIER" style={{ height: isMobile ? "72px" : "130px", width: "auto", display: "block" }} /></a>
+        <Link href="/"><img src={logoUrl} alt="ELYXIER" style={{ height: isMobile ? "72px" : "130px", width: "auto", display: "block" }} /></Link>
       </div>
 
       {/* Marquee Ticker */}

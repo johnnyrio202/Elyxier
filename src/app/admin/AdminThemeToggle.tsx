@@ -8,6 +8,9 @@ export default function AdminThemeToggle() {
   useEffect(() => {
     const root = document.getElementById("admin-theme-root");
     const current = root?.getAttribute("data-admin-theme") === "light" ? "light" : "dark";
+    // Reads the server-rendered theme off the DOM once on mount; there is no
+    // other source for it, so this effect-then-setState is intentional.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTheme(current);
   }, []);
 
